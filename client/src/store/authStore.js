@@ -1,12 +1,15 @@
 import { create } from 'zustand';
 import api from '../api/axios';
+import { setCookie, getCookie, eraseCookie } from '../utils/cookies';
+
+const savedInfo = getCookie('iste_login_info');
 
 const useAuthStore = create((set, get) => ({
   // State
-  user: null,
-  profile: null,
-  isAuthenticated: false,
-  isLoading: true, // true until initial auth check completes
+  user: savedInfo?.user || null,
+  profile: savedInfo?.profile || null,
+  isAuthenticated: !!savedInfo,
+  isLoading: !savedInfo, // true until initial auth check completes if no cached session
 
   // Actions
   login: async (identifier, password) => {
@@ -15,6 +18,7 @@ const useAuthStore = create((set, get) => ({
 
       if (response.data.success) {
         const { user, profile } = response.data.data;
+        setCookie('iste_login_info', { user, profile }, 7); // Save login info in client cookie for 7 days
         set({
           user,
           profile,
@@ -36,6 +40,7 @@ const useAuthStore = create((set, get) => ({
       // Logout should always succeed locally even if API call fails
       console.error('Logout API error:', error);
     } finally {
+      eraseCookie('iste_login_info');
       set({
         user: null,
         profile: null,
@@ -52,6 +57,7 @@ const useAuthStore = create((set, get) => ({
 
       if (response.data.success) {
         const { user, profile } = response.data.data;
+        setCookie('iste_login_info', { user, profile }, 7); // Keep cookie fresh
         set({
           user,
           profile,
@@ -60,6 +66,7 @@ const useAuthStore = create((set, get) => ({
         });
       }
     } catch (error) {
+      eraseCookie('iste_login_info');
       set({
         user: null,
         profile: null,
@@ -73,13 +80,15 @@ const useAuthStore = create((set, get) => ({
   setProfile: (profile) => set({ profile }),
 
   // Clear auth state (called by axios 401 interceptor)
-  clearAuth: () =>
+  clearAuth: () => {
+    eraseCookie('iste_login_info');
     set({
       user: null,
       profile: null,
       isAuthenticated: false,
       isLoading: false,
-    }),
+    });
+  },
 }));
 
 export default useAuthStore;
