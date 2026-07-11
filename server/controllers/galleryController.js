@@ -158,14 +158,15 @@ const addPhotosToAlbum = async (req, res) => {
       });
     }
 
-    // Creator or Central can add photos
+    // Creator, Central, or Respective Branch Faculty can add photos
     const isCreator = album.createdBy.toString() === req.user.userId.toString();
     const isCentral = req.user.role === 'central_faculty';
+    const isRespectiveBranchFaculty = req.user.role === 'branch_faculty' && req.user.branch === album.branch;
 
-    if (!isCreator && !isCentral) {
+    if (!isCreator && !isCentral && !isRespectiveBranchFaculty) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied.',
+        message: 'Access denied. Only the album creator, central admin, or respective branch faculty coordinator can add photos.',
       });
     }
 

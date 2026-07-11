@@ -104,6 +104,12 @@ const CentralDashboard = () => {
   });
   const [albumFiles, setAlbumFiles] = useState([]);
 
+  // Add photos state
+  const [showAddPhotosModal, setShowAddPhotosModal] = useState(false);
+  const [selectedAlbumForUpload, setSelectedAlbumForUpload] = useState(null);
+  const [uploadFiles, setUploadFiles] = useState([]);
+  const [isSubmittingPhotos, setIsSubmittingPhotos] = useState(false);
+
   // Toast message
   const [message, setMessage] = useState({ type: '', text: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -664,6 +670,46 @@ const CentralDashboard = () => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleAddPhotosSubmit = async (e) => {
+    e.preventDefault();
+    if (uploadFiles.length === 0) {
+      toast.error('Please select at least one photo.');
+      return;
+    }
+
+    setIsSubmittingPhotos(true);
+    const loadingToast = toast.loading('Uploading photos to album...');
+
+    try {
+      const formData = new FormData();
+      for (const file of uploadFiles) {
+        formData.append('photos', file);
+      }
+
+      const response = await api.patch(`/gallery/${selectedAlbumForUpload._id}/photos`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (response.data.success) {
+        toast.success(`Added ${uploadFiles.length} photos successfully!`, { id: loadingToast });
+        fetchAlbums();
+        setShowAddPhotosModal(false);
+        setUploadFiles([]);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to add photos.', { id: loadingToast });
+    } finally {
+      setIsSubmittingPhotos(false);
+    }
+  };
+
+  const openAddPhotosModal = (album) => {
+    setSelectedAlbumForUpload(album);
+    setUploadFiles([]);
+    setShowAddPhotosModal(true);
   };
 
   return (
@@ -1514,6 +1560,14 @@ const CentralDashboard = () => {
                             <h4 className="font-extrabold text-slate-800 line-clamp-1">{album.albumName}</h4>
                             <p className="text-xs text-slate-400 font-bold mt-1 select-none">{album.photos?.length || 0} Photos</p>
                           </div>
+                          <div className="flex justify-end mt-2 pt-2 border-t border-slate-100 select-none">
+                            <button
+                              onClick={() => openAddPhotosModal(album)}
+                              className="text-xs font-bold text-iste-blue hover:text-sky-600 px-2.5 py-1 rounded bg-[#EEF1F5] shadow-clay-sm hover:shadow-clay-md active:scale-95 transition-all"
+                            >
+                              + Add Photos
+                            </button>
+                          </div>
                         </ClayCard>
                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 select-none">
                           <button onClick={() => deleteAlbum(album._id)} className="bg-[#EEF1F5] text-red-655 hover:text-red-800 rounded-full w-9 h-9 flex items-center justify-center shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all">
@@ -1990,6 +2044,26 @@ const CentralDashboard = () => {
             label="Photos (Select Multiple)" 
             multiple={true}
             onChange={(files) => setAlbumFiles(files)}
+          />
+        </div>
+      </Modal>
+
+      {/* ────────────────────────────────────────── */}
+      {/* MODAL: ADD PHOTOS TO ALBUM                 */}
+      {/* ────────────────────────────────────────── */}
+      <Modal
+        isOpen={showAddPhotosModal}
+        onClose={() => setShowAddPhotosModal(false)}
+        title={`Add Photos to "${selectedAlbumForUpload?.albumName}"`}
+        onSubmit={handleAddPhotosSubmit}
+        submitText="Upload Photos"
+        isSubmitting={isSubmittingPhotos}
+      >
+        <div className="space-y-5">
+          <FileUpload 
+            label="Select Photos" 
+            multiple={true}
+            onChange={(files) => setUploadFiles(files)}
           />
         </div>
       </Modal>
