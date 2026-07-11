@@ -41,6 +41,17 @@ const CoordinatorCard = ({ profile }) => {
   };
   const accentColor = branchAccents[profile.branch?.toUpperCase()] || 'blue';
 
+  const branchGradients = {
+    CSE: 'from-blue-100/60 to-indigo-50/40',
+    ECE: 'from-purple-100/60 to-pink-50/40',
+    EEE: 'from-amber-100/60 to-yellow-50/40',
+    MECH: 'from-slate-100/70 to-zinc-50/50',
+    CIVIL: 'from-teal-100/60 to-emerald-50/40',
+    IT: 'from-pink-100/60 to-rose-50/40',
+    CENTRAL: 'from-blue-100/60 to-purple-50/40',
+  };
+  const gradientClass = branchGradients[profile.branch?.toUpperCase()] || branchGradients.CENTRAL;
+
   return (
     <ClayCard
       as={Link}
@@ -49,8 +60,8 @@ const CoordinatorCard = ({ profile }) => {
       accent={accentColor}
       className="flex flex-col h-full items-stretch overflow-hidden p-4 group"
     >
-      {/* Photo / Avatar Zone - Centered circular avatar with gradient border */}
-      <div className="relative w-full aspect-square rounded-clay-md bg-[#EEF1F5] shadow-clay-inset flex items-center justify-center p-4 overflow-hidden flex-shrink-0 select-none">
+      {/* Photo / Avatar Zone - Centered circular avatar with gradient border and branch bi-gradient */}
+      <div className={`relative w-full aspect-square rounded-clay-md bg-gradient-to-br ${gradientClass} shadow-clay-inset flex items-center justify-center p-4 overflow-hidden flex-shrink-0 select-none`}>
         {/* Ambient background depth orbs */}
         <div className="absolute w-24 h-24 rounded-full bg-iste-blue/10 blur-xl -top-6 -left-6" />
         <div className="absolute w-20 h-20 rounded-full bg-iste-violet/10 blur-lg -bottom-4 -right-4" />
