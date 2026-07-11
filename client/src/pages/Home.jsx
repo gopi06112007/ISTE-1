@@ -1386,17 +1386,17 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
                   const isVisible = Math.abs(diff) <= 2;
                   if (!isVisible) return null;
 
-                  const translateX = diff * 330;
+                  const translateX = diff * 290;
                   const rotateY = diff * -25;
                   const translateZ = Math.abs(diff) * -140;
                   const scale = diff === 0 ? 1 : 0.82;
-                  const opacity = diff === 0 ? 1 : 0.45;
+                  const opacity = diff === 0 ? 1 : 0;
                   const zIndex = diff === 0 ? 30 : 10;
 
                   return (
                     <motion.div
                       key={album._id}
-                      className="absolute w-[300px] h-[380px] flex-shrink-0 cursor-pointer"
+                      className="absolute w-[270px] h-[350px] flex-shrink-0 cursor-pointer"
                       style={{
                         x: translateX,
                         transformStyle: 'preserve-3d',
