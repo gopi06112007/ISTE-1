@@ -70,11 +70,23 @@ const DetailCard = ({ icon, label, value }) => (
 /* ─── Mini coordinator card for "More from branch" ──────── */
 const MiniCard = ({ profile }) => {
   const user = profile.userId || {};
+  const branchAccents = {
+    CSE: 'blue',
+    ECE: 'violet',
+    EEE: 'amber',
+    MECH: 'slate',
+    CIVIL: 'teal',
+    IT: 'rose',
+    CENTRAL: 'blue',
+  };
+  const accentColor = branchAccents[profile.branch?.toUpperCase()] || 'blue';
+
   return (
     <ClayCard
       as={Link}
       to={`/coordinators/${profile._id}`}
       interactive={true}
+      accent={accentColor}
       className="w-[180px] min-w-[180px] max-w-[180px] flex-shrink-0 overflow-hidden flex flex-col p-3"
     >
       <div className="w-full aspect-square overflow-hidden bg-[#EEF1F5] rounded-clay-sm shadow-clay-inset p-1.5 flex-shrink-0">
@@ -130,7 +142,7 @@ const ProfileDetailPage = () => {
         if (p.branch) {
           const relRes = await api.get('/profiles', { params: { branch: p.branch } });
           if (relRes.data.success) {
-            setRelated(relRes.data.data.filter(r => r._id !== p._id).slice(0, 4));
+            setRelated(relRes.data.data.filter(r => r._id !== p._id));
           }
         }
       }

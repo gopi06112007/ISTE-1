@@ -15,11 +15,11 @@ const CoordinatorCard = ({ profile }) => {
   const user = profile.userId || {};
   const isStudent = user.role === 'student_coordinator';
 
-  // Reskinned as soft clay badges
+  // Soft colored badges with borders matching roles
   const roleBadgeStyles = {
-    student_coordinator: 'bg-[#EEF1F5] text-emerald-600 shadow-clay-sm',
-    branch_faculty: 'bg-[#EEF1F5] text-blue-600 shadow-clay-sm',
-    central_faculty: 'bg-[#EEF1F5] text-amber-600 shadow-clay-sm',
+    student_coordinator: 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 shadow-clay-sm',
+    branch_faculty: 'bg-blue-500/10 text-blue-600 border border-blue-500/20 shadow-clay-sm',
+    central_faculty: 'bg-amber-500/10 text-amber-600 border border-amber-500/20 shadow-clay-sm',
   };
 
   const roleLabels = {
@@ -28,7 +28,7 @@ const CoordinatorCard = ({ profile }) => {
     central_faculty: 'Central Faculty',
   };
 
-  const badgeClass = roleBadgeStyles[user.role] || 'bg-[#EEF1F5] text-blue-600 shadow-clay-sm';
+  const badgeClass = roleBadgeStyles[user.role] || 'bg-blue-500/10 text-blue-600 border border-blue-500/20 shadow-clay-sm';
 
   const branchAccents = {
     CSE: 'blue',
@@ -47,42 +47,41 @@ const CoordinatorCard = ({ profile }) => {
       to={`/coordinators/${profile._id}`}
       interactive={true}
       accent={accentColor}
-      className="flex flex-col h-full items-stretch overflow-hidden p-4"
+      className="flex flex-col h-full items-stretch overflow-hidden p-4 group"
     >
-      {/* Photo / Avatar Zone - Pressed into the Card */}
-      <div className="relative w-full aspect-[4/3] rounded-clay-md bg-[#EEF1F5] shadow-clay-inset flex items-center justify-center p-4">
-        {profile.photoUrl ? (
-          <div className="w-24 h-24 rounded-full overflow-hidden shadow-clay-inset p-1.5 bg-[#EEF1F5]">
+      {/* Photo / Avatar Zone - Full aspect square layout pressed into the card */}
+      <div className="relative w-full aspect-square rounded-clay-md bg-[#EEF1F5] shadow-clay-inset p-2.5 overflow-hidden flex-shrink-0 select-none">
+        <div className="w-full h-full rounded-clay-sm overflow-hidden bg-white shadow-clay-inset relative">
+          {profile.photoUrl ? (
             <SafeImage
               src={profile.photoUrl}
               alt={`${profile.name} - ISTE GMRIT`}
-              className="w-full h-full object-cover object-top rounded-full"
+              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
               fallbackType="profile"
               name={profile.name}
               objectPosition="center top"
             />
-          </div>
-        ) : (
-          /* Custom fallback avatar pressed into frame */
-          <div className="w-20 h-20 rounded-full shadow-clay-inset bg-[#EEF1F5] p-1 flex items-center justify-center">
-            <span className="text-xl font-extrabold tracking-wider text-slate-700">
-              {getInitials(profile.name)}
-            </span>
-          </div>
-        )}
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] flex items-center justify-center">
+              <span className="text-3xl font-extrabold tracking-wider text-iste-blue select-none">
+                {getInitials(profile.name)}
+              </span>
+            </div>
+          )}
+        </div>
 
-        {/* Branch badge — top-left clay badge */}
+        {/* Branch badge — top-left overlaid on photo */}
         {profile.branch && (
-          <div className="absolute top-2 left-2 z-10">
-            <span className="px-2.5 py-1 text-xs font-bold rounded-clay-sm bg-[#EEF1F5] text-slate-800 shadow-clay-sm">
+          <div className="absolute top-4 left-4 z-10">
+            <span className="px-2.5 py-1 text-xs font-bold rounded-clay-sm bg-[#EEF1F5]/85 text-slate-800 shadow-clay-sm backdrop-blur-sm">
               {profile.branch}
             </span>
           </div>
         )}
 
-        {/* Role badge — top-right clay badge */}
-        <div className="absolute top-2 right-2 z-10">
-          <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full ${badgeClass}`}>
+        {/* Role badge — top-right overlaid on photo */}
+        <div className="absolute top-4 right-4 z-10">
+          <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full backdrop-blur-sm ${badgeClass}`}>
             {roleLabels[user.role] || user.role}
           </span>
         </div>
@@ -91,7 +90,7 @@ const CoordinatorCard = ({ profile }) => {
       {/* Content */}
       <div className="pt-5 flex flex-col flex-grow">
         {/* Name */}
-        <h3 className="text-lg font-extrabold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-lg font-extrabold text-gray-900 mb-1 line-clamp-1 group-hover:text-iste-blue transition-colors duration-200">
           {profile.name}
         </h3>
 
@@ -105,7 +104,7 @@ const CoordinatorCard = ({ profile }) => {
         {/* Info rows */}
         <div className="space-y-2 text-sm mb-3 font-semibold">
           {isStudent && user.jntuNo && (
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-gray-650 text-xs">
               <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
               </svg>
@@ -114,7 +113,7 @@ const CoordinatorCard = ({ profile }) => {
           )}
 
           {!isStudent && user.email && (
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-gray-650 text-xs">
               <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
@@ -123,7 +122,7 @@ const CoordinatorCard = ({ profile }) => {
           )}
 
           {isStudent && profile.year && (
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-gray-650 text-xs">
               <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
               </svg>
@@ -132,7 +131,7 @@ const CoordinatorCard = ({ profile }) => {
           )}
 
           {!isStudent && profile.designation && (
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-gray-650 text-xs">
               <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
@@ -143,14 +142,14 @@ const CoordinatorCard = ({ profile }) => {
 
         {/* Bio */}
         {profile.bio && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed font-medium">
+          <p className="text-xs text-gray-500 line-clamp-2 mb-4 leading-relaxed font-semibold">
             {profile.bio}
           </p>
         )}
 
         {/* Social Links Footer */}
         {profile.socialLinks && (
-          <div className="flex items-center gap-2 pt-3 mt-auto">
+          <div className="flex items-center gap-2 pt-3 mt-auto border-t border-slate-200/50">
             {profile.socialLinks.linkedin && (
               <span
                 onClick={(e) => { e.preventDefault(); window.open(profile.socialLinks.linkedin, '_blank', 'noopener,noreferrer'); }}
