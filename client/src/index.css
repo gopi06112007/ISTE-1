@@ -1,0 +1,505 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────── */
+/* Base Styles                              */
+/* ──────────────────────────────────────── */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans text-slate-900 bg-[#EEF1F5] antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight text-slate-900 font-bold;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-[#EEF1F5];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full shadow-clay-inset;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+}
+
+/* ──────────────────────────────────────── */
+/* Component Utilities                      */
+/* ──────────────────────────────────────── */
+@layer components {
+
+  /* Mesh Gradients (reduced opacity for subtle clay context) */
+  .mesh-gradient-1 {
+    background: radial-gradient(at 0% 0%, rgba(26, 86, 219, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(13, 148, 136, 0.05) 0px, transparent 50%);
+  }
+
+  .mesh-gradient-2 {
+    background: radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(26, 86, 219, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.05) 0px, transparent 50%);
+  }
+
+  /* Glass effect for cards - rebranded as Clay */
+  .glass {
+    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-md transition-all duration-300;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-[#1A56DB] bg-clip-text text-transparent;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-blue font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
+  }
+
+  /* Secondary button */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-violet font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-slate-700 font-bold rounded-clay-sm hover:shadow-clay-sm active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300;
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-50 text-red-600 font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-sm hover:shadow-clay-md transition-all duration-300 overflow-hidden;
+  }
+
+  /* Input field */
+  .input-field {
+    @apply w-full px-4 h-[46px] bg-[#EEF1F5] rounded-clay-sm text-slate-900 placeholder-slate-400 shadow-clay-inset focus:outline-none transition-all duration-300;
+  }
+
+  .input-field:focus {
+    @apply shadow-clay-pressed;
+  }
+
+  textarea.input-field {
+    @apply min-h-[100px] py-3 h-auto resize-y;
+  }
+
+  /* Form Labels */
+  .form-label {
+    @apply block text-xs font-bold tracking-wide text-slate-600 uppercase mb-2;
+  }
+
+  /* Form Hints */
+  .form-hint {
+    @apply block text-xs text-slate-400 mt-1.5;
+  }
+
+  /* Badge System */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full;
+  }
+
+  .badge-blue {
+    @apply badge bg-iste-blue/10 text-iste-blue;
+  }
+
+  .badge-violet {
+    @apply badge bg-iste-violet/10 text-iste-violet;
+  }
+
+  .badge-teal {
+    @apply badge bg-iste-teal/10 text-iste-teal;
+  }
+
+  .badge-amber {
+    @apply badge bg-iste-amber/10 text-iste-amber;
+  }
+
+  .badge-slate {
+    @apply badge bg-slate-100 text-slate-600;
+  }
+
+  .badge-red {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+
+  /* Section container */
+  .section-container {
+    @apply max-w-7xl mx-auto px-6;
+  }
+
+  /* Page heading */
+  .page-heading {
+    @apply text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight text-slate-900;
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply text-3xl sm:text-4xl font-display font-bold tracking-tight text-slate-900;
+  }
+
+  /* ── Claymorphism 2.0 / Bento Grid design system ── */
+
+  /* Glass card — base tile rebranded to Clay Card */
+  .glass-card {
+    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-md transition-all duration-300 hover:shadow-clay-lg hover:-translate-y-1;
+  }
+
+  /* Dark page section */
+  .page-dark-section {
+    @apply bg-transparent;
+    min-height: 100vh;
+  }
+
+  /* Glass search input -> Clay search input */
+  .search-glass {
+    @apply w-full pl-11 pr-10 h-[46px] bg-[#EEF1F5] rounded-full text-slate-900 placeholder-slate-500 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300;
+  }
+
+  /* Filter pill — inactive state (raised) */
+  .filter-pill {
+    @apply py-2 px-4 rounded-full text-sm font-semibold whitespace-nowrap bg-[#EEF1F5] text-slate-600 shadow-clay-sm hover:shadow-clay-md hover:text-slate-800 transition-all duration-200 cursor-pointer;
+  }
+
+  /* Filter pill — active / selected state (inset/pressed with tint) */
+  .filter-pill-active {
+    @apply py-2 px-4 rounded-full text-sm font-semibold whitespace-nowrap bg-iste-blue/20 text-iste-blue shadow-clay-pressed transition-all duration-200 cursor-pointer;
+  }
+
+  /* Filter scroll row — scrollable on mobile */
+  .filter-scroll {
+    @apply flex gap-2 overflow-x-auto pb-1;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .filter-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Glass chip -> Clay inset chip */
+  .badge-glass {
+    @apply px-2.5 py-1 text-xs font-bold rounded-clay-sm bg-[#EEF1F5] text-slate-800 shadow-clay-inset;
+  }
+
+  /* Accent text helper */
+  .gradient-accent-text {
+    @apply text-iste-blue font-bold;
+  }
+
+  /* Bento Grid Span Presets */
+  .bento-hero {
+    @apply col-span-12 md:col-span-8 row-span-2;
+  }
+  .bento-feature {
+    @apply col-span-12 md:col-span-4 row-span-2;
+  }
+  .bento-wide {
+    @apply col-span-12 md:col-span-6 row-span-1;
+  }
+  .bento-square {
+    @apply col-span-6 md:col-span-3 row-span-1;
+  }
+  .bento-tall {
+    @apply col-span-6 md:col-span-3 row-span-2;
+  }
+}
+
+/* ──────────────────────────────────────── */
+/* Scroll Carousel Containers               */
+/* (outside @layer to avoid nested @media)  */
+/* ──────────────────────────────────────── */
+
+/* ── Events horizontal scroll container ── */
+.events-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 1rem 0 1.5rem 0;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.events-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Events scroll card sizing */
+.events-scroll-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  min-width: 280px;
+  max-width: 300px;
+}
+
+/* Mobile dot indicators */
+.events-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid #94a3b8;
+  background: transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.events-dot.active {
+  width: 8px;
+  height: 8px;
+  background: #1A56DB;
+  border-color: #1A56DB;
+}
+
+/* ── Blog horizontal scroll container ── */
+.blog-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 1rem 0 1.5rem 0;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blog-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Blog scroll card sizing — wider than event cards */
+.blog-scroll-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  min-width: 340px;
+  max-width: 360px;
+}
+
+/* ── Responsive overrides for scroll cards ── */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .events-scroll-card {
+    min-width: calc(50% - 0.75rem);
+    max-width: calc(50% - 0.75rem);
+  }
+
+  .blog-scroll-card {
+    min-width: calc(50% - 0.75rem);
+    max-width: calc(50% - 0.75rem);
+  }
+}
+
+@media (max-width: 639px) {
+  .events-scroll-card {
+    min-width: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+    max-width: none;
+    scroll-snap-align: center;
+  }
+
+  .events-scroll {
+    scroll-snap-stop: always;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .blog-scroll-card {
+    min-width: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+    max-width: none;
+    scroll-snap-align: center;
+  }
+
+  .blog-scroll {
+    scroll-snap-stop: always;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ──────────────────────────────────────── */
+/* Animations                               */
+/* ──────────────────────────────────────── */
+@layer utilities {
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+}
+
+/* ──────────────────────────────────────── */
+/* Branch Color Cycle Background            */
+/* GPU-accelerated: animates opacity only   */
+/* ──────────────────────────────────────── */
+
+/* Each branch layer pulses in/out with a staggered delay.
+   Total cycle = 30s. Each branch gets ~5s on-screen.
+   Keyframe: ramp up over 1.5s, hold 3s, ramp down 0.5s. */
+@keyframes branchLayerCycle {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 0.04;
+  }
+
+  16.67% {
+    opacity: 0.04;
+  }
+
+  21.67% {
+    opacity: 0;
+  }
+
+  83.33% {
+    opacity: 0;
+  }
+}
+
+/* Slow blob drift — independent of color cycle */
+@keyframes blobDrift {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  25% {
+    transform: translate(70px, -50px) scale(1.08);
+  }
+
+  50% {
+    transform: translate(-30px, 70px) scale(0.96);
+  }
+
+  75% {
+    transform: translate(50px, 30px) scale(1.04);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+/* Branch color orbs — one per branch, opacity-only animation */
+.branch-orb {
+  position: absolute;
+  width: 70vw;
+  height: 70vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  top: 10%;
+  left: 15%;
+  pointer-events: none;
+  animation: branchLayerCycle 72s ease-in-out infinite,
+    blobDrift 22s ease-in-out infinite;
+}
+
+.branch-orb-cse {
+  background: radial-gradient(circle, #D946EF 0%, transparent 70%);
+  animation-delay: 0s, 0s;
+}
+
+.branch-orb-ece {
+  background: radial-gradient(circle, #7C3AED 0%, transparent 70%);
+  animation-delay: -60s, -3s;
+}
+
+.branch-orb-eee {
+  background: radial-gradient(circle, #F59E0B 0%, transparent 70%);
+  animation-delay: -48s, -6s;
+}
+
+.branch-orb-mech {
+  background: radial-gradient(circle, #F43F5E 0%, transparent 70%);
+  animation-delay: -36s, -9s;
+}
+
+.branch-orb-civil {
+  background: radial-gradient(circle, #0D9488 0%, transparent 70%);
+  animation-delay: -24s, -12s;
+}
+
+.branch-orb-it {
+  background: radial-gradient(circle, #DB2777 0%, transparent 70%);
+  animation-delay: -12s, -15s;
+}
+
+/* Pause cycle and show a specific branch color (set via JS) */
+.branch-orb-pinned {
+  animation-play-state: paused !important;
+  transition: opacity 0.6s ease;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .branch-orb {
+    animation: none;
+    opacity: 0 !important;
+  }
+}
+
+/* Scrollbar hide utility */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
