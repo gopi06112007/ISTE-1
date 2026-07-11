@@ -14,16 +14,16 @@ const ClayCard = ({
   const isClickable = interactive || props.onClick || props.whileTap;
 
   const tintMap = {
-    cse: 'bg-[#A8C5F0]',
-    ece: 'bg-[#C9B8F0]',
-    eee: 'bg-[#F0D9A8]',
-    mech: 'bg-[#C7CDD6]',
-    civil: 'bg-[#A8E0D4]',
-    it: 'bg-[#F0B8D4]',
+    cse: 'bg-clay-cse',
+    ece: 'bg-clay-ece',
+    eee: 'bg-clay-eee',
+    mech: 'bg-clay-mech',
+    civil: 'bg-clay-civil',
+    it: 'bg-clay-it',
   };
 
   const getBgClass = () => {
-    if (!tint) return 'bg-[#EEF1F5]';
+    if (!tint) return 'bg-clay-card';
     const key = tint.toLowerCase();
     return tintMap[key] || `bg-[${tint}]`;
   };

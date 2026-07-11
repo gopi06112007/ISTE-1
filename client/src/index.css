@@ -2,6 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-page: #EEF1F5;
+  --bg-card: #EEF1F5;
+  --bg-btn: #EEF1F5;
+  --bg-input: #EEF1F5;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --shadow-clay-sm: 6px 6px 12px rgba(163,177,198,0.35), -6px -6px 12px rgba(255,255,255,0.2);
+  --shadow-clay-md: 9px 9px 16px rgba(163,177,198,0.4), -9px -9px 16px rgba(255,255,255,0.2);
+  --shadow-clay-lg: 14px 14px 28px rgba(163,177,198,0.35), -14px -14px 28px rgba(255,255,255,0.2);
+  --shadow-clay-inset: inset 6px 6px 12px rgba(163,177,198,0.35), inset -6px -6px 12px rgba(255,255,255,0.2);
+  --shadow-clay-pressed: inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.15);
+  --border-color: rgba(255,255,255,0.4);
+  --clay-cse: #A8C5F0;
+  --clay-ece: #C9B8F0;
+  --clay-eee: #F0D9A8;
+  --clay-mech: #C7CDD6;
+  --clay-civil: #A8E0D4;
+  --clay-it: #F0B8D4;
+}
+
+.dark {
+  --bg-page: #0b0f19;
+  --bg-card: #151d30;
+  --bg-btn: #151d30;
+  --bg-input: #0b0f19;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --shadow-clay-sm: 6px 6px 12px rgba(0,0,0,0.5), -6px -6px 12px rgba(255,255,255,0.015);
+  --shadow-clay-md: 9px 9px 16px rgba(0,0,0,0.55), -9px -9px 16px rgba(255,255,255,0.015);
+  --shadow-clay-lg: 14px 14px 28px rgba(0,0,0,0.5), -14px -14px 28px rgba(255,255,255,0.015);
+  --shadow-clay-inset: inset 6px 6px 12px rgba(0,0,0,0.5), inset -6px -6px 12px rgba(255,255,255,0.015);
+  --shadow-clay-pressed: inset 4px 4px 8px rgba(0,0,0,0.55), inset -4px -4px 8px rgba(255,255,255,0.015);
+  --border-color: rgba(255,255,255,0.05);
+  --clay-cse: #162e54;
+  --clay-ece: #231842;
+  --clay-eee: #3d2812;
+  --clay-mech: #242b35;
+  --clay-civil: #10302b;
+  --clay-it: #3b1527;
+}
+
 /* ──────────────────────────────────────── */
 /* Base Styles                              */
 /* ──────────────────────────────────────── */
@@ -17,7 +61,10 @@
   }
 
   body {
-    @apply font-sans text-slate-900 bg-[#EEF1F5] antialiased;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    @apply font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -28,7 +75,8 @@
   h4,
   h5,
   h6 {
-    @apply font-display tracking-tight text-slate-900 font-bold;
+    color: var(--text-primary);
+    @apply font-display tracking-tight font-bold;
   }
 
   /* Custom scrollbar */
@@ -37,7 +85,7 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-[#EEF1F5];
+    background-color: var(--bg-page);
   }
 
   ::-webkit-scrollbar-thumb {
@@ -69,7 +117,8 @@
 
   /* Glass effect for cards - rebranded as Clay */
   .glass {
-    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-md transition-all duration-300;
+    background-color: var(--bg-card);
+    @apply rounded-clay-md shadow-clay-md transition-all duration-300;
   }
 
   /* Gradient text */
@@ -79,12 +128,14 @@
 
   /* Primary button */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-blue font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
+    background-color: var(--bg-btn);
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-iste-blue font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
   }
 
   /* Secondary button */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-violet font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
+    background-color: var(--bg-btn);
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-iste-violet font-bold rounded-clay-sm shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-[0.97] transition-all duration-300 focus:outline-none;
   }
 
   /* Ghost button */
@@ -99,12 +150,15 @@
 
   /* Card */
   .card {
-    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-sm hover:shadow-clay-md transition-all duration-300 overflow-hidden;
+    background-color: var(--bg-card);
+    @apply rounded-clay-md shadow-clay-sm hover:shadow-clay-md transition-all duration-300 overflow-hidden;
   }
 
   /* Input field */
   .input-field {
-    @apply w-full px-4 h-[46px] bg-[#EEF1F5] rounded-clay-sm text-slate-900 placeholder-slate-400 shadow-clay-inset focus:outline-none transition-all duration-300;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    @apply w-full px-4 h-[46px] rounded-clay-sm placeholder-slate-400 shadow-clay-inset focus:outline-none transition-all duration-300;
   }
 
   .input-field:focus {
@@ -177,7 +231,8 @@
 
   /* Glass card — base tile rebranded to Clay Card */
   .glass-card {
-    @apply bg-[#EEF1F5] rounded-clay-md shadow-clay-md transition-all duration-300 hover:shadow-clay-lg hover:-translate-y-1;
+    background-color: var(--bg-card);
+    @apply rounded-clay-md shadow-clay-md transition-all duration-300 hover:shadow-clay-lg hover:-translate-y-1;
   }
 
   /* Dark page section */
@@ -188,12 +243,16 @@
 
   /* Glass search input -> Clay search input */
   .search-glass {
-    @apply w-full pl-11 pr-10 h-[46px] bg-[#EEF1F5] rounded-full text-slate-900 placeholder-slate-500 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    @apply w-full pl-11 pr-10 h-[46px] rounded-full placeholder-slate-500 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300;
   }
 
   /* Filter pill — inactive state (raised) */
   .filter-pill {
-    @apply py-2 px-4 rounded-full text-sm font-semibold whitespace-nowrap bg-[#EEF1F5] text-slate-600 shadow-clay-sm hover:shadow-clay-md hover:text-slate-800 transition-all duration-200 cursor-pointer;
+    background-color: var(--bg-btn);
+    color: var(--text-secondary);
+    @apply py-2 px-4 rounded-full text-sm font-semibold whitespace-nowrap shadow-clay-sm hover:shadow-clay-md hover:text-slate-800 transition-all duration-200 cursor-pointer;
   }
 
   /* Filter pill — active / selected state (inset/pressed with tint) */
@@ -214,7 +273,9 @@
 
   /* Glass chip -> Clay inset chip */
   .badge-glass {
-    @apply px-2.5 py-1 text-xs font-bold rounded-clay-sm bg-[#EEF1F5] text-slate-800 shadow-clay-inset;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    @apply px-2.5 py-1 text-xs font-bold rounded-clay-sm shadow-clay-inset;
   }
 
   /* Accent text helper */
@@ -502,4 +563,78 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+}
+
+/* Dark Mode Overrides & Utility Classes */
+.bg-\[\#EEF1F5\] {
+  background-color: var(--bg-page) !important;
+}
+
+.dark .bg-\[\#EEF1F5\] {
+  background-color: var(--bg-card) !important;
+}
+
+.dark .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.dark .text-slate-900,
+.dark .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-slate-800,
+.dark .text-gray-800 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-slate-700,
+.dark .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-slate-600,
+.dark .text-gray-600 {
+  color: var(--text-muted) !important;
+}
+
+.dark .text-slate-500,
+.dark .text-gray-500 {
+  color: var(--text-muted) !important;
+}
+
+/* Custom UI adjustments in dark mode */
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .shadow-clay-sm,
+.dark .shadow-clay-md,
+.dark .shadow-clay-lg,
+.dark .shadow-clay-inset,
+.dark .shadow-clay-pressed {
+  transition: box-shadow 0.3s ease;
+}
+
+.dark .bg-\[\#EEF1F5\]\/85 {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+}
+
+.dark .bg-\[\#EEF1F5\]\/90 {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+.dark .text-slate-550 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-slate-650,
+.dark .text-slate-655 {
+  color: var(--text-secondary) !important;
+}
+
+/* Modal dark mode backdrop */
+.dark .bg-slate-900\/40 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
