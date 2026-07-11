@@ -49,28 +49,34 @@ const CoordinatorCard = ({ profile }) => {
       accent={accentColor}
       className="flex flex-col h-full items-stretch overflow-hidden p-4 group"
     >
-      {/* Photo / Avatar Zone - Full aspect square layout pressed into the card */}
-      <div className="relative w-full aspect-square rounded-clay-md bg-[#EEF1F5] shadow-clay-inset p-2.5 overflow-hidden flex-shrink-0 select-none">
-        <div className="w-full h-full rounded-clay-sm overflow-hidden bg-white shadow-clay-inset relative">
-          {profile.photoUrl ? (
-            <SafeImage
-              src={profile.photoUrl}
-              alt={`${profile.name} - ISTE GMRIT`}
-              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-              fallbackType="profile"
-              name={profile.name}
-              objectPosition="center top"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] flex items-center justify-center">
-              <span className="text-3xl font-extrabold tracking-wider text-iste-blue select-none">
-                {getInitials(profile.name)}
-              </span>
-            </div>
-          )}
+      {/* Photo / Avatar Zone - Centered circular avatar with gradient border */}
+      <div className="relative w-full aspect-square rounded-clay-md bg-[#EEF1F5] shadow-clay-inset flex items-center justify-center p-4 overflow-hidden flex-shrink-0 select-none">
+        {/* Ambient background depth orbs */}
+        <div className="absolute w-24 h-24 rounded-full bg-iste-blue/10 blur-xl -top-6 -left-6" />
+        <div className="absolute w-20 h-20 rounded-full bg-iste-violet/10 blur-lg -bottom-4 -right-4" />
+
+        <div className="relative p-1 rounded-full bg-gradient-to-tr from-iste-blue via-iste-violet to-iste-teal shadow-clay-md transition-all duration-500 ease-spring group-hover:scale-110 group-hover:rotate-6">
+          <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-white bg-white shadow-clay-inset">
+            {profile.photoUrl ? (
+              <SafeImage
+                src={profile.photoUrl}
+                alt={`${profile.name} - ISTE GMRIT`}
+                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                fallbackType="profile"
+                name={profile.name}
+                objectPosition="center top"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] flex items-center justify-center">
+                <span className="text-xl font-extrabold tracking-wider text-iste-blue select-none">
+                  {getInitials(profile.name)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Branch badge — top-left overlaid on photo */}
+        {/* Branch badge — top-left overlaid on photo zone */}
         {profile.branch && (
           <div className="absolute top-4 left-4 z-10">
             <span className="px-2.5 py-1 text-xs font-bold rounded-clay-sm bg-[#EEF1F5]/85 text-slate-800 shadow-clay-sm backdrop-blur-sm">
@@ -79,7 +85,7 @@ const CoordinatorCard = ({ profile }) => {
           </div>
         )}
 
-        {/* Role badge — top-right overlaid on photo */}
+        {/* Role badge — top-right overlaid on photo zone */}
         <div className="absolute top-4 right-4 z-10">
           <span className={`px-2.5 py-1 text-[10px] font-bold rounded-full backdrop-blur-sm ${badgeClass}`}>
             {roleLabels[user.role] || user.role}
