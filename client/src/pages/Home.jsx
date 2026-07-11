@@ -892,20 +892,20 @@ const IndividualPhotoCell = ({ src, albumName, branch, onClick, index }) => {
 /* ─────────────────────────────────────────────────────────────
    BentoAlbumCard — tall card showing a bento layout of photos
    ──────────────────────────────────────────────────────────── */
-const BentoAlbumCard = ({ album, onPhotoClick, isMobile = false }) => {
+const BentoAlbumCard = ({ album, onPhotoClick }) => {
   const photos = album.photos || [];
   const totalCount = photos.length;
-  const shownCount = isMobile ? Math.min(totalCount, 1) : Math.min(totalCount, 3);
+  const shownCount = Math.min(totalCount, 1);
   const extraCount = totalCount - shownCount;
   const badgeText = extraCount > 0 ? `+${extraCount} more` : `${totalCount} photo${totalCount !== 1 ? 's' : ''}`;
 
   return (
     <ClayCard
       variant="raised"
-      className="group flex flex-col h-full w-full overflow-hidden p-3.5 hover:-translate-y-1.5 duration-300 transition-all cursor-pointer"
+      className="group flex flex-col h-fit w-full overflow-hidden p-3.5 hover:-translate-y-1.5 duration-300 transition-all cursor-pointer"
     >
       {/* ── Photo Grid Area inside clay-inset frame with padding ── */}
-      <div className={`w-full relative flex flex-col overflow-hidden bg-[#EEF1F5] rounded-clay-sm shadow-clay-inset p-2 ${isMobile ? 'aspect-square' : 'flex-1'}`}>
+      <div className="w-full relative flex flex-col overflow-hidden bg-[#EEF1F5] rounded-clay-sm shadow-clay-inset p-2 aspect-square">
         {/* Photo count badge overlaid top-right */}
         {photos.length > 0 && (
           <div className="absolute top-4 right-4 z-10 bg-[#EEF1F5]/85 text-slate-700 text-xs px-2.5 py-1 rounded-clay-sm shadow-clay-sm font-bold">
@@ -920,78 +920,15 @@ const BentoAlbumCard = ({ album, onPhotoClick, isMobile = false }) => {
             </svg>
             <span className="text-xs text-slate-400 mt-2 font-bold">No photos</span>
           </div>
-        ) : isMobile ? (
-          <div className="w-full h-full">
-            <IndividualPhotoCell
-              src={photos[0]}
-              albumName={album.albumName}
-              branch={album.branch}
-              onClick={(idx) => onPhotoClick(album, idx)}
-              index={0}
-            />
-          </div>
-        ) : photos.length === 1 ? (
-          <div className="w-full h-full">
-            <IndividualPhotoCell
-              src={photos[0]}
-              albumName={album.albumName}
-              branch={album.branch}
-              onClick={(idx) => onPhotoClick(album, idx)}
-              index={0}
-            />
-          </div>
-        ) : photos.length === 2 ? (
-          <div className="w-full h-full flex flex-col gap-2">
-            <div className="h-[55%]">
-              <IndividualPhotoCell
-                src={photos[0]}
-                albumName={album.albumName}
-                branch={album.branch}
-                onClick={(idx) => onPhotoClick(album, idx)}
-                index={0}
-              />
-            </div>
-            <div className="h-[45%]">
-              <IndividualPhotoCell
-                src={photos[1]}
-                albumName={album.albumName}
-                branch={album.branch}
-                onClick={(idx) => onPhotoClick(album, idx)}
-                index={1}
-              />
-            </div>
-          </div>
         ) : (
-          <div className="w-full h-full flex flex-col gap-2">
-            <div className="h-[55%]">
-              <IndividualPhotoCell
-                src={photos[0]}
-                albumName={album.albumName}
-                branch={album.branch}
-                onClick={(idx) => onPhotoClick(album, idx)}
-                index={0}
-              />
-            </div>
-            <div className="h-[45%] flex gap-2">
-              <div className="w-1/2 h-full">
-                <IndividualPhotoCell
-                  src={photos[1]}
-                  albumName={album.albumName}
-                  branch={album.branch}
-                  onClick={(idx) => onPhotoClick(album, idx)}
-                  index={1}
-                />
-              </div>
-              <div className="w-1/2 h-full">
-                <IndividualPhotoCell
-                  src={photos[2]}
-                  albumName={album.albumName}
-                  branch={album.branch}
-                  onClick={(idx) => onPhotoClick(album, idx)}
-                  index={2}
-                />
-              </div>
-            </div>
+          <div className="w-full h-full">
+            <IndividualPhotoCell
+              src={photos[0]}
+              albumName={album.albumName}
+              branch={album.branch}
+              onClick={(idx) => onPhotoClick(album, idx)}
+              index={0}
+            />
           </div>
         )}
       </div>
@@ -1344,7 +1281,7 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
                     ref={(el) => (cardRefs.current[index] = el)}
                     className="events-scroll-card"
                   >
-                    <BentoAlbumCard album={album} onPhotoClick={openLightbox} isMobile={true} />
+                    <BentoAlbumCard album={album} onPhotoClick={openLightbox} />
                   </div>
                 ))}
               </div>
@@ -1396,7 +1333,7 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
                   return (
                     <motion.div
                       key={album._id}
-                      className="absolute w-[270px] h-[350px] flex-shrink-0 cursor-pointer"
+                      className="absolute w-[270px] h-fit flex-shrink-0 cursor-pointer"
                       style={{
                         x: translateX,
                         transformStyle: 'preserve-3d',
