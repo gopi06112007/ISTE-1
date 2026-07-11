@@ -1700,7 +1700,7 @@ const Home = () => {
           >
             <Link 
               to="/events" 
-              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md hover:scale-102 active:shadow-clay-pressed transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
+              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-iste-blue text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
             >
               <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1710,7 +1710,7 @@ const Home = () => {
 
             <Link 
               to="/coordinators" 
-              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-[#EEF1F5] text-slate-650 shadow-clay-sm hover:shadow-clay-md hover:scale-102 active:shadow-clay-pressed transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
+              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-iste-violet text-white shadow-md shadow-purple-500/20 hover:bg-purple-700 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
             >
               <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1846,14 +1846,14 @@ const Home = () => {
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   to="/blog"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-blue font-extrabold rounded-full shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-iste-blue text-white font-extrabold rounded-full shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300"
                   id="cta-blog"
                 >
                   Read the Blog
                 </Link>
                 <Link
                   to="/gallery"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#EEF1F5] text-iste-violet font-extrabold rounded-full shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-iste-violet text-white font-extrabold rounded-full shadow-md shadow-purple-500/20 hover:bg-purple-700 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300"
                   id="cta-gallery"
                 >
                   View Gallery

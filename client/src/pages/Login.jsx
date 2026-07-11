@@ -444,12 +444,12 @@ const Login = () => {
               disabled={isSubmitting}
               whileHover={{ scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
-              className="w-full h-[50px] rounded-clay-sm text-sm font-extrabold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+              className="w-full h-[50px] rounded-clay-sm text-sm font-extrabold bg-iste-blue text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
               id="login-submit-btn"
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-5 h-5 border-2.5 border-iste-blue/30 border-t-iste-blue rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2.5 border-white/30 border-t-white rounded-full animate-spin" />
                   <span>Signing In...</span>
                 </>
               ) : (

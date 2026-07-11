@@ -18,7 +18,7 @@ const Footer = ({ forceRender = false }) => {
 
   return (
     <footer className="w-full px-4 sm:px-6 lg:px-8 pb-8 pt-4">
-      <div className="mx-auto max-w-6xl bg-[#EEF1F5] rounded-clay-lg shadow-clay-inset p-8 sm:p-12 transition-colors duration-300">
+      <div className="mx-auto max-w-6xl bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] rounded-clay-lg shadow-clay-inset p-8 sm:p-12 transition-colors duration-300">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
