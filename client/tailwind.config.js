@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -16,14 +15,13 @@ export default {
         'glass-bg': 'rgba(255, 255, 255, 0.6)',
         'glass-border': 'rgba(255, 255, 255, 0.4)',
         // Claymorphism colors
-        'clay-bg': 'var(--bg-page)',
-        'clay-card': 'var(--bg-card)',
-        'clay-cse': 'var(--clay-cse)',
-        'clay-ece': 'var(--clay-ece)',
-        'clay-eee': 'var(--clay-eee)',
-        'clay-mech': 'var(--clay-mech)',
-        'clay-civil': 'var(--clay-civil)',
-        'clay-it': 'var(--clay-it)',
+        'clay-bg': '#EEF1F5',
+        'clay-cse': '#A8C5F0',
+        'clay-ece': '#C9B8F0',
+        'clay-eee': '#F0D9A8',
+        'clay-mech': '#C7CDD6',
+        'clay-civil': '#A8E0D4',
+        'clay-it': '#F0B8D4',
       },
       fontFamily: {
         display: ['Sora', 'sans-serif'],
@@ -48,11 +46,11 @@ export default {
         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
         'card-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
         // Claymorphism shadows (softened highlight to eliminate glowing borders)
-        'clay-sm': 'var(--shadow-clay-sm)',
-        'clay-md': 'var(--shadow-clay-md)',
-        'clay-lg': 'var(--shadow-clay-lg)',
-        'clay-inset': 'var(--shadow-clay-inset)',
-        'clay-pressed': 'var(--shadow-clay-pressed)',
+        'clay-sm': '6px 6px 12px rgba(163,177,198,0.35), -6px -6px 12px rgba(255,255,255,0.2)',
+        'clay-md': '9px 9px 16px rgba(163,177,198,0.4), -9px -9px 16px rgba(255,255,255,0.2)',
+        'clay-lg': '14px 14px 28px rgba(163,177,198,0.35), -14px -14px 28px rgba(255,255,255,0.2)',
+        'clay-inset': 'inset 6px 6px 12px rgba(163,177,198,0.35), inset -6px -6px 12px rgba(255,255,255,0.2)',
+        'clay-pressed': 'inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.15)',
       },
       backgroundImage: {
         'orb-primary': 'radial-gradient(circle, #7C3AED 0%, transparent 70%)',

@@ -26,11 +26,23 @@ const getBranchChipClass = (branch) => {
 const AlbumGrid = ({ album, onClick }) => {
   const photoCount = album.photos?.length || 0;
 
+  const branchAccents = {
+    CSE: 'blue',
+    ECE: 'violet',
+    EEE: 'amber',
+    MECH: 'slate',
+    CIVIL: 'teal',
+    IT: 'rose',
+    CENTRAL: 'blue',
+  };
+  const accentColor = branchAccents[album.branch?.toUpperCase()] || 'blue';
+
   return (
     <ClayCard
       as="div"
       interactive={true}
       onClick={() => onClick?.(album)}
+      accent={accentColor}
       className="group cursor-pointer overflow-hidden flex flex-col h-full"
       role="button"
       tabIndex={0}

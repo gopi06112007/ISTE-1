@@ -93,11 +93,23 @@ const HomeEventCard = ({ event }) => {
     alert('Event link copied to clipboard!');
   };
 
+  const branchAccents = {
+    CSE: 'blue',
+    ECE: 'violet',
+    EEE: 'amber',
+    MECH: 'slate',
+    CIVIL: 'teal',
+    IT: 'rose',
+    CENTRAL: 'blue',
+  };
+  const accentColor = branchAccents[branch] || 'blue';
+
   return (
     <>
       <ClayCard
         variant="raised"
         onClick={() => setIsModalOpen(true)}
+        accent={accentColor}
         className="group flex flex-col h-full overflow-hidden p-3.5 hover:-translate-y-1.5 duration-300 transition-all cursor-pointer"
       >
       {/* ── Poster Image Area ── */}

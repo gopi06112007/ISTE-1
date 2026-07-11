@@ -66,9 +66,18 @@ const HomeBlogCard = ({ blog }) => {
   const authorName = blog.author?.profileId?.name || blog.author?.email || 'ISTE GMRIT';
   const authorPhoto = blog.author?.profileId?.photoUrl || '';
 
+  const categoryAccents = {
+    Announcement: 'blue',
+    Achievement: 'amber',
+    Technical: 'violet',
+    'ISTE News': 'teal',
+  };
+  const accentColor = categoryAccents[category] || 'blue';
+
   return (
     <ClayCard
       variant="raised"
+      accent={accentColor}
       className="group flex flex-col h-full overflow-hidden p-3.5 hover:-translate-y-1.5 duration-300 transition-all cursor-pointer"
     >
       {/* ── Featured Image Area inside clay-inset frame ── */}

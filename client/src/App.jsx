@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
@@ -62,6 +62,28 @@ function AnimatedRoutes() {
   );
 }
 
+function ScrollProgress() {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setWidth((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div
+      className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-iste-blue via-iste-violet to-iste-teal z-[200] transition-all duration-100 ease-out"
+      style={{ width: `${width}%` }}
+    />
+  );
+}
+
 function App() {
   // removed theme initialization
   const { checkAuth } = useAuth();
@@ -74,6 +96,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col relative text-slate-800  font-inter transition-colors duration-300">
+        <ScrollProgress />
         <Toaster position="top-right" toastOptions={{ className: 'font-sans' }} />
         <Navbar />
         <main className="flex-1">

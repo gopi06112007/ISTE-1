@@ -899,9 +899,21 @@ const BentoAlbumCard = ({ album, onPhotoClick }) => {
   const extraCount = totalCount - shownCount;
   const badgeText = extraCount > 0 ? `+${extraCount} more` : `${totalCount} photo${totalCount !== 1 ? 's' : ''}`;
 
+  const branchAccents = {
+    CSE: 'blue',
+    ECE: 'violet',
+    EEE: 'amber',
+    MECH: 'slate',
+    CIVIL: 'teal',
+    IT: 'rose',
+    CENTRAL: 'blue',
+  };
+  const accentColor = branchAccents[album.branch] || 'blue';
+
   return (
     <ClayCard
       variant="raised"
+      accent={accentColor}
       className="group flex flex-col h-fit w-full overflow-hidden p-3.5 hover:-translate-y-1.5 duration-300 transition-all cursor-pointer"
     >
       {/* ── Photo Grid Area inside clay-inset frame with padding ── */}

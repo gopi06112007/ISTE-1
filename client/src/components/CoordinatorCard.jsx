@@ -30,11 +30,23 @@ const CoordinatorCard = ({ profile }) => {
 
   const badgeClass = roleBadgeStyles[user.role] || 'bg-[#EEF1F5] text-blue-600 shadow-clay-sm';
 
+  const branchAccents = {
+    CSE: 'blue',
+    ECE: 'violet',
+    EEE: 'amber',
+    MECH: 'slate',
+    CIVIL: 'teal',
+    IT: 'rose',
+    CENTRAL: 'blue',
+  };
+  const accentColor = branchAccents[profile.branch?.toUpperCase()] || 'blue';
+
   return (
     <ClayCard
       as={Link}
       to={`/coordinators/${profile._id}`}
       interactive={true}
+      accent={accentColor}
       className="flex flex-col h-full items-stretch overflow-hidden p-4"
     >
       {/* Photo / Avatar Zone - Pressed into the Card */}
