@@ -8,18 +8,11 @@ const Footer = ({ forceRender = false }) => {
     return null;
   }
 
-  const quickLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/coordinators', label: 'Coordinators' },
-    { to: '/events', label: 'Events' },
-    { to: '/gallery', label: 'Gallery' },
-    { to: '/blog', label: 'Blog' },
-  ];
 
   return (
     <footer className="w-full px-4 sm:px-6 lg:px-8 pb-8 pt-4">
       <div className="mx-auto max-w-6xl bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] rounded-clay-lg shadow-clay-inset p-8 sm:p-12 transition-colors duration-300">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
@@ -41,45 +34,34 @@ const Footer = ({ forceRender = false }) => {
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-              Quick Links
-            </h3>
-            <ul className="space-y-2.5">
-              {quickLinks.map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-sm font-bold text-gray-600 hover:text-iste-blue transition-colors duration-300"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact */}
           <div>
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
               Contact
             </h3>
-            <ul className="space-y-2.5 text-sm text-gray-600 font-medium">
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 mt-0.5 text-iste-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex gap-3">
+              <a
+                href="mailto:iste_student@gmrit.edu.in"
+                className="w-10 h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
+                aria-label="Email"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=GMR+Institute+of+Technology+Rajam"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
+                aria-label="Location"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span>GMR Institute of Technology, Rajam, Srikakulam, AP</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-iste-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>iste_student@gmrit.edu.in</span>
-              </li>
-            </ul>
+              </a>
+            </div>
           </div>
 
           {/* Social */}
