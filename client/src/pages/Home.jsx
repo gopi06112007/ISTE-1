@@ -1101,22 +1101,79 @@ const LightboxModal = ({ isOpen, currentAlbumPhotos, currentIndex, albumName, br
 };
 
 /* ─────────────────────────────────────────────────────────────
-   GalleryHighlightsSection — 3-column bento album cards and carousel
+   GalleryHighlightsSection — masonry grid (desktop) / horizontal scroll (mobile)
    ──────────────────────────────────────────────────────────── */
 const galleryContainerVariants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
 };
 const galleryCardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
+
+/* Skeleton card for gallery */
+const GallerySkeletonCard = ({ tall = false }) => (
+  <div className={`rounded-2xl bg-[#EEF1F5] shadow-clay-md p-3 space-y-3 ${tall ? 'row-span-2' : ''}`}>
+    <div className={`w-full skeleton-shimmer rounded-xl ${tall ? 'h-[280px]' : 'h-[200px]'}`} />
+    <div className="flex items-center justify-between px-1">
+      <div className="flex items-center gap-2">
+        <div className="w-24 h-4 skeleton-shimmer rounded" />
+        <div className="w-12 h-4 skeleton-shimmer rounded-full" />
+      </div>
+      <div className="w-20 h-3 skeleton-shimmer rounded" />
+    </div>
+  </div>
+);
+
+const PremiumGalleryCard = ({ album, onPhotoClick }) => {
+  const photo = album.photos?.[0] || '';
+  const totalPhotos = album.photos?.length || 0;
+  
+  return (
+    <div
+      onClick={() => onPhotoClick(album, 0)}
+      className="group relative w-full h-full rounded-2xl overflow-hidden shadow-clay-md hover:shadow-clay-lg cursor-pointer transition-all duration-350"
+    >
+      {photo ? (
+        <img
+          src={photo}
+          alt={album.albumName}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white font-extrabold">
+          {album.branch}
+        </div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent transition-opacity duration-300" />
+      
+      {/* Photo count badge */}
+      <span className="absolute top-3 right-3 text-[10px] font-black bg-white/95 text-slate-700 px-2.5 py-1 rounded-full shadow-sm">
+        {totalPhotos} Photos
+      </span>
+
+      {/* Info bar at the bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col justify-end text-white">
+        <span className="text-[9px] font-black uppercase tracking-widest text-teal-450 mb-1">
+          {album.branch}
+        </span>
+        <h4 className="text-sm font-bold text-white leading-tight line-clamp-1 group-hover:text-teal-300 transition-colors">
+          {album.albumName}
+        </h4>
+        <p className="text-[10px] text-white/70 font-semibold line-clamp-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          Click to view photos →
+        </p>
+      </div>
+    </div>
+  );
 };
 
 const GalleryHighlightsSection = ({ albums, loading }) => {
   const scrollRef = useRef(null);
   const cardRefs = useRef([]);
   const [activeIdx, setActiveIdx] = useState(0);
-  const wheelTimeout = useRef(null);
 
   // Lightbox State
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -1149,105 +1206,35 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
 
   const displayAlbums = albums.slice(0, 5);
 
-  const handlePrev = () => {
-    if (displayAlbums.length <= 1) return;
-    setActiveIdx((prev) => (prev === 0 ? displayAlbums.length - 1 : prev - 1));
+  /* Masonry height pattern for visual interest */
+  const getCardHeight = (index) => {
+    const heights = ['row-span-2', '', '', 'row-span-2', ''];
+    return heights[index % heights.length];
   };
-
-  const handleNext = () => {
-    if (displayAlbums.length <= 1) return;
-    setActiveIdx((prev) => (prev === displayAlbums.length - 1 ? 0 : prev + 1));
-  };
-
-  /* ── Trackpad horizontal swipe handling (deltaX detection) ── */
-  const handleWheel = (e) => {
-    if (Math.abs(e.deltaX) > 25) {
-      if (wheelTimeout.current) return;
-      if (e.deltaX > 25) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-      wheelTimeout.current = setTimeout(() => {
-        wheelTimeout.current = null;
-      }, 400);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
-    };
-  }, []);
-
-  /* ── Mobile dot indicators via IntersectionObserver ── */
-  useEffect(() => {
-    if (!scrollRef.current || albums.length === 0) return;
-    const cards = cardRefs.current.filter(Boolean);
-    if (cards.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = cards.indexOf(entry.target);
-            if (idx !== -1) setActiveIdx(idx);
-          }
-        });
-      },
-      { root: scrollRef.current, threshold: 0.6 }
-    );
-
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, [albums]);
-
-  const scrollToDot = (idx) => {
-    const card = cardRefs.current[idx];
-    if (card && scrollRef.current) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-  };
-
-  /* ── Custom Tactile Arrow Button ── */
-  const ArrowBtn = ({ direction }) => (
-    <button
-      onClick={direction === -1 ? handlePrev : handleNext}
-      className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 bg-white/70 hover:bg-white border border-white/60 shadow-clay-md hover:scale-110 active:scale-90"
-      aria-label={direction === -1 ? 'Scroll left' : 'Scroll right'}
-    >
-      <svg className="w-6 h-6 text-[#1A56DB]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        {direction === -1
-          ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-          : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-        }
-      </svg>
-    </button>
-  );
 
   return (
     <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6"
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
         >
           <div>
-            <span className="block text-xs font-semibold tracking-widest uppercase text-[#1A56DB] mb-2">
+            <span className="block text-xs font-semibold tracking-widest uppercase text-teal-650 mb-2">
               Gallery Highlights
             </span>
             <h2 className="text-3xl lg:text-4xl font-display font-bold text-slate-800 leading-tight">
-              Moments <span className="text-violet-600">Captured</span>
+              Moments <span className="text-teal-650">Captured</span>
             </h2>
             <p className="text-slate-500 text-sm mt-1">Snapshots from events, workshops, and achievements across GMRIT</p>
           </div>
           <Link
             to="/gallery"
-            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#1A56DB]/30 text-[#1A56DB] hover:bg-[#1A56DB] hover:text-white transition-all duration-300 text-sm font-semibold group"
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-teal-500/30 text-teal-650 hover:bg-teal-650 hover:text-white transition-all duration-300 text-sm font-semibold group"
           >
             View Gallery
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1258,13 +1245,27 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
 
         {/* ── Content ── */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-[300px] sm:h-[360px] lg:h-[420px] rounded-[1.25rem] bg-gray-100/60 animate-pulse" />
-            ))}
-          </div>
-        ) : albums.length === 0 ? (
-          /* Empty state */
+          <>
+            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-[200px]">
+              <GallerySkeletonCard tall />
+              <GallerySkeletonCard />
+              <GallerySkeletonCard />
+              <GallerySkeletonCard tall />
+              <GallerySkeletonCard />
+            </div>
+            <div className="sm:hidden flex flex-col gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-full rounded-2xl bg-[#EEF1F5] shadow-clay-md p-3 space-y-3">
+                  <div className="w-full h-[200px] skeleton-shimmer rounded-xl" />
+                  <div className="flex items-center justify-between px-1">
+                    <div className="w-24 h-4 skeleton-shimmer rounded" />
+                    <div className="w-16 h-3 skeleton-shimmer rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : displayAlbums.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1282,116 +1283,29 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
           </motion.div>
         ) : (
           <>
-            {/* Mobile layout - scroll (untouched!) */}
-            <div className="sm:hidden relative w-full overflow-hidden">
-              <div
-                ref={scrollRef}
-                className="events-scroll"
-              >
-                {albums.map((album, index) => (
+            {/* Desktop — masonry staggered grid */}
+            <div className="hidden sm:block">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-[200px]">
+                {displayAlbums.map((album, index) => (
                   <div
                     key={album._id}
-                    ref={(el) => (cardRefs.current[index] = el)}
-                    className="events-scroll-card"
+                    className={getCardHeight(index)}
                   >
-                    <BentoAlbumCard album={album} onPhotoClick={openLightbox} />
+                    <PremiumGalleryCard album={album} onPhotoClick={openLightbox} />
                   </div>
-                ))}
-              </div>
-
-              {/* Mobile dots */}
-              <div className="flex items-center justify-center gap-2 mt-4">
-                {albums.map((_, idx) => (
-                  <button
-                    key={idx}
-                    className={`events-dot ${idx === activeIdx ? 'active' : ''}`}
-                    onClick={() => scrollToDot(idx)}
-                    aria-label={`Go to album ${idx + 1}`}
-                  />
                 ))}
               </div>
             </div>
 
-            {/* Desktop/Tablet layout - centered 3D loop slider */}
-            <div
-              className="hidden sm:flex relative w-full h-[460px] items-center justify-center overflow-hidden"
-              onWheel={handleWheel}
-              style={{ perspective: 1200 }}
-            >
-              {/* Left Arrow - Side placement */}
-              {displayAlbums.length > 1 && (
-                <div className="absolute left-2 lg:left-6 z-40">
-                  <ArrowBtn direction={-1} />
-                </div>
-              )}
-
-              {/* Slider tracks */}
-              <div className="relative flex items-center justify-center w-full h-full" style={{ transformStyle: 'preserve-3d' }}>
-                {displayAlbums.map((album, index) => {
-                  let diff = index - activeIdx;
-                  const count = displayAlbums.length;
-                  if (diff > Math.floor(count / 2)) diff -= count;
-                  if (diff < -Math.floor(count / 2)) diff += count;
-
-                  const isVisible = Math.abs(diff) <= 2;
-                  if (!isVisible) return null;
-
-                  const translateX = diff * 290;
-                  const rotateY = diff * -25;
-                  const translateZ = Math.abs(diff) * -140;
-                  const scale = diff === 0 ? 1 : 0.82;
-                  const opacity = diff === 0 ? 1 : 0;
-                  const zIndex = diff === 0 ? 30 : 10;
-
-                  return (
-                    <motion.div
-                      key={album._id}
-                      className="absolute w-[270px] h-fit flex-shrink-0 cursor-pointer"
-                      style={{
-                        x: translateX,
-                        transformStyle: 'preserve-3d',
-                      }}
-                      animate={{
-                        scale: scale,
-                        opacity: opacity,
-                        zIndex: zIndex,
-                        rotateY: rotateY,
-                        z: translateZ,
-                        y: diff === 0 ? 0 : 20,
-                      }}
-                      drag={diff === 0 ? "x" : false}
-                      dragConstraints={{ left: 0, right: 0 }}
-                      onDragEnd={(e, info) => {
-                        const threshold = 55;
-                        if (info.offset.x < -threshold) {
-                          handleNext();
-                        } else if (info.offset.x > threshold) {
-                          handlePrev();
-                        }
-                      }}
-                      transition={{ type: 'tween', ease: [0.25, 1, 0.5, 1], duration: 0.75 }}
-                      onClick={() => {
-                        if (diff !== 0) {
-                          setActiveIdx(index);
-                        }
-                      }}
-                    >
-
-
-                      <div className={diff === 0 ? 'pointer-events-auto' : 'pointer-events-none'}>
-                        <BentoAlbumCard album={album} onPhotoClick={openLightbox} />
-                      </div>
-                    </motion.div>
-                  );
-                })}
+            {/* Mobile — vertical stacked list */}
+            <div className="sm:hidden">
+              <div className="flex flex-col gap-4">
+                {displayAlbums.map((album) => (
+                  <div key={album._id} className="h-[250px]">
+                    <PremiumGalleryCard album={album} onPhotoClick={openLightbox} />
+                  </div>
+                ))}
               </div>
-
-              {/* Right Arrow - Side placement */}
-              {displayAlbums.length > 1 && (
-                <div className="absolute right-2 lg:right-6 z-40">
-                  <ArrowBtn direction={1} />
-                </div>
-              )}
             </div>
           </>
         )}
@@ -1400,7 +1314,7 @@ const GalleryHighlightsSection = ({ albums, loading }) => {
         <div className="sm:hidden mt-6 text-center">
           <Link
             to="/gallery"
-            className="inline-flex items-center gap-2 text-[#1A56DB] text-sm font-semibold"
+            className="inline-flex items-center gap-2 text-teal-600 text-sm font-semibold"
           >
             View Gallery →
           </Link>
