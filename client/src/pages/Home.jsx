@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import api from '../api/axios';
@@ -10,6 +10,8 @@ import Footer from '../components/Footer';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import HeroBackgroundMobile from '../components/HeroBackgroundMobile';
+
+const TechHeroCanvas = lazy(() => import('../components/TechHeroCanvas'));
 
 /* ─────────────────────────────────────────────────────────────
    Animated branch illustrations — unique per branch code
@@ -322,7 +324,7 @@ const UpcomingEventsSection = ({ events, loading }) => {
   );
 
   return (
-    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
+    <section id="events-section" className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div
@@ -1595,6 +1597,14 @@ const Home = () => {
     });
   };
 
+  const handleScrollToEvents = (e) => {
+    e.preventDefault();
+    const target = document.getElementById('events-section');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
 
 
   return (
@@ -1603,128 +1613,99 @@ const Home = () => {
       {/* Hero Section                           */}
       {/* ══════════════════════════════════════ */}
       <section 
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
-        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 hero-gradient-mesh overflow-hidden py-20"
       >
-        {/* Interactive floating blur orbs - Desktop Only */}
-        <motion.div
-          animate={{ x: mousePos.x * 0.1, y: mousePos.y * 0.1 }}
-          transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-          className="absolute w-72 h-72 rounded-full bg-blue-300/10 blur-3xl -top-20 left-10 pointer-events-none -z-10 hidden md:block"
-        />
-        <motion.div
-          animate={{ x: -mousePos.x * 0.08, y: -mousePos.y * 0.08 }}
-          transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-          className="absolute w-80 h-80 rounded-full bg-purple-300/10 blur-3xl bottom-10 right-10 pointer-events-none -z-10 hidden md:block"
-        />
+        {/* Background elements */}
+        <div className="noise-overlay" />
+        <div className="tech-grid" />
+        <div className="mesh-blob mesh-blob-1" />
+        <div className="mesh-blob mesh-blob-2" />
 
-        {/* Mobile Background Animation */}
+        {/* Mobile Background Animation Fallback */}
         <HeroBackgroundMobile />
 
-        <div className="section-container relative z-10 py-16 md:py-8 flex flex-col items-center text-center max-w-4xl mx-auto px-5 md:px-6">
-
-          {/* Dark semi-transparent overlay container behind the hero text block on mobile */}
-          <div className="w-full bg-gradient-to-b from-[rgba(0,0,0,0.4)] to-[rgba(0,0,0,0.5)] md:bg-none p-5 sm:p-8 md:p-0 rounded-2xl md:rounded-none border border-white/10 md:border-none backdrop-blur-[2px] md:backdrop-blur-none shadow-lg md:shadow-none mb-8 md:mb-0 flex flex-col items-center">
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
+        <div className="max-w-7xl mx-auto px-6 relative z-10 w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Text & CTAs */}
+          <div className="col-span-12 md:col-span-7 flex flex-col items-start text-left relative">
+            
+            {/* Pill badge with a glowing dot indicator */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EEF1F5] rounded-full text-iste-blue text-xs font-black mb-6 shadow-clay-sm select-none"
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-900/60 border border-white/10 rounded-full text-cyan-400 text-xs font-semibold mb-6 shadow-lg shadow-cyan-500/10 backdrop-blur-md relative select-none"
             >
-              <span className="w-2 h-2 bg-iste-blue rounded-full animate-pulse" />
-              ISTE Student Chapter, GMRIT
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping absolute" />
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 relative" />
+              <span className="pl-1">ISTE Student Chapter, GMRIT</span>
             </motion.div>
 
-            <div className="relative px-2 sm:px-8 select-none w-full">
-              {/* Interactive floating tech sparkles/nodes in the background */}
-              <motion.div
-                animate={{ y: [0, -10, 0], rotate: [0, 360] }}
-                transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-                whileHover={{ scale: 1.3, rotate: 45 }}
-                className="absolute -top-10 left-0 text-amber-500/40 text-3xl cursor-pointer select-none filter drop-shadow hidden md:block"
-                title="Innovation"
-              >
-                ✦
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 8, 0], rotate: -15 }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-                whileHover={{ scale: 1.3, rotate: 15 }}
-                className="absolute top-2 -right-8 text-iste-blue/30 text-3xl font-mono cursor-pointer select-none font-black hidden md:block"
-                title="Code"
-              >
-                &lt;/&gt;
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, -8, 0], rotate: 45 }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                whileHover={{ scale: 1.3, rotate: 90 }}
-                className="absolute bottom-10 -left-12 text-[#DB2777]/30 text-3xl font-extrabold cursor-pointer select-none hidden md:block"
-                title="Connect"
-              >
-                +
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 6, 0], rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-                whileHover={{ scale: 1.3 }}
-                className="absolute bottom-0 -right-10 text-slate-400/30 text-3xl cursor-pointer select-none hidden md:block"
-                title="System"
-              >
-                ⚙
-              </motion.div>
+            {/* Bold headline with gradient highlighting */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-100 tracking-tight leading-[1.15] mb-6 select-none"
+            >
+              Empowering{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-400 drop-shadow-[0_2px_10px_rgba(37,99,235,0.2)]">
+                Technical Excellence
+              </span>{' '}
+              Through Innovation
+            </motion.h1>
 
-              <motion.h1 
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                className="text-3xl xs:text-[32px] md:text-5xl lg:text-6xl font-black text-white md:text-slate-850 mb-6 tracking-tight max-w-4xl leading-[1.35] md:leading-[1.2] select-none mx-auto"
-              >
-                Empowering{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300 md:from-iste-blue md:to-sky-500 hover:brightness-110 transition-all duration-300 inline-block">
-                  Technical Excellence
-                </span>{' '}
-                Through Innovation
-              </motion.h1>
-            </div>
-
+            {/* Supporting paragraph */}
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-base sm:text-lg text-slate-200 md:text-slate-500 font-bold leading-relaxed mb-4 md:mb-10 max-w-2xl select-none [text-shadow:0_1px_2px_rgba(0,0,0,0.5)] md:[text-shadow:none]"
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="text-base sm:text-lg text-slate-400 font-bold leading-relaxed mb-8 max-w-xl select-none"
             >
               The Indian Society for Technical Education (ISTE) Student Chapter at GMRIT is a platform for engineers to connect, build, and lead. We spark curiosity and accelerate growth across all engineering disciplines.
             </motion.p>
+
+            {/* Two CTA Buttons */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
+              className="flex flex-col sm:flex-row items-center gap-4 select-none w-full sm:w-auto"
+            >
+              <a 
+                href="#events-section" 
+                onClick={handleScrollToEvents}
+                className="group w-full sm:w-auto px-6 py-4 rounded-xl text-base font-extrabold text-white bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg shadow-blue-500/25 hover:shadow-cyan-400/40 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+              >
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>View Events</span>
+              </a>
+
+              <Link 
+                to="/coordinators" 
+                className="group w-full sm:w-auto px-6 py-4 rounded-xl text-base font-extrabold text-slate-200 bg-white/5 border border-white/10 backdrop-blur-md shadow-lg hover:bg-white/10 hover:border-white/20 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
+              >
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Meet the Team</span>
+              </Link>
+            </motion.div>
           </div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 select-none w-full px-4 md:px-0"
-          >
-            <Link 
-              to="/events" 
-              className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-iste-blue text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>View Events</span>
-            </Link>
+          {/* Right Column: Animated 3D visual */}
+          <div className="col-span-12 md:col-span-5 flex items-center justify-center relative">
+            <Suspense fallback={
+              <div className="w-full h-[320px] sm:h-[400px] md:h-[500px] flex items-center justify-center relative select-none">
+                <div className="w-16 h-16 border-4 border-t-cyan-500 border-r-transparent border-b-purple-500 border-l-transparent rounded-full animate-spin" />
+              </div>
+            }>
+              <TechHeroCanvas />
+            </Suspense>
+          </div>
 
-            <Link 
-              to="/coordinators" 
-              className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-iste-violet text-white shadow-md shadow-purple-500/20 hover:bg-purple-700 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>Meet the Team</span>
-            </Link>
-          </motion.div>
         </div>
       </section>
 
