@@ -1647,26 +1647,55 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 select-none w-full px-4 sm:px-0"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 select-none w-full px-4 sm:px-0"
           >
+            {/* Primary CTA — View Events */}
             <Link
               to="/events"
-              className="w-full sm:w-auto px-8 py-4 sm:py-3.5 rounded-full text-base sm:text-sm font-extrabold bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center gap-2.5 whitespace-nowrap"
+              className="group relative w-full sm:w-auto overflow-hidden rounded-2xl transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.96]"
             >
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              View Events
+              {/* Gradient background layer */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 transition-all duration-500 group-hover:from-blue-500 group-hover:via-indigo-500 group-hover:to-violet-500" />
+              {/* Animated shimmer sweep on hover */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+              {/* Glow shadow */}
+              <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_8px_30px_rgba(99,102,241,0.5)]" />
+              {/* Content */}
+              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4.5 text-base font-bold text-white tracking-wide">
+                <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-400 group-hover:rotate-12 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Explore Events</span>
+                <svg className="w-4 h-4 flex-shrink-0 transition-transform duration-400 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
             </Link>
 
+            {/* Secondary CTA — Meet the Team */}
             <Link
               to="/coordinators"
-              className="w-full sm:w-auto px-8 py-4 sm:py-3.5 rounded-full text-base sm:text-sm font-extrabold bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-md hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center gap-2.5 whitespace-nowrap"
+              className="group relative w-full sm:w-auto overflow-hidden rounded-2xl transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.96]"
             >
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              Meet the Team
+              {/* Gradient border via background + inner mask */}
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 rounded-2xl transition-all duration-500 group-hover:from-purple-400 group-hover:via-pink-400 group-hover:to-rose-400" />
+              <span className="absolute inset-[2px] bg-white rounded-[14px] transition-all duration-500 group-hover:bg-white/95" />
+              {/* Shimmer sweep */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-purple-500/10 to-transparent z-[1]" />
+              {/* Glow shadow */}
+              <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_8px_30px_rgba(168,85,247,0.35)]" />
+              {/* Content */}
+              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4.5 text-base font-bold tracking-wide">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-400 group-hover:from-purple-500 group-hover:to-rose-500">
+                  <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-400 group-hover:-rotate-6 group-hover:scale-110 text-purple-600 group-hover:text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 group-hover:from-purple-500 group-hover:to-rose-500 transition-all duration-400">Meet the Team</span>
+                <svg className="w-4 h-4 flex-shrink-0 text-pink-500 transition-transform duration-400 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
             </Link>
           </motion.div>
         </div>
