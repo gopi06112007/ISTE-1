@@ -9,7 +9,7 @@ import BentoGrid from '../components/ui/BentoGrid';
 import Footer from '../components/Footer';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
-import Iste3DLogo from '../components/Iste3DLogo';
+import HeroBackground3D from '../components/HeroBackground3D';
 
 /* ─────────────────────────────────────────────────────────────
    Animated branch illustrations — unique per branch code
@@ -1602,84 +1602,73 @@ const Home = () => {
       {/* ══════════════════════════════════════ */}
       {/* Hero Section                           */}
       {/* ══════════════════════════════════════ */}
-      <section 
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
-        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #EEF2FF, #E0E7FF, #F5F3FF)' }}
+      <section
+        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden bg-white"
       >
-        <div className="section-container relative z-10 py-16 md:py-12 flex flex-col items-center justify-center max-w-4xl mx-auto px-5 md:px-6 w-full">
+        {/* 3D Animated Background — fills entire section behind text */}
+        <HeroBackground3D />
 
-          {/* Claymorphic Hero Card */}
-          <div className="w-full bg-white/70 backdrop-blur-md rounded-clay-lg shadow-clay-md p-6 sm:p-10 md:p-14 border border-white/60 flex flex-col items-center text-center relative z-10 overflow-hidden">
-            
-            {/* 3D Rotating Logo - Layer 2 */}
-            <div className="absolute inset-0 z-0 opacity-15 sm:opacity-20 pointer-events-none select-none flex items-center justify-center">
-              <Iste3DLogo />
-            </div>
+        {/* Content layer — sits above the 3D canvas */}
+        <div className="relative z-10 py-16 md:py-12 flex flex-col items-center justify-center max-w-4xl mx-auto px-5 md:px-6 w-full">
 
-            {/* Content Elements - Layer 3 */}
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/95 rounded-full text-iste-blue text-xs font-black mb-6 shadow-clay-sm select-none relative z-10 border border-white/50"
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-iste-blue text-xs font-black mb-8 shadow-clay-sm select-none border border-slate-200/60"
+          >
+            <span className="w-2 h-2 bg-iste-blue rounded-full animate-pulse" />
+            ISTE Student Chapter, GMRIT
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            className="text-4xl xs:text-[36px] sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 mb-6 tracking-tight max-w-4xl leading-[1.15] select-none mx-auto text-center"
+          >
+            Empowering{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-iste-blue to-iste-violet">
+              Technical Excellence
+            </span>{' '}
+            Through Innovation
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="text-base sm:text-lg text-slate-500 font-semibold leading-relaxed mb-10 max-w-2xl select-none text-center"
+          >
+            The Indian Society for Technical Education (ISTE) Student Chapter at GMRIT — a platform for engineers to connect, build, and lead. We spark curiosity and accelerate growth across all engineering disciplines.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 select-none w-full px-4 sm:px-0"
+          >
+            <Link
+              to="/events"
+              className="w-full sm:w-auto px-8 py-4 sm:py-3.5 rounded-full text-base sm:text-sm font-extrabold bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-slate-900/20 hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center gap-2.5 whitespace-nowrap"
             >
-              <span className="w-2 h-2 bg-iste-blue rounded-full animate-pulse" />
-              ISTE Student Chapter, GMRIT
-            </motion.div>
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              View Events
+            </Link>
 
-            <div className="relative px-2 sm:px-8 select-none w-full z-10">
-              <motion.h1 
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                className="text-3xl xs:text-[34px] md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 tracking-tight max-w-4xl leading-[1.3] select-none mx-auto"
-              >
-                Empowering{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-iste-blue to-iste-violet hover:brightness-110 transition-all duration-300 inline-block">
-                  Technical Excellence
-                </span>{' '}
-                Through Innovation
-              </motion.h1>
-            </div>
-
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="text-base sm:text-lg text-slate-600 font-bold leading-relaxed mb-10 max-w-2xl select-none relative z-10"
+            <Link
+              to="/coordinators"
+              className="w-full sm:w-auto px-8 py-4 sm:py-3.5 rounded-full text-base sm:text-sm font-extrabold bg-white text-slate-900 border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-md hover:shadow-lg hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center gap-2.5 whitespace-nowrap"
             >
-              The Indian Society for Technical Education (ISTE) Student Chapter at GMRIT is a platform for engineers to connect, build, and lead. We spark curiosity and accelerate growth across all engineering disciplines.
-            </motion.p>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 select-none w-full px-4 md:px-0 relative z-10"
-            >
-              <Link 
-                to="/events" 
-                className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-clay-sm hover:shadow-clay-md hover:scale-102 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span>View Events</span>
-              </Link>
-
-              <Link 
-                to="/coordinators" 
-                className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-clay-sm hover:shadow-clay-md hover:scale-102 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
-              >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span>Meet the Team</span>
-              </Link>
-            </motion.div>
-          </div>
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Meet the Team
+            </Link>
+          </motion.div>
         </div>
       </section>
 
