@@ -38,9 +38,6 @@ const Footer = ({ forceRender = false }) => {
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-4 w-full">
             {/* Contact (Left side) */}
             <div className="flex items-center gap-1.5 sm:gap-3">
-              <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider">
-                Contact
-              </h3>
               <div className="flex gap-1.5 sm:gap-2">
                 <a
                   href="mailto:iste_student@gmrit.edu.in"
@@ -68,9 +65,6 @@ const Footer = ({ forceRender = false }) => {
 
             {/* Social (Right side) */}
             <div className="flex items-center gap-1.5 sm:gap-3">
-              <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider">
-                Follow Us
-              </h3>
               <div className="flex gap-1.5 sm:gap-2">
                 <a
                   href="https://www.instagram.com/_iste_gmrit"
