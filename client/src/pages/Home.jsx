@@ -9,6 +9,7 @@ import BentoGrid from '../components/ui/BentoGrid';
 import Footer from '../components/Footer';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
+import HeroBackgroundMobile from '../components/HeroBackgroundMobile';
 
 /* ─────────────────────────────────────────────────────────────
    Animated branch illustrations — unique per branch code
@@ -1606,17 +1607,20 @@ const Home = () => {
         onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
         className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden"
       >
-        {/* Interactive floating blur orbs */}
+        {/* Interactive floating blur orbs - Desktop Only */}
         <motion.div
           animate={{ x: mousePos.x * 0.1, y: mousePos.y * 0.1 }}
           transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-          className="absolute w-72 h-72 rounded-full bg-blue-300/10 blur-3xl -top-20 left-10 pointer-events-none -z-10"
+          className="absolute w-72 h-72 rounded-full bg-blue-300/10 blur-3xl -top-20 left-10 pointer-events-none -z-10 hidden md:block"
         />
         <motion.div
           animate={{ x: -mousePos.x * 0.08, y: -mousePos.y * 0.08 }}
           transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-          className="absolute w-80 h-80 rounded-full bg-purple-300/10 blur-3xl bottom-10 right-10 pointer-events-none -z-10"
+          className="absolute w-80 h-80 rounded-full bg-purple-300/10 blur-3xl bottom-10 right-10 pointer-events-none -z-10 hidden md:block"
         />
+
+        {/* Mobile Background Animation */}
+        <HeroBackgroundMobile />
 
         <div className="section-container relative z-10 py-16 md:py-8 flex flex-col items-center text-center max-w-4xl mx-auto px-5 md:px-6">
 
