@@ -581,7 +581,7 @@
 }
 
 .colorful-gradient-bg {
-  background: linear-gradient(-45deg, #EEF2FF, #E0E7FF, #F5F3FF, #FCE7F3, #FDF4FF, #F0FDFA, #E0F2FE);
+  background: linear-gradient(-45deg, #EEF2FF, #E0E7FF, #E0F2FE, #F5F3FF, #F0FDFA, #ECFDF5);
   background-size: 400% 400%;
   animation: dynamicGradient 18s ease infinite;
 }

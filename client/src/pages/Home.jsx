@@ -1652,7 +1652,7 @@ const Home = () => {
             {/* Primary Button: Explore Events */}
             <Link
               to="/events"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-slate-900 text-white font-bold text-base shadow-lg shadow-slate-950/10 hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-950/20 active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-base shadow-lg shadow-indigo-600/25 hover:shadow-xl hover:shadow-indigo-600/35 hover:-translate-y-0.5 hover:scale-[1.01] active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
             >
               <svg 
                 className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" 
@@ -1676,7 +1676,7 @@ const Home = () => {
             {/* Secondary Button: Meet the Team */}
             <Link
               to="/coordinators"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-base shadow-sm hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white border-2 border-indigo-600/20 text-indigo-600 font-bold text-base shadow-sm hover:border-indigo-600/50 hover:bg-indigo-50/30 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-md active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
             >
               <svg 
                 className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" 
