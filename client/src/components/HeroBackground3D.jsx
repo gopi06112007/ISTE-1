@@ -1,198 +1,258 @@
 import React, { useRef, useMemo, Suspense, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshTransmissionMaterial } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-/* ── Individual floating shape ── */
-function FloatingShape({ geometry, position, rotation, scale, speed, color, floatSpeed, floatIntensity }) {
+/* ────────────────────────────────────────────────────
+   1. GEAR COG — precise toothed engineering wheel
+   ──────────────────────────────────────────────────── */
+function GearCog({ position, scale, speed, color, teeth = 12, innerRadius = 0.6, outerRadius = 1.0, thickness = 0.15 }) {
   const meshRef = useRef();
-  const initialRotation = useMemo(() => rotation, []);
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape();
+    const toothDepth = outerRadius - innerRadius;
+    const anglePerTooth = (Math.PI * 2) / teeth;
+    const halfTooth = anglePerTooth * 0.25;
+
+    for (let i = 0; i < teeth; i++) {
+      const angle = i * anglePerTooth;
+      // inner arc
+      shape.absarc(0, 0, innerRadius, angle + halfTooth, angle + anglePerTooth - halfTooth, false);
+      // outer tooth
+      shape.absarc(0, 0, outerRadius, angle + anglePerTooth - halfTooth, angle + anglePerTooth + halfTooth, false);
+    }
+
+    // center hole
+    const holePath = new THREE.Path();
+    holePath.absarc(0, 0, innerRadius * 0.35, 0, Math.PI * 2, true);
+    shape.holes.push(holePath);
+
+    const extrudeSettings = { depth: thickness, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 2 };
+    return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  }, [teeth, innerRadius, outerRadius, thickness]);
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    const t = state.clock.getElapsedTime();
-    meshRef.current.rotation.x = initialRotation[0] + t * speed * 0.3;
-    meshRef.current.rotation.y = initialRotation[1] + t * speed * 0.5;
-    meshRef.current.rotation.z = initialRotation[2] + t * speed * 0.2;
+    meshRef.current.rotation.z = state.clock.getElapsedTime() * speed;
   });
 
   return (
-    <Float speed={floatSpeed} rotationIntensity={0.2} floatIntensity={floatIntensity}>
-      <mesh ref={meshRef} position={position} scale={scale}>
-        {geometry}
+    <Float speed={0.8} floatIntensity={0.2} rotationIntensity={0.05}>
+      <mesh ref={meshRef} geometry={geometry} position={position} scale={scale}>
         <meshPhysicalMaterial
           color={color}
-          roughness={0.15}
-          metalness={0.1}
+          roughness={0.3}
+          metalness={0.6}
           transparent
-          opacity={0.55}
-          clearcoat={1}
-          clearcoatRoughness={0.1}
-          envMapIntensity={0.5}
+          opacity={0.45}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </Float>
   );
 }
 
-/* ── Wireframe ring ── */
-function WireframeRing({ position, scale, color, speed }) {
+/* ────────────────────────────────────────────────────
+   2. WIREFRAME GEODESIC — engineering structural frame
+   ──────────────────────────────────────────────────── */
+function GeodesicFrame({ position, scale, speed, color, detail = 1 }) {
+  const meshRef = useRef();
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
+    meshRef.current.rotation.x = t * speed * 0.3;
+    meshRef.current.rotation.y = t * speed * 0.5;
+  });
+
+  return (
+    <Float speed={1.0} floatIntensity={0.3} rotationIntensity={0.1}>
+      <mesh ref={meshRef} position={position} scale={scale}>
+        <icosahedronGeometry args={[1, detail]} />
+        <meshPhysicalMaterial
+          color={color}
+          wireframe
+          roughness={0.2}
+          metalness={0.5}
+          transparent
+          opacity={0.35}
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+/* ────────────────────────────────────────────────────
+   3. CIRCUIT NODE NETWORK — connected points
+   ──────────────────────────────────────────────────── */
+function CircuitNetwork({ position, scale, color, nodeCount = 8 }) {
+  const groupRef = useRef();
+  const { nodes, edges } = useMemo(() => {
+    const n = [];
+    for (let i = 0; i < nodeCount; i++) {
+      n.push(new THREE.Vector3(
+        (Math.random() - 0.5) * 3,
+        (Math.random() - 0.5) * 3,
+        (Math.random() - 0.5) * 1.5
+      ));
+    }
+    const e = [];
+    for (let i = 0; i < n.length; i++) {
+      for (let j = i + 1; j < n.length; j++) {
+        if (n[i].distanceTo(n[j]) < 2.0) {
+          e.push([n[i], n[j]]);
+        }
+      }
+    }
+    return { nodes: n, edges: e };
+  }, [nodeCount]);
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.08;
+    groupRef.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.05) * 0.15;
+  });
+
+  return (
+    <group ref={groupRef} position={position} scale={scale}>
+      {/* Connection lines */}
+      {edges.map((edge, i) => {
+        const points = [edge[0], edge[1]];
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+        return (
+          <line key={`edge-${i}`} geometry={lineGeo}>
+            <lineBasicMaterial color={color} transparent opacity={0.2} />
+          </line>
+        );
+      })}
+      {/* Nodes */}
+      {nodes.map((node, i) => (
+        <mesh key={`node-${i}`} position={node}>
+          <sphereGeometry args={[0.04, 8, 8]} />
+          <meshBasicMaterial color={color} transparent opacity={0.5} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+/* ────────────────────────────────────────────────────
+   4. TECHNICAL GRID PLANE — engineering blueprint floor
+   ──────────────────────────────────────────────────── */
+function GridPlane({ position, rotation, size = 6, divisions = 12, color }) {
+  const gridRef = useRef();
+
+  useFrame((state) => {
+    if (!gridRef.current) return;
+    gridRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 0.3) * 0.1;
+  });
+
+  return (
+    <group ref={gridRef} position={position} rotation={rotation}>
+      <gridHelper args={[size, divisions, color, color]} material-transparent material-opacity={0.08} />
+    </group>
+  );
+}
+
+/* ────────────────────────────────────────────────────
+   5. PRECISION RING — mechanical bearing ring
+   ──────────────────────────────────────────────────── */
+function PrecisionRing({ position, scale, speed, color }) {
   const meshRef = useRef();
 
   useFrame((state) => {
     if (!meshRef.current) return;
     const t = state.clock.getElapsedTime();
     meshRef.current.rotation.x = t * speed * 0.4;
-    meshRef.current.rotation.z = t * speed * 0.3;
+    meshRef.current.rotation.y = t * speed * 0.2;
   });
 
   return (
-    <Float speed={1.0} floatIntensity={0.3}>
+    <Float speed={0.6} floatIntensity={0.15}>
       <mesh ref={meshRef} position={position} scale={scale}>
-        <torusGeometry args={[1, 0.03, 16, 100]} />
-        <meshBasicMaterial color={color} transparent opacity={0.3} />
+        <torusGeometry args={[1, 0.04, 16, 64]} />
+        <meshPhysicalMaterial color={color} roughness={0.2} metalness={0.7} transparent opacity={0.3} />
       </mesh>
     </Float>
   );
 }
 
-/* ── Tiny floating particles ── */
-function Particles({ count = 40 }) {
-  const mesh = useRef();
-  const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 16;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 8;
-    }
-    return pos;
-  }, [count]);
-
-  useFrame((state) => {
-    if (!mesh.current) return;
-    mesh.current.rotation.y = state.clock.getElapsedTime() * 0.02;
-    mesh.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.05) * 0.1;
-  });
-
-  return (
-    <points ref={mesh}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-          count={count}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.04}
-        color="#93A3BC"
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-      />
-    </points>
-  );
-}
-
-/* ── Scene that holds all the 3D shapes ── */
-function Scene({ isMobile }) {
+/* ────────────────────────────────────────────────────
+   6. AXIS CROSS — 3D coordinate axis indicator
+   ──────────────────────────────────────────────────── */
+function AxisCross({ position, scale }) {
   const groupRef = useRef();
 
   useFrame((state) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.015;
+    groupRef.current.rotation.y = state.clock.getElapsedTime() * 0.06;
   });
 
-  const shapes = useMemo(() => {
-    const baseShapes = [
-      // Large translucent sphere — top left
-      {
-        geometry: <icosahedronGeometry args={[1, 1]} />,
-        position: [-3.5, 1.8, -2],
-        rotation: [0.4, 0.2, 0],
-        scale: isMobile ? 0.8 : 1.2,
-        speed: 0.15,
-        color: '#A5B4FC', // soft indigo
-        floatSpeed: 1.2,
-        floatIntensity: 0.6,
-      },
-      // Medium torus knot — right side
-      {
-        geometry: <torusKnotGeometry args={[0.6, 0.2, 100, 16]} />,
-        position: [3.8, -0.5, -1.5],
-        rotation: [0.8, 1.2, 0],
-        scale: isMobile ? 0.55 : 0.8,
-        speed: 0.12,
-        color: '#C4B5FD', // soft violet
-        floatSpeed: 1.5,
-        floatIntensity: 0.5,
-      },
-      // Octahedron — bottom left
-      {
-        geometry: <octahedronGeometry args={[0.8, 0]} />,
-        position: [-2.8, -2.2, -1],
-        rotation: [0.3, 0.6, 0.5],
-        scale: isMobile ? 0.6 : 0.9,
-        speed: 0.2,
-        color: '#93C5FD', // soft blue
-        floatSpeed: 1.8,
-        floatIntensity: 0.7,
-      },
-      // Small dodecahedron — top right
-      {
-        geometry: <dodecahedronGeometry args={[0.5, 0]} />,
-        position: [2.5, 2.5, -2.5],
-        rotation: [1.2, 0.3, 0.8],
-        scale: isMobile ? 0.5 : 0.7,
-        speed: 0.18,
-        color: '#BFDBFE', // light blue
-        floatSpeed: 1.3,
-        floatIntensity: 0.4,
-      },
-      // Sphere — center background
-      {
-        geometry: <sphereGeometry args={[0.7, 32, 32]} />,
-        position: [0.5, 0.3, -3.5],
-        rotation: [0, 0, 0],
-        scale: isMobile ? 0.7 : 1.0,
-        speed: 0.08,
-        color: '#DDD6FE', // faint purple
-        floatSpeed: 0.8,
-        floatIntensity: 0.3,
-      },
-      // Cone — bottom right
-      {
-        geometry: <coneGeometry args={[0.5, 1.2, 6]} />,
-        position: [3.2, -2.5, -2],
-        rotation: [0.5, 0, 1.0],
-        scale: isMobile ? 0.5 : 0.7,
-        speed: 0.14,
-        color: '#E0E7FF', // pale indigo
-        floatSpeed: 1.6,
-        floatIntensity: 0.5,
-      },
-    ];
-    return baseShapes;
-  }, [isMobile]);
-
+  const axisLen = 0.8;
+  const axisRadius = 0.012;
   return (
-    <group ref={groupRef}>
-      {shapes.map((s, i) => (
-        <FloatingShape key={i} {...s} />
-      ))}
-
-      {/* Decorative wireframe rings */}
-      <WireframeRing position={[-1.5, 1.0, -3]} scale={isMobile ? 0.8 : 1.2} color="#C7D2FE" speed={0.1} />
-      <WireframeRing position={[2.0, -1.5, -2.5]} scale={isMobile ? 0.6 : 0.9} color="#DDD6FE" speed={-0.08} />
-
-      {/* Floating particles for depth */}
-      <Particles count={isMobile ? 20 : 50} />
+    <group ref={groupRef} position={position} scale={scale}>
+      {/* X — red */}
+      <mesh rotation={[0, 0, -Math.PI / 2]}>
+        <cylinderGeometry args={[axisRadius, axisRadius, axisLen, 8]} />
+        <meshBasicMaterial color="#EF4444" transparent opacity={0.25} />
+      </mesh>
+      {/* Y — green */}
+      <mesh>
+        <cylinderGeometry args={[axisRadius, axisRadius, axisLen, 8]} />
+        <meshBasicMaterial color="#22C55E" transparent opacity={0.25} />
+      </mesh>
+      {/* Z — blue */}
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[axisRadius, axisRadius, axisLen, 8]} />
+        <meshBasicMaterial color="#3B82F6" transparent opacity={0.25} />
+      </mesh>
+      {/* Center node */}
+      <mesh>
+        <sphereGeometry args={[0.035, 12, 12]} />
+        <meshBasicMaterial color="#64748B" transparent opacity={0.4} />
+      </mesh>
     </group>
   );
 }
 
-/* ── Exported full-screen 3D background canvas ── */
+/* ────────────────────────────────────────────────────
+   SCENE — assembles all engineering elements
+   ──────────────────────────────────────────────────── */
+function Scene({ isMobile }) {
+  const s = isMobile ? 0.65 : 1;
+  return (
+    <group>
+      {/* Gear cogs — interlocking pair */}
+      <GearCog position={[-3.8 * s, 1.5 * s, -2]} scale={s * 0.9} speed={0.15} color="#64748B" teeth={14} />
+      <GearCog position={[-2.3 * s, 0.5 * s, -2.5]} scale={s * 0.6} speed={-0.22} color="#94A3B8" teeth={10} />
+
+      {/* Geodesic wireframe structures */}
+      <GeodesicFrame position={[3.5 * s, 1.8 * s, -2]} scale={s * 1.1} speed={0.08} color="#6366F1" detail={1} />
+      <GeodesicFrame position={[-1 * s, -2.5 * s, -3]} scale={s * 0.7} speed={-0.06} color="#818CF8" detail={2} />
+
+      {/* Circuit node networks */}
+      <CircuitNetwork position={[3 * s, -1.5 * s, -1.5]} scale={s * 0.8} color="#6366F1" nodeCount={isMobile ? 6 : 10} />
+      <CircuitNetwork position={[-3 * s, -1 * s, -2.5]} scale={s * 0.5} color="#94A3B8" nodeCount={isMobile ? 5 : 7} />
+
+      {/* Precision mechanical rings */}
+      <PrecisionRing position={[0.8 * s, 2.2 * s, -3]} scale={s * 0.6} speed={0.1} color="#A5B4FC" />
+      <PrecisionRing position={[-2 * s, -2.8 * s, -2]} scale={s * 0.45} speed={-0.12} color="#CBD5E1" />
+
+      {/* Technical grid planes */}
+      <GridPlane position={[0, -3 * s, -2]} rotation={[0, 0, 0]} size={isMobile ? 5 : 8} divisions={isMobile ? 8 : 14} color="#94A3B8" />
+      <GridPlane position={[2 * s, 0, -4]} rotation={[Math.PI / 2, 0, Math.PI / 6]} size={4} divisions={8} color="#A5B4FC" />
+
+      {/* Axis crosses — engineering coordinate markers */}
+      <AxisCross position={[2.5 * s, 2 * s, -1.5]} scale={s * 0.9} />
+      {!isMobile && <AxisCross position={[-4 * s, -0.5 * s, -1]} scale={s * 0.7} />}
+    </group>
+  );
+}
+
+/* ────────────────────────────────────────────────────
+   EXPORT — full-screen 3D background canvas
+   ──────────────────────────────────────────────────── */
 export default function HeroBackground3D() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== 'undefined' ? window.innerWidth < 768 : false
@@ -214,12 +274,11 @@ export default function HeroBackground3D() {
           style={{ background: 'transparent' }}
         >
           <color attach="background" args={['#FFFFFF']} />
-          <fog attach="fog" args={['#FFFFFF', 8, 18]} />
+          <fog attach="fog" args={['#FFFFFF', 8, 20]} />
 
-          <ambientLight intensity={1.8} />
-          <directionalLight position={[5, 5, 5]} intensity={1.2} color="#F8FAFC" />
-          <directionalLight position={[-3, 3, 2]} intensity={0.6} color="#E0E7FF" />
-          <pointLight position={[0, -3, 3]} intensity={0.4} color="#C7D2FE" />
+          <ambientLight intensity={2.0} />
+          <directionalLight position={[5, 5, 5]} intensity={1.5} color="#F8FAFC" />
+          <directionalLight position={[-3, 3, 2]} intensity={0.8} color="#E0E7FF" />
 
           <Scene isMobile={isMobile} />
         </Canvas>
