@@ -1652,49 +1652,63 @@ const Home = () => {
             {/* Primary Button: Explore Events */}
             <Link
               to="/events"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-base shadow-lg shadow-indigo-600/25 hover:shadow-xl hover:shadow-indigo-600/35 hover:-translate-y-0.5 hover:scale-[1.01] active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              className="group relative w-full sm:w-auto overflow-hidden rounded-full p-[2px] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 shadow-lg hover:shadow-indigo-500/25"
             >
-              <svg 
-                className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>Explore Events</span>
-              <svg 
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
+              {/* Outer neon gradient border wrapper */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-teal-500 rounded-full" />
+              {/* Inner body mask - fades out on hover */}
+              <span className="absolute inset-[1.5px] bg-white rounded-full transition-all duration-300 group-hover:bg-transparent" />
+              {/* Content layer */}
+              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4 font-bold text-base bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent group-hover:text-white transition-all duration-300 whitespace-nowrap">
+                <svg 
+                  className="w-5 h-5 text-indigo-600 group-hover:text-white transition-all duration-300 group-hover:rotate-6" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Explore Events</span>
+                <svg 
+                  className="w-4 h-4 text-indigo-500 group-hover:text-white transition-all duration-300 group-hover:translate-x-1" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
             </Link>
 
             {/* Secondary Button: Meet the Team */}
             <Link
               to="/coordinators"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white border-2 border-indigo-600/20 text-indigo-600 font-bold text-base shadow-sm hover:border-indigo-600/50 hover:bg-indigo-50/30 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-md active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              className="group relative w-full sm:w-auto overflow-hidden rounded-full p-[2px] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 shadow-md hover:shadow-teal-500/20"
             >
-              <svg 
-                className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>Meet the Team</span>
-              <svg 
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
+              {/* Outer neon gradient border wrapper */}
+              <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-500 rounded-full" />
+              {/* Inner body mask - dark frosted slate */}
+              <span className="absolute inset-[1.5px] bg-slate-900/90 rounded-full transition-all duration-300 group-hover:bg-slate-900/70" />
+              {/* Content layer */}
+              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4 font-bold text-base text-white transition-all duration-300 whitespace-nowrap">
+                <svg 
+                  className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-all duration-300" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Meet the Team</span>
+                <svg 
+                  className="w-4 h-4 text-teal-300 transition-transform duration-300 group-hover:translate-x-1" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
             </Link>
           </motion.div>
         </div>

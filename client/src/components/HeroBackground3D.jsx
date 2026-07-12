@@ -239,10 +239,6 @@ function Scene({ isMobile }) {
       <PrecisionRing position={[0.8 * s, 2.2 * s, -3]} scale={s * 0.6} speed={0.1} color="#D946EF" />
       <PrecisionRing position={[-2 * s, -2.8 * s, -2]} scale={s * 0.45} speed={-0.12} color="#3B82F6" />
 
-      {/* Technical grid planes */}
-      <GridPlane position={[0, -3 * s, -2]} rotation={[0, 0, 0]} size={isMobile ? 5 : 8} divisions={isMobile ? 8 : 14} color="#6366F1" />
-      <GridPlane position={[2 * s, 0, -4]} rotation={[Math.PI / 2, 0, Math.PI / 6]} size={4} divisions={8} color="#EC4899" />
-
       {/* Axis crosses — engineering coordinate markers */}
       <AxisCross position={[2.5 * s, 2 * s, -1.5]} scale={s * 0.9} />
       {!isMobile && <AxisCross position={[-4 * s, -0.5 * s, -1]} scale={s * 0.7} />}
