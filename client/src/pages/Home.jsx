@@ -1618,89 +1618,92 @@ const Home = () => {
           className="absolute w-80 h-80 rounded-full bg-purple-300/10 blur-3xl bottom-10 right-10 pointer-events-none -z-10"
         />
 
-        <div className="section-container relative z-10 py-8 flex flex-col items-center text-center max-w-4xl mx-auto px-6">
+        <div className="section-container relative z-10 py-16 md:py-8 flex flex-col items-center text-center max-w-4xl mx-auto px-5 md:px-6">
 
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EEF1F5] rounded-full text-iste-blue text-xs font-black mb-6 shadow-clay-sm select-none"
-          >
-            <span className="w-2 h-2 bg-iste-blue rounded-full animate-pulse" />
-            ISTE Student Chapter, GMRIT
-          </motion.div>
-
-          <div className="relative px-8 select-none">
-            {/* Interactive floating tech sparkles/nodes in the background */}
-            <motion.div
-              animate={{ y: [0, -10, 0], rotate: [0, 360] }}
-              transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-              whileHover={{ scale: 1.3, rotate: 45 }}
-              className="absolute -top-10 left-0 text-amber-500/40 text-3xl cursor-pointer select-none filter drop-shadow hidden md:block"
-              title="Innovation"
-            >
-              ✦
-            </motion.div>
-            <motion.div
-              animate={{ y: [0, 8, 0], rotate: -15 }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              whileHover={{ scale: 1.3, rotate: 15 }}
-              className="absolute top-2 -right-8 text-iste-blue/30 text-3xl font-mono cursor-pointer select-none font-black hidden md:block"
-              title="Code"
-            >
-              &lt;/&gt;
-            </motion.div>
-            <motion.div
-              animate={{ y: [0, -8, 0], rotate: 45 }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              whileHover={{ scale: 1.3, rotate: 90 }}
-              className="absolute bottom-10 -left-12 text-[#DB2777]/30 text-3xl font-extrabold cursor-pointer select-none hidden md:block"
-              title="Connect"
-            >
-              +
-            </motion.div>
-            <motion.div
-              animate={{ y: [0, 6, 0], rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-              whileHover={{ scale: 1.3 }}
-              className="absolute bottom-0 -right-10 text-slate-400/30 text-3xl cursor-pointer select-none hidden md:block"
-              title="System"
-            >
-              ⚙
-            </motion.div>
-
-            <motion.h1 
-              initial={{ opacity: 0, y: 24 }}
+          {/* Dark semi-transparent overlay container behind the hero text block on mobile */}
+          <div className="w-full bg-gradient-to-b from-[rgba(0,0,0,0.4)] to-[rgba(0,0,0,0.5)] md:bg-none p-5 sm:p-8 md:p-0 rounded-2xl md:rounded-none border border-white/10 md:border-none backdrop-blur-[2px] md:backdrop-blur-none shadow-lg md:shadow-none mb-8 md:mb-0 flex flex-col items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-850 mb-6 tracking-tight max-w-4xl leading-[1.2] select-none mx-auto"
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EEF1F5] rounded-full text-iste-blue text-xs font-black mb-6 shadow-clay-sm select-none"
             >
-              Empowering{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-iste-blue to-sky-500 hover:brightness-110 transition-all duration-300 inline-block">
-                Technical Excellence
-              </span>{' '}
-              Through Innovation
-            </motion.h1>
-          </div>
+              <span className="w-2 h-2 bg-iste-blue rounded-full animate-pulse" />
+              ISTE Student Chapter, GMRIT
+            </motion.div>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-base sm:text-lg text-slate-500 font-bold leading-relaxed mb-10 max-w-2xl select-none"
-          >
-            The Indian Society for Technical Education (ISTE) Student Chapter at GMRIT is a platform for engineers to connect, build, and lead. We spark curiosity and accelerate growth across all engineering disciplines.
-          </motion.p>
+            <div className="relative px-2 sm:px-8 select-none w-full">
+              {/* Interactive floating tech sparkles/nodes in the background */}
+              <motion.div
+                animate={{ y: [0, -10, 0], rotate: [0, 360] }}
+                transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                whileHover={{ scale: 1.3, rotate: 45 }}
+                className="absolute -top-10 left-0 text-amber-500/40 text-3xl cursor-pointer select-none filter drop-shadow hidden md:block"
+                title="Innovation"
+              >
+                ✦
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, 8, 0], rotate: -15 }}
+                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+                whileHover={{ scale: 1.3, rotate: 15 }}
+                className="absolute top-2 -right-8 text-iste-blue/30 text-3xl font-mono cursor-pointer select-none font-black hidden md:block"
+                title="Code"
+              >
+                &lt;/&gt;
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, -8, 0], rotate: 45 }}
+                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                whileHover={{ scale: 1.3, rotate: 90 }}
+                className="absolute bottom-10 -left-12 text-[#DB2777]/30 text-3xl font-extrabold cursor-pointer select-none hidden md:block"
+                title="Connect"
+              >
+                +
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, 6, 0], rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+                whileHover={{ scale: 1.3 }}
+                className="absolute bottom-0 -right-10 text-slate-400/30 text-3xl cursor-pointer select-none hidden md:block"
+                title="System"
+              >
+                ⚙
+              </motion.div>
+
+              <motion.h1 
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                className="text-3xl xs:text-[32px] md:text-5xl lg:text-6xl font-black text-white md:text-slate-850 mb-6 tracking-tight max-w-4xl leading-[1.35] md:leading-[1.2] select-none mx-auto"
+              >
+                Empowering{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-300 md:from-iste-blue md:to-sky-500 hover:brightness-110 transition-all duration-300 inline-block">
+                  Technical Excellence
+                </span>{' '}
+                Through Innovation
+              </motion.h1>
+            </div>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="text-base sm:text-lg text-slate-200 md:text-slate-500 font-bold leading-relaxed mb-4 md:mb-10 max-w-2xl select-none [text-shadow:0_1px_2px_rgba(0,0,0,0.5)] md:[text-shadow:none]"
+            >
+              The Indian Society for Technical Education (ISTE) Student Chapter at GMRIT is a platform for engineers to connect, build, and lead. We spark curiosity and accelerate growth across all engineering disciplines.
+            </motion.p>
+          </div>
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-wrap items-center justify-center gap-4 select-none w-full"
+            className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 select-none w-full px-4 md:px-0"
           >
             <Link 
               to="/events" 
-              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-iste-blue text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
+              className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-iste-blue text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1710,7 +1713,7 @@ const Home = () => {
 
             <Link 
               to="/coordinators" 
-              className="px-6 py-3.5 rounded-clay-sm text-sm font-extrabold bg-iste-violet text-white shadow-md shadow-purple-500/20 hover:bg-purple-700 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center gap-2 whitespace-nowrap"
+              className="w-full md:w-auto px-6 py-4 md:py-3.5 rounded-clay-sm text-base md:text-sm font-extrabold bg-iste-violet text-white shadow-md shadow-purple-500/20 hover:bg-purple-700 hover:shadow-lg hover:scale-102 active:scale-98 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
