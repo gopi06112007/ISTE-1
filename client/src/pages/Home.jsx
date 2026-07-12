@@ -1647,55 +1647,54 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 select-none w-full px-4 sm:px-0"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 select-none w-full px-4 sm:px-0 z-20 relative"
           >
-            {/* Primary CTA — View Events */}
+            {/* Primary Button: Explore Events */}
             <Link
               to="/events"
-              className="group relative w-full sm:w-auto overflow-hidden rounded-2xl transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.96]"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-slate-900 text-white font-bold text-base shadow-lg shadow-slate-950/10 hover:bg-slate-800 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-950/20 active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
             >
-              {/* Gradient background layer */}
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 transition-all duration-500 group-hover:from-blue-500 group-hover:via-indigo-500 group-hover:to-violet-500" />
-              {/* Animated shimmer sweep on hover */}
-              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-              {/* Glow shadow */}
-              <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_8px_30px_rgba(99,102,241,0.5)]" />
-              {/* Content */}
-              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4.5 text-base font-bold text-white tracking-wide">
-                <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-400 group-hover:rotate-12 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span>Explore Events</span>
-                <svg className="w-4 h-4 flex-shrink-0 transition-transform duration-400 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                </svg>
-              </span>
+              <svg 
+                className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Explore Events</span>
+              <svg 
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
 
-            {/* Secondary CTA — Meet the Team */}
+            {/* Secondary Button: Meet the Team */}
             <Link
               to="/coordinators"
-              className="group relative w-full sm:w-auto overflow-hidden rounded-2xl transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.96]"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-base shadow-sm hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
             >
-              {/* Gradient border via background + inner mask */}
-              <span className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 rounded-2xl transition-all duration-500 group-hover:from-purple-400 group-hover:via-pink-400 group-hover:to-rose-400" />
-              <span className="absolute inset-[2px] bg-white rounded-[14px] transition-all duration-500 group-hover:bg-white/95" />
-              {/* Shimmer sweep */}
-              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out bg-gradient-to-r from-transparent via-purple-500/10 to-transparent z-[1]" />
-              {/* Glow shadow */}
-              <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_8px_30px_rgba(168,85,247,0.35)]" />
-              {/* Content */}
-              <span className="relative z-10 flex items-center justify-center gap-3 px-9 py-4.5 text-base font-bold tracking-wide">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-400 group-hover:from-purple-500 group-hover:to-rose-500">
-                  <svg className="w-5 h-5 flex-shrink-0 transition-transform duration-400 group-hover:-rotate-6 group-hover:scale-110 text-purple-600 group-hover:text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 group-hover:from-purple-500 group-hover:to-rose-500 transition-all duration-400">Meet the Team</span>
-                <svg className="w-4 h-4 flex-shrink-0 text-pink-500 transition-transform duration-400 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                </svg>
-              </span>
+              <svg 
+                className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Meet the Team</span>
+              <svg 
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
             </Link>
           </motion.div>
         </div>
@@ -1721,20 +1720,75 @@ const Home = () => {
 
           <BentoGrid className="gap-6 justify-center">
             {[
-              { value: '6', label: 'Active Branches', size: 'bento-square' },
-              { value: '50+', label: 'Coordinators', size: 'bento-square' },
-              { value: '30+', label: 'Events/Year', size: 'bento-square' },
-              { value: '1000+', label: 'Students Impacted', size: 'bento-square' },
+              { 
+                value: '6', 
+                label: 'Active Branches', 
+                size: 'bento-square', 
+                accent: 'blue',
+                colorClass: 'text-blue-600',
+                innerHoverBg: 'group-hover:from-blue-600 group-hover:to-indigo-600',
+                glowClass: 'hover:shadow-[0_12px_36px_rgba(37,99,235,0.18)] hover:-translate-y-1.5',
+                icon: (
+                  <svg className="w-7 h-7 text-blue-500 mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                )
+              },
+              { 
+                value: '50+', 
+                label: 'Coordinators', 
+                size: 'bento-square',
+                accent: 'violet',
+                colorClass: 'text-purple-600',
+                innerHoverBg: 'group-hover:from-purple-600 group-hover:to-fuchsia-600',
+                glowClass: 'hover:shadow-[0_12px_36px_rgba(147,51,234,0.18)] hover:-translate-y-1.5',
+                icon: (
+                  <svg className="w-7 h-7 text-purple-500 mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                )
+              },
+              { 
+                value: '30+', 
+                label: 'Events/Year', 
+                size: 'bento-square',
+                accent: 'teal',
+                colorClass: 'text-teal-600',
+                innerHoverBg: 'group-hover:from-teal-600 group-hover:to-emerald-600',
+                glowClass: 'hover:shadow-[0_12px_36px_rgba(13,148,136,0.18)] hover:-translate-y-1.5',
+                icon: (
+                  <svg className="w-7 h-7 text-teal-500 mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                )
+              },
+              { 
+                value: '1000+', 
+                label: 'Students Impacted', 
+                size: 'bento-square',
+                accent: 'rose',
+                colorClass: 'text-rose-600',
+                innerHoverBg: 'group-hover:from-rose-600 group-hover:to-pink-600',
+                glowClass: 'hover:shadow-[0_12px_36px_rgba(225,29,72,0.18)] hover:-translate-y-1.5',
+                icon: (
+                  <svg className="w-7 h-7 text-rose-500 mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                )
+              },
             ].map((stat) => (
               <ClayCard
                 key={stat.label}
                 variant="raised"
-                className={`p-6 flex flex-col items-center justify-center text-center group ${stat.size}`}
+                accent={stat.accent}
+                interactive={true}
+                className={`p-6 flex flex-col items-center justify-center text-center group ${stat.size} transition-all duration-500 ${stat.glowClass}`}
               >
-                <div className="w-full max-w-[160px] mx-auto px-4 py-2.5 rounded-clay-sm bg-[#EEF1F5] shadow-clay-inset mb-4 text-2xl lg:text-3xl font-black font-jetbrains text-iste-blue select-none whitespace-nowrap">
+                {stat.icon}
+                <div className={`w-full max-w-[150px] mx-auto px-3 py-2.5 rounded-clay-sm bg-[#EEF1F5] shadow-clay-inset mb-4 text-2xl lg:text-3xl font-black font-jetbrains text-slate-700 select-none whitespace-nowrap transition-all duration-550 ease-out group-hover:bg-gradient-to-r ${stat.innerHoverBg} group-hover:text-white group-hover:shadow-none`}>
                   <CountUp value={stat.value} />
                 </div>
-                <div className="text-xs text-slate-500 font-black tracking-wider uppercase select-none">{stat.label}</div>
+                <div className={`text-xs font-black tracking-wider uppercase select-none transition-colors duration-300 text-slate-500 group-hover:${stat.colorClass}`}>{stat.label}</div>
               </ClayCard>
             ))}
           </BentoGrid>
