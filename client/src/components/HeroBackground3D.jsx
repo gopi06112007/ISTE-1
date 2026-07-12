@@ -223,25 +223,25 @@ function Scene({ isMobile }) {
   const s = isMobile ? 0.65 : 1;
   return (
     <group>
-      {/* Gear cogs — interlocking pair */}
-      <GearCog position={[-3.8 * s, 1.5 * s, -2]} scale={s * 0.9} speed={0.15} color="#64748B" teeth={14} />
-      <GearCog position={[-2.3 * s, 0.5 * s, -2.5]} scale={s * 0.6} speed={-0.22} color="#94A3B8" teeth={10} />
+      {/* Gear cogs — interlocking pair (vibrant pink and blue) */}
+      <GearCog position={[-3.8 * s, 1.5 * s, -2]} scale={s * 0.9} speed={0.15} color="#EC4899" teeth={14} />
+      <GearCog position={[-2.3 * s, 0.5 * s, -2.5]} scale={s * 0.6} speed={-0.22} color="#3B82F6" teeth={10} />
 
-      {/* Geodesic wireframe structures */}
-      <GeodesicFrame position={[3.5 * s, 1.8 * s, -2]} scale={s * 1.1} speed={0.08} color="#6366F1" detail={1} />
-      <GeodesicFrame position={[-1 * s, -2.5 * s, -3]} scale={s * 0.7} speed={-0.06} color="#818CF8" detail={2} />
+      {/* Geodesic wireframe structures (vibrant purple and cyan) */}
+      <GeodesicFrame position={[3.5 * s, 1.8 * s, -2]} scale={s * 1.1} speed={0.08} color="#8B5CF6" detail={1} />
+      <GeodesicFrame position={[-1 * s, -2.5 * s, -3]} scale={s * 0.7} speed={-0.06} color="#06B6D4" detail={2} />
 
-      {/* Circuit node networks */}
-      <CircuitNetwork position={[3 * s, -1.5 * s, -1.5]} scale={s * 0.8} color="#6366F1" nodeCount={isMobile ? 6 : 10} />
-      <CircuitNetwork position={[-3 * s, -1 * s, -2.5]} scale={s * 0.5} color="#94A3B8" nodeCount={isMobile ? 5 : 7} />
+      {/* Circuit node networks (vibrant amber and emerald) */}
+      <CircuitNetwork position={[3 * s, -1.5 * s, -1.5]} scale={s * 0.8} color="#F59E0B" nodeCount={isMobile ? 6 : 10} />
+      <CircuitNetwork position={[-3 * s, -1 * s, -2.5]} scale={s * 0.5} color="#10B981" nodeCount={isMobile ? 5 : 7} />
 
       {/* Precision mechanical rings */}
-      <PrecisionRing position={[0.8 * s, 2.2 * s, -3]} scale={s * 0.6} speed={0.1} color="#A5B4FC" />
-      <PrecisionRing position={[-2 * s, -2.8 * s, -2]} scale={s * 0.45} speed={-0.12} color="#CBD5E1" />
+      <PrecisionRing position={[0.8 * s, 2.2 * s, -3]} scale={s * 0.6} speed={0.1} color="#D946EF" />
+      <PrecisionRing position={[-2 * s, -2.8 * s, -2]} scale={s * 0.45} speed={-0.12} color="#3B82F6" />
 
       {/* Technical grid planes */}
-      <GridPlane position={[0, -3 * s, -2]} rotation={[0, 0, 0]} size={isMobile ? 5 : 8} divisions={isMobile ? 8 : 14} color="#94A3B8" />
-      <GridPlane position={[2 * s, 0, -4]} rotation={[Math.PI / 2, 0, Math.PI / 6]} size={4} divisions={8} color="#A5B4FC" />
+      <GridPlane position={[0, -3 * s, -2]} rotation={[0, 0, 0]} size={isMobile ? 5 : 8} divisions={isMobile ? 8 : 14} color="#6366F1" />
+      <GridPlane position={[2 * s, 0, -4]} rotation={[Math.PI / 2, 0, Math.PI / 6]} size={4} divisions={8} color="#EC4899" />
 
       {/* Axis crosses — engineering coordinate markers */}
       <AxisCross position={[2.5 * s, 2 * s, -1.5]} scale={s * 0.9} />
@@ -273,8 +273,8 @@ export default function HeroBackground3D() {
           gl={{ antialias: true, alpha: true }}
           style={{ background: 'transparent' }}
         >
-          <color attach="background" args={['#FFFFFF']} />
-          <fog attach="fog" args={['#FFFFFF', 8, 20]} />
+          {/* Transparent background so HTML moving gradient shines through */}
+          <fog attach="fog" args={['#EEF2FF', 8, 20]} />
 
           <ambientLight intensity={2.0} />
           <directionalLight position={[5, 5, 5]} intensity={1.5} color="#F8FAFC" />

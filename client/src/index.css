@@ -572,3 +572,16 @@
     transform: none !important;
   }
 }
+
+/* Colorful dynamic animated gradient background */
+@keyframes dynamicGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.colorful-gradient-bg {
+  background: linear-gradient(-45deg, #EEF2FF, #E0E7FF, #F5F3FF, #FCE7F3, #FDF4FF, #F0FDFA, #E0F2FE);
+  background-size: 400% 400%;
+  animation: dynamicGradient 18s ease infinite;
+}

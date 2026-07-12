@@ -1603,7 +1603,7 @@ const Home = () => {
       {/* Hero Section                           */}
       {/* ══════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden bg-white"
+        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden colorful-gradient-bg"
       >
         {/* 3D Animated Background — fills entire section behind text */}
         <HeroBackground3D />
