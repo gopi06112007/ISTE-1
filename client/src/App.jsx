@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 import useAuth from './hooks/useAuth';
 
 // Layout
@@ -103,6 +104,7 @@ function App() {
           <AnimatedRoutes />
         </main>
         <Footer />
+        <Analytics />
       </div>
     </Router>
   );
