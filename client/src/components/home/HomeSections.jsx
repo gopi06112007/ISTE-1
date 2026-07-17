@@ -338,7 +338,7 @@ export const UpcomingEventsSection = ({ events, loading, error, onRetry }) => {
   );
 
   return (
-    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-start pt-12 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div
@@ -618,7 +618,7 @@ export const LatestBlogSection = ({ posts, loading, error, onRetry }) => {
   );
 
   return (
-    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-start pt-12 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div
@@ -879,7 +879,7 @@ export const GalleryHighlightsSection = ({ albums = [], loading, error, onRetry 
   const displayAlbums = isMobile ? albums.slice(0, 3) : albums.slice(0, 6);
 
   return (
-    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-16 snap-start snap-always relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-start pt-12 md:pt-32 pb-16 snap-start snap-always relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div

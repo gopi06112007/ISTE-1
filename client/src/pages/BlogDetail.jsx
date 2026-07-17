@@ -58,7 +58,7 @@ const BlogDetail = ({ blogId }) => {
 
   if (loading) {
     return (
-      <PageTransition className="pt-16 lg:pt-20 min-h-[60vh] flex items-center justify-center">
+      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
           <p className="text-gray-500 ">Loading post...</p>
@@ -69,7 +69,7 @@ const BlogDetail = ({ blogId }) => {
 
   if (error || !blog) {
     return (
-      <PageTransition className="pt-16 lg:pt-20 min-h-[60vh] flex items-center justify-center">
+      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error || 'Post not found.'}</p>
           <Link to="/blog" className="btn-secondary">
@@ -131,7 +131,7 @@ const BlogDetail = ({ blogId }) => {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="pt-16 lg:pt-20 touch-pan-y"
+        className="pt-2 lg:pt-20 touch-pan-y"
       >
         <article className="pt-4 pb-12 lg:pt-6 lg:pb-16 relative">
           {/* Navigation arrows (desktop only) */}

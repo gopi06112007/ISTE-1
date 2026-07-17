@@ -109,14 +109,14 @@ const Navbar = () => {
       {/* Mobile-only floating ISTE logo — top left corner */}
       <Link
         to="/"
-        className="fixed top-4 left-4 z-50 lg:hidden flex items-center gap-2 group"
+        className="fixed top-3 left-4 z-50 lg:hidden flex items-center gap-2.5 group"
       >
-        <div className="w-11 h-11 flex items-center justify-center group-active:scale-95 transition-transform">
+        <div className="w-14 h-14 flex items-center justify-center group-active:scale-95 transition-transform">
           <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-md" />
         </div>
         <div className="flex flex-col">
-          <span className="text-sm font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
-          <span className="text-[8px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold">GMRIT</span>
+          <span className="text-base font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
+          <span className="text-[9px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold mt-0.5">GMRIT</span>
         </div>
       </Link>
 

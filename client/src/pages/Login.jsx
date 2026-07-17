@@ -129,7 +129,7 @@ const Login = () => {
   ];
 
   return (
-    <PageTransition className="pt-16 lg:pt-0 min-h-screen w-full flex flex-col lg:flex-row relative bg-[#EEF1F5] overflow-hidden">
+    <PageTransition className="pt-2 lg:pt-0 min-h-screen w-full flex flex-col lg:flex-row relative bg-[#EEF1F5] overflow-hidden">
       {/* LEFT PANEL: Interactive Brand Hub (Visible on large screens) */}
       <div
         ref={brandPanelRef}

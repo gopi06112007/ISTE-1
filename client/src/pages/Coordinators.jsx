@@ -124,7 +124,7 @@ const Coordinators = () => {
   });
 
   return (
-    <PageTransition className="pt-16 lg:pt-20">
+    <PageTransition className="pt-2 lg:pt-20">
       <section className="bg-transparent pt-4 pb-12 lg:pt-6 lg:pb-16">
         <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}

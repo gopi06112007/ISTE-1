@@ -47,7 +47,7 @@ const Blog = () => {
   });
 
   return (
-    <PageTransition className="pt-16 lg:pt-20">
+    <PageTransition className="pt-2 lg:pt-20">
       <section className="bg-transparent pt-6 pb-16 lg:pt-8 lg:pb-24">
         <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}

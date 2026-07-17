@@ -146,7 +146,7 @@ const Home = () => {
       {/* Hero Section                           */}
       {/* ══════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-16 overflow-hidden colorful-gradient-bg"
+        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-2 lg:pt-16 overflow-hidden colorful-gradient-bg"
       >
         {/* 3D Animated Background — fills entire section behind text */}
         <HeroBackdrop />
@@ -355,7 +355,7 @@ const Home = () => {
       {/* ══════════════════════════════════════ */}
       {/* Branch Cards                           */}
       {/* ══════════════════════════════════════ */}
-      <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 relative snap-start snap-always">
+      <section className="min-h-screen flex flex-col justify-start pt-12 md:pt-32 pb-10 relative snap-start snap-always">
         <div className="w-full px-4 sm:px-6 lg:px-10">
           {/* Section header */}
           <div className="text-center mb-6">

@@ -169,7 +169,7 @@ const ProfileDetailPage = () => {
   /* ── Loading skeleton ─────────────── */
   if (loading) {
     return (
-      <PageTransition className="pt-20 pb-16">
+      <PageTransition className="pt-2 lg:pt-20 pb-16">
         <div className="section-container max-w-5xl">
           <div className="mb-8 h-4 w-36 bg-gray-200 rounded animate-pulse" />
           <SkeletonHero />
@@ -181,7 +181,7 @@ const ProfileDetailPage = () => {
   /* ── Error / 404 states ──────────── */
   if (error === 'not_found' || !profile) {
     return (
-      <PageTransition className="pt-20 min-h-[60vh] flex items-center justify-center">
+      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
         <ClayCard variant="raised" className="max-w-md w-full p-8 text-center flex flex-col items-center">
           <p className="text-6xl mb-4 select-none">🔍</p>
           <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none">Profile Not Found</h2>
@@ -199,7 +199,7 @@ const ProfileDetailPage = () => {
 
   if (error === 'network') {
     return (
-      <PageTransition className="pt-20 min-h-[60vh] flex items-center justify-center">
+      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
         <ClayCard variant="raised" className="max-w-md w-full p-8 text-center flex flex-col items-center">
           <p className="text-6xl mb-4 select-none">⚠️</p>
           <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none">Connection Error</h2>
@@ -220,7 +220,7 @@ const ProfileDetailPage = () => {
   const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
 
   return (
-    <PageTransition className="pt-20 pb-16">
+    <PageTransition className="pt-2 lg:pt-20 pb-16">
       <div className="section-container max-w-5xl">
 
         {/* Back link - clay button style */}
