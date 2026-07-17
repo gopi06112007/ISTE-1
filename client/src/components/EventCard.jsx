@@ -322,54 +322,56 @@ export const EventDetailsModal = ({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative w-full max-w-5xl md:h-[82vh] max-h-[820px] bg-white rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-slate-100 z-[130] my-auto"
           >
-            {/* ── Left Side: Poster Studio View (Uncropped Full View) ── */}
-            <div className="relative w-full md:w-[58%] h-[320px] sm:h-[400px] md:h-full bg-slate-950 flex items-center justify-center overflow-hidden flex-shrink-0">
+            {/* ── Left Side: Poster Studio View (Framed Box View) ── */}
+            <div className="relative w-full md:w-[55%] h-[360px] sm:h-[450px] md:h-full bg-slate-950 flex flex-col p-4 md:p-6 overflow-hidden flex-shrink-0">
               {/* Ambient Blurred Background Poster Glow */}
               {event.posterUrl && (
                 <img
                   src={event.posterUrl}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125 pointer-events-none select-none"
+                  className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-35 scale-125 pointer-events-none select-none"
                 />
               )}
 
-              {/* Subtly darkened overlay grid pattern */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-slate-950/60 pointer-events-none z-0" />
+              {/* Subtly darkened overlay */}
+              <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-0" />
 
-              {/* Poster Image (Uncropped, Object Contain) */}
-              <div className="relative z-10 w-full h-full p-4 md:p-6 flex items-center justify-center">
+              {/* Top Badges Header Bar (Cleanly separated above poster) */}
+              <div className="relative z-20 flex items-center justify-between gap-2 mb-3 flex-shrink-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold border border-white/10 shadow-md">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                    ISTE Event
+                  </span>
+                  {event.category && (
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-semibold border border-white/20 shadow-md">
+                      {categoryIcons[event.category] || ''} {event.category}
+                    </span>
+                  )}
+                </div>
+
+                {/* Mobile Close Button */}
+                <button
+                  onClick={onClose}
+                  className="md:hidden p-2 rounded-full bg-slate-900/80 backdrop-blur-md text-white hover:bg-slate-900 transition-all border border-white/10"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Inner Frame Box for Poster Image (Fits completely inside) */}
+              <div className="relative z-10 w-full flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm p-2">
                 <SafeImage
                   src={event.posterUrl}
                   alt={event.title}
-                  className="max-h-[280px] sm:max-h-[360px] md:max-h-[92%] max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
+                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
                   fallbackType="full"
                   eager
                 />
               </div>
-
-              {/* Top Left Badge Overlay */}
-              <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold border border-white/10 shadow-lg">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  ISTE Event
-                </span>
-                {event.category && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-semibold border border-white/20 shadow-lg">
-                    {categoryIcons[event.category] || ''} {event.category}
-                  </span>
-                )}
-              </div>
-
-              {/* Mobile Close Button Overlay */}
-              <button
-                onClick={onClose}
-                className="md:hidden absolute top-4 right-4 z-20 p-2.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white hover:bg-slate-900 transition-all border border-white/10"
-                aria-label="Close modal"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
 
             {/* ── Right Side: Social Media Details Feed ── */}
