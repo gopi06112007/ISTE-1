@@ -146,13 +146,13 @@ const Home = () => {
       {/* Hero Section                           */}
       {/* ══════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center justify-center snap-start snap-always pt-2 lg:pt-16 overflow-hidden colorful-gradient-bg"
+        className="relative min-h-screen flex items-center justify-center snap-start snap-always overflow-hidden colorful-gradient-bg"
       >
         {/* 3D Animated Background — fills entire section behind text */}
         <HeroBackdrop />
 
-        {/* Content layer — sits above the 3D canvas */}
-        <div className="relative z-10 py-16 md:py-12 flex flex-col items-center justify-center max-w-4xl mx-auto px-5 md:px-6 w-full">
+        {/* Content layer — sits above the 3D canvas, centered with safe margins for floating mobile logo (top) & bottom bar */}
+        <div className="relative z-10 pt-24 pb-32 lg:py-16 flex flex-col items-center justify-center max-w-4xl mx-auto px-5 md:px-6 w-full">
 
           <motion.div
             initial={{ opacity: 0, y: -20 }}
