@@ -355,7 +355,7 @@ const Home = () => {
       {/* ══════════════════════════════════════ */}
       {/* Branch Cards                           */}
       {/* ══════════════════════════════════════ */}
-      <section className="min-h-screen flex flex-col justify-start pt-12 md:pt-32 pb-10 relative snap-start snap-always">
+      <section className="min-h-screen flex flex-col justify-center pt-24 pb-32 md:pt-32 relative snap-start snap-always">
         <div className="w-full px-4 sm:px-6 lg:px-10">
           {/* Section header */}
           <div className="text-center mb-6">
