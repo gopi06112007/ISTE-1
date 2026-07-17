@@ -461,7 +461,7 @@ export const UpcomingEventsSection = ({ events, loading, error, onRetry }) => {
                 return (
                   <motion.div
                     key={event._id}
-                    className="absolute w-[320px] sm:w-[360px] h-[490px] flex-shrink-0 cursor-pointer"
+                    className="absolute w-[320px] sm:w-[360px] h-[540px] flex-shrink-0 cursor-pointer"
                     style={{
                       x: translateX,
                       transformStyle: 'preserve-3d',

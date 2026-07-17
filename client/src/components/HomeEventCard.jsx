@@ -108,7 +108,7 @@ const HomeEventCard = ({ event, index = 0 }) => {
             className="relative w-full overflow-hidden"
             style={{
               borderRadius: '20px',
-              height: '280px',
+              height: '250px',
               background: gradient,
             }}
           >
