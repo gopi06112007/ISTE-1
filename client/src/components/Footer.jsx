@@ -16,8 +16,8 @@ const Footer = ({ forceRender = false }) => {
           {/* Brand */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200/50 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#EEF1F5] rounded-clay-sm flex items-center justify-center shadow-clay-inset text-iste-blue font-extrabold text-lg">
-                I
+              <div className="w-10 h-10 flex items-center justify-center p-0.5">
+                <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-sm" />
               </div>
               <div>
                 <span className="text-lg font-extrabold text-gray-900 block leading-tight">
