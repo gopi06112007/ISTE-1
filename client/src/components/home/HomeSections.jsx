@@ -5,6 +5,7 @@ import HomeEventCard from '../HomeEventCard';
 import HomeBlogCard from '../HomeBlogCard';
 import ClayCard from '../ui/ClayCard';
 import Lightbox from '../Lightbox';
+import AlbumGrid from '../AlbumGrid';
 
 const SectionErrorState = ({ title, message, onRetry }) => (
   <motion.div
@@ -836,65 +837,7 @@ const LightboxModal = ({ isOpen, currentAlbumPhotos, currentIndex, albumName, br
 /* ─────────────────────────────────────────────────────────────
    GalleryHighlightsSection — masonry grid (desktop) / horizontal scroll (mobile)
    ──────────────────────────────────────────────────────────── */
-/* Skeleton card for gallery */
-const GallerySkeletonCard = ({ tall = false }) => (
-  <div className={`rounded-2xl bg-[#EEF1F5] shadow-clay-md p-3 space-y-3 ${tall ? 'row-span-2' : ''}`}>
-    <div className={`w-full skeleton-shimmer rounded-xl ${tall ? 'h-[280px]' : 'h-[200px]'}`} />
-    <div className="flex items-center justify-between px-1">
-      <div className="flex items-center gap-2">
-        <div className="w-24 h-4 skeleton-shimmer rounded" />
-        <div className="w-12 h-4 skeleton-shimmer rounded-full" />
-      </div>
-      <div className="w-20 h-3 skeleton-shimmer rounded" />
-    </div>
-  </div>
-);
-
-const PremiumGalleryCard = ({ album, onPhotoClick }) => {
-  const photo = album.photos?.[0] || '';
-  const totalPhotos = album.photos?.length || 0;
-  
-  return (
-    <div
-      onClick={() => onPhotoClick(album, 0)}
-      className="group relative w-full h-full rounded-2xl overflow-hidden shadow-clay-md hover:shadow-clay-lg cursor-pointer transition-all duration-350"
-    >
-      {photo ? (
-        <img
-          src={photo}
-          alt={album.albumName}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
-        />
-      ) : (
-        <div className="w-full h-full bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white font-extrabold">
-          {album.branch}
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent transition-opacity duration-300" />
-      
-      {/* Photo count badge */}
-      <span className="absolute top-3 right-3 text-[10px] font-black bg-white/95 text-slate-700 px-2.5 py-1 rounded-full shadow-sm">
-        {totalPhotos} Photos
-      </span>
-
-      {/* Info bar at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-col justify-end text-white">
-        <span className="text-[9px] font-black uppercase tracking-widest text-teal-450 mb-1">
-          {album.branch}
-        </span>
-        <h4 className="text-sm font-bold text-white leading-tight line-clamp-1 group-hover:text-teal-300 transition-colors">
-          {album.albumName}
-        </h4>
-        <p className="text-[10px] text-white/70 font-semibold line-clamp-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Click to view photos
-        </p>
-      </div>
-    </div>
-  );
-};
-
-export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) => {
+export const GalleryHighlightsSection = ({ albums = [], loading, error, onRetry }) => {
   // Lightbox State
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxPhotos, setLightboxPhotos] = useState([]);
@@ -902,7 +845,7 @@ export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) =>
   const [lightboxAlbumName, setLightboxAlbumName] = useState('');
   const [lightboxBranch, setLightboxBranch] = useState('');
 
-  const openLightbox = (album, index) => {
+  const openLightbox = (album, index = 0) => {
     setLightboxPhotos(album.photos || []);
     setLightboxIndex(index);
     setLightboxAlbumName(album.albumName || '');
@@ -935,14 +878,8 @@ export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) =>
 
   const displayAlbums = isMobile ? albums.slice(0, 3) : albums.slice(0, 6);
 
-  /* Height pattern for grid */
-  const getCardHeight = (index) => {
-    const heights = ['row-span-2', '', '', 'row-span-2', '', ''];
-    return heights[index % heights.length];
-  };
-
   return (
-    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-10 snap-start snap-always relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-start pt-28 md:pt-32 pb-16 snap-start snap-always relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
         {/* ── Section header ── */}
         <motion.div
@@ -953,47 +890,36 @@ export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) =>
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8"
         >
           <div>
-            <span className="block text-xs font-semibold tracking-widest uppercase text-teal-650 mb-2">
+            <span className="block text-xs font-bold tracking-widest uppercase text-iste-blue mb-2">
               Gallery Highlights
             </span>
-            <h2 className="text-3xl lg:text-4xl font-display font-bold text-slate-800 leading-tight">
-              Moments <span className="text-teal-650">Captured</span>
+            <h2 className="text-3xl lg:text-4xl font-display font-black text-slate-800 leading-tight">
+              Moments <span className="text-transparent bg-clip-text bg-gradient-to-r from-iste-blue to-sky-500">Captured</span>
             </h2>
-            <p className="text-slate-500 text-sm mt-1">Snapshots from events, workshops, and achievements across GMRIT</p>
+            <p className="text-slate-500 text-sm mt-1 font-bold">Snapshots from events, workshops, and achievements across GMRIT</p>
           </div>
           <Link
             to="/gallery"
-            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-teal-500/30 text-teal-650 hover:bg-teal-650 hover:text-white transition-all duration-300 text-sm font-semibold group"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300 text-sm font-extrabold group"
           >
-            View Gallery
+            <span>View All Albums</span>
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </motion.div>
 
         {/* ── Content ── */}
         {loading ? (
-          <>
-            <div className="hidden sm:grid grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-[200px]">
-              <GallerySkeletonCard tall />
-              <GallerySkeletonCard />
-              <GallerySkeletonCard />
-              <GallerySkeletonCard tall />
-              <GallerySkeletonCard />
-            </div>
-            <div className="sm:hidden flex flex-col gap-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-full rounded-2xl bg-[#EEF1F5] shadow-clay-md p-3 space-y-3">
-                  <div className="w-full h-[200px] skeleton-shimmer rounded-xl" />
-                  <div className="flex items-center justify-between px-1">
-                    <div className="w-24 h-4 skeleton-shimmer rounded" />
-                    <div className="w-16 h-3 skeleton-shimmer rounded" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-3xl bg-[#EEF1F5] shadow-clay-md p-4 space-y-4">
+                <div className="w-full h-48 skeleton-shimmer rounded-2xl" />
+                <div className="w-3/4 h-5 skeleton-shimmer rounded" />
+                <div className="w-1/2 h-4 skeleton-shimmer rounded" />
+              </div>
+            ))}
+          </div>
         ) : error ? (
           <SectionErrorState
             title="Gallery could not load"
@@ -1014,46 +940,26 @@ export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) =>
               </svg>
             </div>
             <h3 className="text-lg font-bold text-slate-600 mb-1">No photos yet</h3>
-            <p className="text-slate-400 text-sm max-w-xs">Gallery albums will appear here once events are photographed.</p>
+            <p className="text-slate-400 text-sm max-w-xs font-semibold">Gallery albums will appear here once events are photographed.</p>
           </motion.div>
         ) : (
-          <>
-            {/* Desktop — masonry staggered grid */}
-            <div className="hidden sm:block">
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-[200px]">
-                {displayAlbums.map((album, index) => (
-                  <div
-                    key={album._id}
-                    className={getCardHeight(index)}
-                  >
-                    <PremiumGalleryCard album={album} onPhotoClick={openLightbox} />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile — vertical stacked list */}
-            <div className="sm:hidden">
-              <div className="flex flex-col gap-4">
-                {displayAlbums.map((album) => (
-                  <div key={album._id} className="h-[250px]">
-                    <PremiumGalleryCard album={album} onPhotoClick={openLightbox} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Mobile CTA */}
-        <div className="sm:hidden mt-6 text-center">
-          <Link
-            to="/gallery"
-            className="inline-flex items-center gap-2 text-teal-600 text-sm font-semibold"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
           >
-            View Gallery
-          </Link>
-        </div>
+            {displayAlbums.map((album) => (
+              <div key={album._id} className="h-full">
+                <AlbumGrid
+                  album={album}
+                  onClick={() => openLightbox(album)}
+                />
+              </div>
+            ))}
+          </motion.div>
+        )}
       </div>
 
       {/* Lightbox Modal */}
