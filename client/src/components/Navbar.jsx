@@ -270,52 +270,114 @@ const Navbar = () => {
 
         <div className="relative flex justify-center px-3 pb-2.5">
           <nav
-            className="pointer-events-auto flex items-center justify-between w-full max-w-sm p-1.5 rounded-[22px] bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_-2px_20px_rgba(0,0,0,0.06),0_4px_30px_rgba(0,0,0,0.08)]"
+            className="pointer-events-auto flex items-center w-full max-w-[420px] p-1.5 rounded-[22px] bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_-2px_20px_rgba(0,0,0,0.06),0_4px_30px_rgba(0,0,0,0.08)]"
             aria-label="Mobile Navigation"
           >
-            {mobileNavLinks.map((link) => {
-              const active = isActive(link.to);
-              const isLogin = link.to === '/login';
-              const isDashboard = link.to === '/dashboard';
+            {/* ── 5 Main Nav Tabs ── */}
+            <div className="flex items-center flex-1">
+              {mobileNavLinks.slice(0, 5).map((link) => {
+                const active = isActive(link.to);
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`relative flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-1 ${
+                      active
+                        ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-2.5 py-2'
+                        : 'text-slate-400 py-2'
+                    }`}
+                  >
+                    <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
+                      {link.icon}
+                    </span>
+                    <AnimatePresence initial={false}>
+                      {active && (
+                        <motion.span
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: 'auto' }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          className="overflow-hidden whitespace-nowrap text-[11px] font-black tracking-tight"
+                        >
+                          {link.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                );
+              })}
+            </div>
 
-              return (
+            {/* ── Separator ── */}
+            <div className="w-px h-6 bg-slate-200/80 mx-1 flex-shrink-0" />
+
+            {/* ── Login / Dashboard Button ── */}
+            {isAuthenticated ? (
+              <div className="flex items-center gap-1 flex-shrink-0">
                 <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`relative flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
-                    active
-                      ? isLogin
-                        ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
-                        : isDashboard
-                          ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
-                          : 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-3 py-2'
-                      : isLogin
-                        ? 'text-iste-blue px-2 py-2'
-                        : isDashboard
-                          ? 'text-iste-blue px-2 py-2'
-                          : 'text-slate-400 px-2 py-2'
+                  to="/dashboard"
+                  className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
+                    isActive('/dashboard')
+                      ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
+                      : 'text-iste-blue px-2 py-2'
                   }`}
                 >
-                  <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
-                    {link.icon}
-                  </span>
-
+                  <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                   <AnimatePresence initial={false}>
-                    {active && (
+                    {isActive('/dashboard') && (
                       <motion.span
                         initial={{ opacity: 0, width: 0 }}
                         animate={{ opacity: 1, width: 'auto' }}
                         exit={{ opacity: 0, width: 0 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                        className="overflow-hidden whitespace-nowrap text-[11px] font-black tracking-tight"
+                        className="overflow-hidden whitespace-nowrap text-[11px] font-black"
                       >
-                        {link.label}
+                        Board
                       </motion.span>
                     )}
                   </AnimatePresence>
                 </Link>
-              );
-            })}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center w-9 h-9 rounded-full text-red-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                  aria-label="Logout"
+                >
+                  <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
+                  isActive('/login')
+                    ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3.5 py-2'
+                    : 'bg-iste-blue/10 text-iste-blue px-3 py-2'
+                }`}
+              >
+                <svg className="w-[20px] h-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                <AnimatePresence initial={false}>
+                  {isActive('/login') ? (
+                    <motion.span
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: 'auto' }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                      className="overflow-hidden whitespace-nowrap text-[11px] font-black"
+                    >
+                      Login
+                    </motion.span>
+                  ) : (
+                    <span className="text-[11px] font-black">Login</span>
+                  )}
+                </AnimatePresence>
+              </Link>
+            )}
           </nav>
         </div>
       </div>
