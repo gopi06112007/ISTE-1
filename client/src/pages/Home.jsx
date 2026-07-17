@@ -260,7 +260,7 @@ const Home = () => {
       {/* ══════════════════════════════════════ */}
       {/* About ISTE + Stats                     */}
       {/* ══════════════════════════════════════ */}
-      <section className="min-h-screen flex flex-col justify-center py-20 lg:py-28 snap-start snap-always bg-transparent">
+      <section className="min-h-screen flex flex-col justify-center pt-24 pb-32 lg:py-28 snap-start snap-always bg-transparent">
         <div className="section-container">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="section-heading text-slate-800 mb-4 select-none">
