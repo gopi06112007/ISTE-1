@@ -108,7 +108,7 @@ const HomeEventCard = ({ event, index = 0 }) => {
             className="relative w-full overflow-hidden"
             style={{
               borderRadius: '20px',
-              height: '250px',
+              height: '225px',
               background: gradient,
             }}
           >
@@ -144,7 +144,7 @@ const HomeEventCard = ({ event, index = 0 }) => {
         </div>
 
         {/* ── Card Content ── */}
-        <div className="flex flex-col flex-1" style={{ padding: '16px 18px 18px 18px' }}>
+        <div className="flex flex-col flex-1" style={{ padding: '14px 16px 14px 16px' }}>
 
           {/* Top row: category chip + branch badge */}
           <div className="flex items-center justify-between gap-2" style={{ marginBottom: '10px' }}>
