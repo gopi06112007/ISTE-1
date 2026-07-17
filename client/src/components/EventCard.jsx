@@ -44,11 +44,6 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
     });
   };
 
-  // Derive date parts for the card
-  const eventDate = new Date(event.date);
-  const month = eventDate.toLocaleString('en', { month: 'short' }).toUpperCase();
-  const day = eventDate.getDate();
-
   // Close modal on Escape key press
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -69,7 +64,7 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
     const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
     const title = encodeURIComponent(ev.title);
     const d = new Date(ev.date);
-    const dateStr = d.toISOString().replace(/-|:|\\.\\d\\d\\d/g, '');
+    const dateStr = d.toISOString().replace(/-|:|\.\d\d\d/g, '');
     const details = encodeURIComponent(ev.description || '');
     const location = encodeURIComponent(ev.venue || '');
     return `${base}&text=${title}&dates=${dateStr}/${dateStr}&details=${details}&location=${location}`;
@@ -96,7 +91,6 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
     })
   };
 
-  // ── COMPACT CARD (used in dashboard/sidebar views) ──────────────
   if (compact) {
     return (
       <>
@@ -112,10 +106,10 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
           {/* Date badge */}
           <div className="flex-shrink-0 w-14 h-14 rounded-full bg-slate-50 border border-slate-200/50 flex flex-col items-center justify-center text-slate-800">
             <span className="text-lg font-bold leading-none text-iste-blue">
-              {day}
+              {new Date(event.date).getDate()}
             </span>
             <span className="text-[10px] uppercase font-bold text-slate-550">
-              {month}
+              {new Date(event.date).toLocaleString('en', { month: 'short' })}
             </span>
           </div>
 
@@ -136,6 +130,7 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
           </svg>
         </motion.div>
 
+        {/* Modal rendering */}
         <EventDetailsModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -151,7 +146,6 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
     );
   }
 
-  // ── POSTER CARD (new design) ─────────────────────────────────────
   return (
     <>
       <motion.div
@@ -161,110 +155,120 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
         viewport={{ once: true, margin: "-50px" }}
         variants={cardVariants}
         onClick={() => setIsModalOpen(true)}
-        className="w-[300px] flex flex-col rounded-[28px] bg-white px-3 pb-5 pt-3 cursor-pointer flex-shrink-0
-                   hover:scale-[1.02] transition-transform duration-300 ease-out"
-        style={{
-          boxShadow: '0 4px 10px rgba(0,0,0,0.05), 0 16px 32px rgba(0,0,0,0.10)',
-        }}
+        className={`event-card-container flex cursor-pointer h-full ${
+          featured ? 'flex-col md:flex-row' : 'flex-col'
+        }`}
       >
-        {/* ── POSTER IMAGE — A4 portrait ratio ── */}
-        <div
-          className="w-full overflow-hidden rounded-[20px] mb-[18px]"
-          style={{ aspectRatio: '1 / 1.4142' }}
+        {/* Top Banner (image/gradient area) */}
+        <div className={`relative overflow-hidden rounded-t-[20px] rounded-b-none bg-gradient-to-br flex-shrink-0 ${
+          featured ? 'w-full md:w-[45%] md:rounded-l-[20px] md:rounded-tr-none aspect-[4/3]' : 'w-full aspect-[4/3]'
+        }`}
+          style={{ background: branchGradients[event.branch] || branchGradients.CENTRAL }}
         >
-          {event.posterUrl ? (
-            <SafeImage
-              src={event.posterUrl}
-              alt={`${event.title} poster`}
-              className="w-full h-full object-cover object-center"
-              fallbackType="event"
-              objectPosition="center center"
-            />
-          ) : (
-            /* Gradient fallback with watermark icon when no poster */
-            <div
-              className="w-full h-full flex flex-col items-center justify-center gap-4"
-              style={{ background: branchGradients[event.branch] || branchGradients.CENTRAL }}
-            >
-              <svg className="w-16 h-16 text-white/25" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2}
-                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-              <p className="text-white/60 text-sm font-bold tracking-wide">No Poster</p>
-            </div>
-          )}
-        </div>
+          {/* Radial Glow Overlay */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full blur-xl pointer-events-none z-10" />
 
-        {/* ── CONTENT BLOCK — date column + text column ── */}
-        <div className="flex gap-3 px-1">
+          {/* Calendar outline watermark */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <svg className="w-16 h-16 text-white/15 stroke-current stroke-1" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+            </svg>
+          </div>
 
-          {/* DATE COLUMN */}
-          <div className="flex flex-col items-start flex-shrink-0" style={{ width: '52px' }}>
-            <span className="text-[13px] font-bold uppercase tracking-wide" style={{ color: '#166534' }}>
-              {month}
-            </span>
-            <span className="text-[30px] font-extrabold leading-none" style={{ color: '#166534' }}>
-              {day}
+          <SafeImage
+            src={event.posterUrl}
+            alt={`${event.title} poster`}
+            className="w-full h-full object-cover top-banner-img relative z-0"
+            fallbackType="event"
+            objectPosition="center center"
+          />
+
+          {/* Status Badge: pill-shaped, white/frosted background, small green dot indicator */}
+          <div className="absolute top-3 left-3 z-10">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full bg-white/75 backdrop-blur-md border border-white/30 text-emerald-600 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {isUpcoming ? 'Upcoming' : 'Past'}
             </span>
           </div>
 
-          {/* VERTICAL DIVIDER */}
-          <div style={{ width: '1px', background: '#E5E7EB', alignSelf: 'stretch' }} />
+          {/* Branch Badge: top-right */}
+          <div className="absolute top-3 right-3 z-10">
+            <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full bg-white/75 backdrop-blur-md border border-white/30 text-slate-700 shadow-sm uppercase tracking-wider">
+              {event.branch}
+            </span>
+          </div>
+        </div>
 
-          {/* TEXT COLUMN */}
-          <div className="flex flex-col gap-1" style={{ flex: 1 }}>
+        {/* Content Area */}
+        <div className={`flex flex-col flex-grow p-6 ${featured ? 'md:justify-center' : ''}`}>
+          {/* Tags Row */}
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${categoryChipColors[event.category] || categoryChipColors.Other}`}>
+              {categoryIcons[event.category]}{event.category}
+            </span>
+            <span className="inline-flex items-center text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200/50 uppercase tracking-wide">
+              {event.branch}
+            </span>
+          </div>
 
-            {/* LOCATION ROW */}
-            <div className="flex items-center gap-1">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                <circle cx="12" cy="10" r="3" />
+          {/* Title */}
+          <h3 className="text-lg md:text-[20px] font-bold text-gray-900 mb-2 line-clamp-2 leading-snug">
+            {event.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-sm text-slate-500 mb-4 leading-relaxed line-clamp-2">
+            {event.description}
+          </p>
+
+          {/* Meta rows */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-500 mt-auto pt-3 border-t border-slate-200/40">
+            <div className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5 text-[#1A56DB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-[13px]" style={{ color: '#6B7280' }}>
-                {event.venue || event.branch || 'ISTE GMRIT'}
-              </span>
+              <span>{formatDate(event.date)}</span>
             </div>
 
-            {/* TITLE */}
-            <h3
-              className="text-[20px] font-extrabold leading-tight"
-              style={{ color: '#111111' }}
-            >
-              {event.title}
-            </h3>
-
-            {/* DESCRIPTION — 2 line clamp */}
-            {event.description && (
-              <p
-                className="text-[13px] leading-snug mt-1"
-                style={{
-                  color: '#6B7280',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                }}
-              >
-                {event.description}
-              </p>
+            {event.time && (
+              <div className="flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5 text-[#1A56DB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{event.time}</span>
+              </div>
             )}
 
-            {/* PRICE / DATE TAG */}
-            <div className="flex items-center gap-1 mt-2">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" />
-                <line x1="7" y1="7" x2="7.01" y2="7" />
-              </svg>
-              <span className="text-[12px]" style={{ color: '#9CA3AF' }}>
-                {formatDate(event.date)}
-              </span>
-            </div>
+            {event.venue && (
+              <div className="flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5 text-[#1A56DB] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="truncate max-w-[120px]">{event.venue}</span>
+              </div>
+            )}
+          </div>
 
+          {/* CTA Button */}
+          <div className="mt-4 pt-4 border-t border-[#EDEFF3]">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsModalOpen(true);
+              }}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold bg-[#1A56DB]/5 text-[#1A56DB] hover:bg-[#1A56DB]/10 transition-all duration-300 group/btn"
+            >
+              <span>View Details</span>
+              <svg className="w-4 h-4 cta-btn-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       </motion.div>
 
-      {/* Modal */}
+      {/* Modal rendering */}
       <EventDetailsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -281,7 +285,7 @@ const EventCard = ({ event, compact = false, featured = false, index = 0 }) => {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   Premium Event Details Modal Component (unchanged)
+   Premium Event Details Modal Component
    ───────────────────────────────────────────────────────────── */
 export const EventDetailsModal = ({
   isOpen,

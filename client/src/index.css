@@ -643,34 +643,38 @@
   }
 }
 
-/* ── Coordinator Card — Sophie Bennett Aesthetic ── */
+/* ── Coordinator Card — Redesigned ── */
 .coord-card {
   position: relative;
   background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 28px rgba(0,0,0,0.08);
+  border-radius: 28px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.03), 0 12px 36px rgba(0,0,0,0.10);
   overflow: hidden;
-  width: 260px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  /* NO border, NO outline, NO transform on hover */
+  transition: box-shadow 300ms ease, transform 300ms ease;
+}
+.coord-card:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06), 0 20px 48px rgba(0,0,0,0.14);
+  transform: translateY(-3px);
 }
 
-/* Photo wrapper — padded in rest state, collapses on hover */
+/* Photo wrapper — padded, with rounded image inside */
 .coord-photo-wrapper {
-  padding: 12px 12px 0 12px;
+  padding: 14px 14px 0 14px;
   transition: padding 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Photo / fallback — shared styles */
+/* Photo / fallback — taller + more rounded */
 .coord-photo {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 3.2;
+  aspect-ratio: 4 / 4.2;
   object-fit: cover;
   object-position: center top;
-  border-radius: 16px;
+  border-radius: 20px;
   transition: border-radius 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -721,7 +725,7 @@
     padding: 0;
   }
   .coord-card:hover .coord-photo {
-    border-radius: 24px 24px 0 0;
+    border-radius: 28px 28px 0 0;
   }
 }
 /* ── Coordinator Horizontal Card (for single layout) ── */

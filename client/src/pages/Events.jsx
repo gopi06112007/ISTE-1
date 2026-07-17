@@ -8,6 +8,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 const BRANCHES = ['All', 'CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
 const CATEGORIES = ['All', 'Workshop', 'Seminar', 'Competition', 'Cultural', 'Other'];
 
+const chunkArray = (arr, size) => {
+  const chunks = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+};
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -231,9 +238,32 @@ const Events = () => {
               </ClayCard>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-6 justify-center">
-              {filteredEvents.map((event, i) => (
-                <EventCard key={event._id} event={event} index={i} />
+            <div className="space-y-10">
+              {chunkArray(filteredEvents, 3).map((rowEvents, rowIndex, allRows) => (
+                <div key={`row-${rowIndex}`} className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {rowEvents.map((event, colIndex) => {
+                      const absIndex = rowIndex * 3 + colIndex;
+                      return (
+                        <div key={event._id} className="w-full">
+                          <EventCard event={event} index={absIndex} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {rowIndex < allRows.length - 1 && (
+                    <div className="relative flex items-center justify-center py-4 select-none">
+                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-dashed border-slate-300" />
+                      </div>
+                      <div className="relative flex justify-center w-full">
+                        <span className="bg-[#EEF1F5] px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                          ✦ Next Batch ✦
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           )}
