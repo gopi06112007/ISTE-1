@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import HomeEventCard from '../HomeEventCard';
 import HomeBlogCard from '../HomeBlogCard';
 import ClayCard from '../ui/ClayCard';
+import Lightbox from '../Lightbox';
 
 const SectionErrorState = ({ title, message, onRetry }) => (
   <motion.div
@@ -818,124 +819,17 @@ export const LatestBlogSection = ({ posts, loading, error, onRetry }) => {
    LightboxModal — full-screen media viewer
    ──────────────────────────────────────────────────────────── */
 const LightboxModal = ({ isOpen, currentAlbumPhotos, currentIndex, albumName, branch, onClose, onNext, onPrev }) => {
-  const activePhoto = currentAlbumPhotos[currentIndex] || '';
-  const totalPhotos = currentAlbumPhotos.length;
-
-  // Keyboard navigation
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') onNext();
-      if (e.key === 'ArrowLeft') onPrev();
-      if (e.key === 'Escape') onClose();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onNext, onPrev, onClose]);
-
-  // Touch swipe support
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX;
-  };
-
-  const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX;
-    const delta = touchStartX.current - touchEndX.current;
-    if (delta > 50) {
-      onNext(); // swipe left -> next
-    } else if (delta < -50) {
-      onPrev(); // swipe right -> prev
-    }
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Background scrim */}
-      <div className="absolute inset-0 bg-slate-900/60" onClick={onClose} />
-
-      {/* Floating clay-lg card */}
-      <ClayCard
-        variant="raised"
-        size="lg"
-        className="relative w-full max-w-4xl max-h-[85vh] bg-[#EEF1F5] shadow-clay-lg flex flex-col overflow-hidden z-10 p-4"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Top-right close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center bg-[#EEF1F5] text-slate-700 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
-          aria-label="Close lightbox"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {/* Navigation arrows (clay-pressed style) */}
-        {totalPhotos > 1 && (
-          <>
-            <button
-              onClick={onPrev}
-              className="absolute left-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full hidden md:flex items-center justify-center bg-[#EEF1F5] text-slate-700 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
-              aria-label="Previous photo"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={onNext}
-              className="absolute right-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full hidden md:flex items-center justify-center bg-[#EEF1F5] text-slate-700 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
-              aria-label="Next photo"
-            >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </>
-        )}
-
-        {/* Image Container with clay-inset style */}
-        <div className="flex-grow flex items-center justify-center bg-[#EEF1F5] rounded-clay-md shadow-clay-inset p-4 relative overflow-hidden" style={{ minHeight: '300px' }}>
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, scale: 0.95, x: 40 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.95, x: -40 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-            className="w-full h-full flex items-center justify-center"
-          >
-            <img
-              src={activePhoto}
-              alt={`${albumName} photo ${currentIndex + 1}`}
-              className="max-w-full max-h-[55vh] object-contain rounded-clay-sm"
-              draggable="false"
-            />
-          </motion.div>
-        </div>
-
-        {/* Bottom caption bar */}
-        <div className="w-full py-4 px-2 text-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left mt-2 font-bold">
-          <div>
-            <h4 className="font-extrabold text-lg text-slate-900">{albumName}</h4>
-            <p className="text-sm text-slate-500 font-bold">Photo {currentIndex + 1} of {totalPhotos}</p>
-          </div>
-          {branch && (
-            <span className="text-xs font-bold px-3 py-1 rounded-clay-sm bg-[#EEF1F5] text-iste-blue shadow-clay-sm uppercase">
-              {branch}
-            </span>
-          )}
-        </div>
-      </ClayCard>
-    </div>
+    <Lightbox
+      photos={currentAlbumPhotos}
+      currentIndex={currentIndex}
+      albumName={albumName}
+      branch={branch}
+      isOpen={isOpen}
+      onClose={onClose}
+      onNext={onNext}
+      onPrev={onPrev}
+    />
   );
 };
 
@@ -1030,11 +924,20 @@ export const GalleryHighlightsSection = ({ albums, loading, error, onRetry }) =>
     setLightboxIndex((prev) => (prev - 1 + lightboxPhotos.length) % lightboxPhotos.length);
   };
 
-  const displayAlbums = albums.slice(0, 5);
+  const [isMobile, setIsMobile] = useState(false);
 
-  /* Masonry height pattern for visual interest */
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const displayAlbums = isMobile ? albums.slice(0, 3) : albums.slice(0, 6);
+
+  /* Height pattern for grid */
   const getCardHeight = (index) => {
-    const heights = ['row-span-2', '', '', 'row-span-2', ''];
+    const heights = ['row-span-2', '', '', 'row-span-2', '', ''];
     return heights[index % heights.length];
   };
 

@@ -20,6 +20,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
 
   const user = profile.userId || {};
   const isStudent = user.role === 'student_coordinator';
+  const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
 
   const roleLabels = {
     student_coordinator: 'Student',
@@ -123,9 +124,11 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
               <span className="text-[16px] font-bold text-[#111111] truncate">
                 {profile.name}
               </span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#22C55E">
-                <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
+              {isFaculty && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#22C55E" className="flex-shrink-0" title="Official Faculty">
+                  <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
+              )}
             </div>
 
             <div className="flex items-center gap-1 text-[13px]" style={{ color: '#6B7280' }}>
@@ -299,8 +302,18 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           letterSpacing: '-0.3px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px',
         }}>
-          {profile.name}
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {profile.name}
+          </span>
+          {isFaculty && (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#22C55E" style={{ flexShrink: 0 }} title="Official Faculty">
+              <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+          )}
         </h3>
 
         {/* Meta row */}

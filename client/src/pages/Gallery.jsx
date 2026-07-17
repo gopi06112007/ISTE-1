@@ -17,6 +17,7 @@ const Gallery = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxPhotos, setLightboxPhotos] = useState([]);
   const [lightboxAlbumName, setLightboxAlbumName] = useState('');
+  const [lightboxBranch, setLightboxBranch] = useState('');
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0);
 
   useEffect(() => {
@@ -47,6 +48,7 @@ const Gallery = () => {
     if (album.photos && album.photos.length > 0) {
       setLightboxPhotos(album.photos);
       setLightboxAlbumName(album.albumName);
+      setLightboxBranch(album.branch || '');
       setLightboxStartIndex(startIndex);
       setLightboxOpen(true);
     }
@@ -59,17 +61,17 @@ const Gallery = () => {
       <section className="bg-transparent pt-6 pb-16 lg:pt-8 lg:pb-24">
         <div className="section-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-800 mb-4 animate-fade-in select-none">
+          <div className="text-center mb-8 select-none">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-800 mb-4 animate-fade-in">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-iste-blue to-sky-500">Gallery</span>
             </h1>
-            <p className="text-slate-600 font-bold max-w-xl mx-auto text-sm sm:text-base animate-fade-in select-none">
+            <p className="text-slate-600 font-bold max-w-xl mx-auto text-sm sm:text-base animate-fade-in">
               Photo albums from our events, workshops, and chapter activities.
             </p>
           </div>
 
           {/* Branch filter - Clay Toggle Buttons */}
-          <div className="filter-scroll flex flex-nowrap md:flex-wrap md:justify-center gap-3 overflow-x-auto py-2 px-4 md:px-0 mb-6 select-none">
+          <div className="filter-scroll flex flex-nowrap md:flex-wrap md:justify-center gap-2.5 overflow-x-auto py-2 px-4 md:px-0 mb-6 select-none">
             {BRANCHES.map((branch) => {
               const isActive = activeBranch === branch;
               return (
@@ -88,13 +90,15 @@ const Gallery = () => {
             })}
           </div>
 
-          {/* Stats */}
-          <div className="mb-4 text-sm text-slate-500 font-bold px-4 sm:px-0 select-none">
-            {filteredAlbums.length} album{filteredAlbums.length !== 1 ? 's' : ''} • {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''}
-            {activeBranch !== 'All' && ` in ${activeBranch}`}
+          {/* Stats Bar */}
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm text-slate-500 font-bold px-4 sm:px-0 select-none">
+            <div>
+              {filteredAlbums.length} album{filteredAlbums.length !== 1 ? 's' : ''} • {totalPhotos} photo{totalPhotos !== 1 ? 's' : ''}
+              {activeBranch !== 'All' && ` in ${activeBranch}`}
+            </div>
           </div>
 
-          {/* Content */}
+          {/* Content Grid */}
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="flex flex-col items-center gap-4">
@@ -129,9 +133,9 @@ const Gallery = () => {
               </ClayCard>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {filteredAlbums.map((album) => (
-                <div key={album._id}>
+                <div key={album._id} className="h-full">
                   <AlbumGrid
                     album={album}
                     onClick={() => openLightbox(album)}
@@ -149,6 +153,7 @@ const Gallery = () => {
           photos={lightboxPhotos}
           initialIndex={lightboxStartIndex}
           albumName={lightboxAlbumName}
+          branch={lightboxBranch}
           onClose={() => setLightboxOpen(false)}
         />
       )}

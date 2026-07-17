@@ -63,6 +63,7 @@ const DetailCard = ({ icon, label, value }) => (
 /* ─── Mini coordinator card for "More from branch" ──────── */
 const MiniCard = ({ profile }) => {
   const user = profile.userId || {};
+  const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
   const branchAccents = {
     CSE: 'blue',
     ECE: 'violet',
@@ -95,7 +96,14 @@ const MiniCard = ({ profile }) => {
         </div>
       </div>
       <div className="pt-3">
-        <p className="text-sm font-extrabold text-slate-800 line-clamp-1">{profile.name}</p>
+        <p className="text-sm font-extrabold text-slate-800 line-clamp-1 flex items-center gap-1">
+          <span className="truncate">{profile.name}</span>
+          {isFaculty && (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#22C55E" className="flex-shrink-0" title="Official Faculty">
+              <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+          )}
+        </p>
         <p className="text-xs text-slate-500 mt-1 font-bold line-clamp-1">{profile.role || roleLabels[user.role] || ''}</p>
       </div>
     </ClayCard>
@@ -209,6 +217,7 @@ const ProfileDetailPage = () => {
 
   const user = profile.userId || {};
   const isStudent = user.role === 'student_coordinator';
+  const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
 
   return (
     <PageTransition className="pt-20 pb-16">
@@ -266,8 +275,13 @@ const ProfileDetailPage = () => {
               </span>
 
               {/* Name */}
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-800 mb-1 leading-tight">
-                {profile.name}
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-800 mb-1 leading-tight flex items-center justify-center lg:justify-start gap-2">
+                <span>{profile.name}</span>
+                {isFaculty && (
+                  <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="#22C55E" title="Official Faculty">
+                    <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                  </svg>
+                )}
               </h1>
 
               {/* ISTE role / designation */}

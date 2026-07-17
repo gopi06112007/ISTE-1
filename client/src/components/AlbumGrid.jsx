@@ -38,24 +38,32 @@ const AlbumGrid = ({ album, onClick }) => {
   const accentColor = branchAccents[album.branch?.toUpperCase()] || 'blue';
 
   return (
-    <ClayCard
-      as="div"
-      interactive={true}
-      onClick={() => onClick?.(album)}
-      accent={accentColor}
-      className="group cursor-pointer overflow-hidden flex flex-col h-full"
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && onClick?.(album)}
-    >
-      {/* Photo Preview sits flush at the top */}
-      <div className="relative w-full overflow-hidden flex-shrink-0" style={{ aspectRatio: '16/10' }}>
-        <div className="w-full h-full">
+    <div className="relative group h-full select-none">
+      {/* Visual Photo Stack layers if > 1 photo */}
+      {photoCount > 1 && (
+        <>
+          <div className="absolute inset-0 rounded-3xl bg-slate-200/60 rotate-2 translate-y-1 scale-98 transition-transform duration-300 group-hover:rotate-3 group-hover:translate-y-2" />
+          <div className="absolute inset-0 rounded-3xl bg-slate-300/40 -rotate-1 translate-y-0.5 scale-99 transition-transform duration-300 group-hover:-rotate-2" />
+        </>
+      )}
+
+      <ClayCard
+        as="div"
+        interactive={true}
+        onClick={() => onClick?.(album)}
+        accent={accentColor}
+        className="relative z-10 overflow-hidden flex flex-col h-full rounded-3xl bg-white border border-slate-100 shadow-clay-md group-hover:shadow-clay-lg transition-all duration-300 cursor-pointer"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && onClick?.(album)}
+      >
+        {/* Cover Photo */}
+        <div className="relative w-full overflow-hidden flex-shrink-0" style={{ aspectRatio: '16/10' }}>
           {album.photos && album.photos.length > 0 ? (
             <SafeImage
               src={album.photos[0]}
               alt={`${album.albumName} cover`}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out"
               fallbackType="gallery"
               objectPosition="center center"
             />
@@ -66,47 +74,61 @@ const AlbumGrid = ({ album, onClick }) => {
               </svg>
             </div>
           )}
-        </div>
 
-        {/* Branch chip — top-right */}
-        <div className="absolute top-3 right-3 z-10">
-          <span className={`px-2.5 py-1 text-[10px] font-bold rounded shadow-sm backdrop-blur-sm ${getBranchChipClass(album.branch)}`}>
-            {album.branch}
-          </span>
-        </div>
-
-        {/* Photo count badge */}
-        {photoCount > 1 && (
-          <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold z-10 rounded">
-            +{photoCount - 1} more
-          </div>
-        )}
-      </div>
-
-      {/* Info section below image */}
-      <div className="p-4 flex-grow flex flex-col justify-between bg-white">
-        <div>
-          <h3 className="text-base font-extrabold text-slate-800 line-clamp-1 group-hover:text-iste-blue transition-colors duration-300">
-            {album.albumName}
-          </h3>
-          <p className="text-xs text-slate-500 mt-1 font-semibold flex items-center gap-1.5">
-            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span>{photoCount} photo{photoCount !== 1 ? 's' : ''}</span>
-          </p>
-        </div>
-
-        {album.eventId?.title && (
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-bold">
-            <span className="truncate text-iste-blue flex items-center gap-1" title={album.eventId.title}>
-              <span></span>
-              <span className="truncate max-w-[180px] text-left">{album.eventId.title}</span>
+          {/* Dark Overlay Gradient on Hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+            <span className="text-white text-xs font-bold flex items-center gap-1.5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              <span>View Album</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
             </span>
           </div>
-        )}
-      </div>
-    </ClayCard>
+
+          {/* Branch badge — top-left */}
+          <div className="absolute top-3 left-3 z-10">
+            <span className={`px-3 py-1 text-[11px] font-extrabold rounded-full shadow-md backdrop-blur-md uppercase tracking-wider ${getBranchChipClass(album.branch)}`}>
+              {album.branch}
+            </span>
+          </div>
+
+          {/* Photo count badge — top-right */}
+          <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/60 backdrop-blur-md text-white text-[11px] font-extrabold z-10 rounded-full flex items-center gap-1 border border-white/10 shadow-md">
+            <svg className="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>{photoCount}</span>
+          </div>
+        </div>
+
+        {/* Card Body */}
+        <div className="p-5 flex-grow flex flex-col justify-between bg-white">
+          <div>
+            <h3 className="text-base font-extrabold text-slate-800 line-clamp-1 group-hover:text-iste-blue transition-colors duration-300">
+              {album.albumName}
+            </h3>
+            {album.eventId?.title ? (
+              <p className="text-xs text-iste-blue mt-1 font-bold line-clamp-1">
+                📌 {album.eventId.title}
+              </p>
+            ) : (
+              <p className="text-xs text-slate-500 mt-1 font-medium">
+                Captured during ISTE activities
+              </p>
+            )}
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold">
+            <span className="flex items-center gap-1 text-slate-400">
+              <span>ISTE Gallery</span>
+            </span>
+            <span className="text-iste-blue group-hover:translate-x-1 transition-transform duration-300">
+              Explore →
+            </span>
+          </div>
+        </div>
+      </ClayCard>
+    </div>
   );
 };
 
