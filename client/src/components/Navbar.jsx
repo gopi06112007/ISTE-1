@@ -140,18 +140,23 @@ const Navbar = () => {
     <>
       {/* Mobile-only floating ISTE logo — visible only on Home page */}
       {location.pathname === '/' && (
-        <Link
-          to="/"
-          className="fixed top-3 left-4 z-50 lg:hidden flex items-center gap-2.5 group"
-        >
-          <div className="w-14 h-14 flex items-center justify-center group-active:scale-95 transition-transform">
-            <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-md" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-base font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
-            <span className="text-[9px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold mt-0.5">GMRIT</span>
-          </div>
-        </Link>
+        <>
+          {/* Straight horizontal background blur layer at the top */}
+          <div className="fixed top-0 left-0 right-0 h-20 bg-gradient-to-b from-[#EEF1F5]/80 via-[#EEF1F5]/40 to-transparent backdrop-blur-md z-[45] lg:hidden pointer-events-none" />
+          
+          <Link
+            to="/"
+            className="fixed top-3 left-4 z-50 lg:hidden flex items-center gap-2.5 group"
+          >
+            <div className="w-14 h-14 flex items-center justify-center group-active:scale-95 transition-transform">
+              <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-md" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-base font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
+              <span className="text-[9px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold mt-0.5">GMRIT</span>
+            </div>
+          </Link>
+        </>
       )}
 
       {/* Top Floating Header — Desktop only */}
