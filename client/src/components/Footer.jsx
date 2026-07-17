@@ -10,7 +10,7 @@ const Footer = ({ forceRender = false }) => {
 
 
   return (
-    <footer className="w-full px-4 sm:px-6 lg:px-8 pb-4 pt-2">
+    <footer className="w-full px-4 sm:px-6 lg:px-8 pb-28 lg:pb-4 pt-2">
       <div className="mx-auto max-w-6xl bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] rounded-clay-lg shadow-clay-inset p-5 sm:p-6 transition-colors duration-300">
         <div className="flex flex-col gap-6">
           {/* Brand */}
