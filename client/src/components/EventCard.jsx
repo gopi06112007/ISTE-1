@@ -324,8 +324,8 @@ export const EventDetailsModal = ({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="relative w-full max-w-5xl max-h-[90vh] md:h-[82vh] md:max-h-[820px] bg-white rounded-[24px] sm:rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-y-auto md:overflow-hidden border border-slate-100 z-[130] my-auto"
           >
-            {/* ── Left Side: Poster Studio View (Framed Box View) ── */}
-            <div className="relative w-full md:w-[55%] h-[220px] sm:h-[300px] md:h-full bg-slate-950 flex flex-col p-3 sm:p-4 md:p-6 overflow-hidden flex-shrink-0">
+            {/* ── Left Side: Poster Studio View (Framed Box View - 35/65 Mobile Split) ── */}
+            <div className="relative w-full md:w-[55%] h-[35vh] min-h-[250px] sm:h-[320px] md:h-full bg-slate-950 flex flex-col p-3 sm:p-4 md:p-6 overflow-hidden flex-shrink-0">
               {/* Ambient Blurred Background Poster Glow */}
               {event.posterUrl && (
                 <img
