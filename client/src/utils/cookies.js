@@ -23,7 +23,7 @@ export const getCookie = (name) => {
     if (c.indexOf(nameEQ) === 0) {
       try {
         return JSON.parse(decodeURIComponent(c.substring(nameEQ.length, c.length)));
-      } catch (e) {
+      } catch {
         return null;
       }
     }

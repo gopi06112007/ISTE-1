@@ -45,12 +45,12 @@ export default {
         'glass-hover': '0 16px 48px rgba(26, 86, 219, 0.22)',
         'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
         'card-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
-        // Claymorphism shadows (softened highlight to eliminate glowing borders)
-        'clay-sm': '6px 6px 12px rgba(163,177,198,0.35), -6px -6px 12px rgba(255,255,255,0.2)',
-        'clay-md': '9px 9px 16px rgba(163,177,198,0.4), -9px -9px 16px rgba(255,255,255,0.2)',
-        'clay-lg': '14px 14px 28px rgba(163,177,198,0.35), -14px -14px 28px rgba(255,255,255,0.2)',
-        'clay-inset': 'inset 6px 6px 12px rgba(163,177,198,0.35), inset -6px -6px 12px rgba(255,255,255,0.2)',
-        'clay-pressed': 'inset 4px 4px 8px rgba(163,177,198,0.4), inset -4px -4px 8px rgba(255,255,255,0.15)',
+        // Claymorphism shadows
+        'clay-sm': '6px 6px 10px rgba(174,182,192,0.55), -6px -6px 12px rgba(255,255,255,0.75)',
+        'clay-md': '9px 9px 18px rgba(174,182,192,0.5), -9px -9px 18px rgba(255,255,255,0.7)',
+        'clay-lg': '14px 14px 28px rgba(174,182,192,0.45), -14px -14px 28px rgba(255,255,255,0.65)',
+        'clay-inset': 'inset 5px 5px 10px rgba(174,182,192,0.45), inset -5px -5px 10px rgba(255,255,255,0.75)',
+        'clay-pressed': 'inset 6px 6px 12px rgba(174,182,192,0.5), inset -6px -6px 12px rgba(255,255,255,0.7)',
       },
       backgroundImage: {
         'orb-primary': 'radial-gradient(circle, #7C3AED 0%, transparent 70%)',

@@ -6,19 +6,12 @@ import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import { buildCloudinaryUrl } from '../utils/cloudinary';
 import ClayCard from '../components/ui/ClayCard';
-import BentoGrid from '../components/ui/BentoGrid';
 
 /* ─── Role helpers ───────────────────────────────────────── */
 const roleLabels = {
   student_coordinator: 'Student Coordinator',
   branch_faculty: 'Branch Faculty',
   central_faculty: 'Central Faculty',
-};
-
-const roleBadgeClasses = {
-  student_coordinator: 'text-emerald-600 bg-[#EEF1F5] shadow-clay-inset font-bold',
-  branch_faculty: 'text-blue-600 bg-[#EEF1F5] shadow-clay-inset font-bold',
-  central_faculty: 'text-orange-600 bg-[#EEF1F5] shadow-clay-inset font-bold',
 };
 
 /* ─── Stagger animation variants ────────────────────────── */

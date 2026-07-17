@@ -79,7 +79,7 @@ const FileUpload = ({ label, accept = "image/*", onChange, multiple = false, hin
             <div className="text-sm font-bold text-slate-600">
               Drag & drop or <span className="text-iste-blue">click to upload</span>
             </div>
-            {hint && <div className="form-hint !mt-0 text-slate-450 font-semibold">{hint}</div>}
+            {hint && <div className="form-hint !mt-0 text-slate-500 font-semibold">{hint}</div>}
           </div>
         ) : (
           <div className="flex flex-wrap gap-3 w-full max-h-[150px] overflow-y-auto p-1">

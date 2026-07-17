@@ -13,13 +13,7 @@ const roleMap = {
   'Central Faculty': 'central_faculty',
 };
 
-const chunkArray = (arr, size) => {
-  const chunks = [];
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size));
-  }
-  return chunks;
-};
+
 
 const Coordinators = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -313,29 +307,9 @@ const Coordinators = () => {
               </ClayCard>
             </div>
           ) : (
-            <div className="space-y-10">
-              {chunkArray(sortedProfiles, 4).map((rowProfiles, rowIndex, allRows) => (
-                <div key={`row-${rowIndex}`} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {rowProfiles.map((profile) => (
-                      <div key={profile._id} className="w-full">
-                        <CoordinatorCard profile={profile} />
-                      </div>
-                    ))}
-                  </div>
-                  {rowIndex < allRows.length - 1 && (
-                    <div className="relative flex items-center justify-center py-4 select-none">
-                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div className="w-full border-t border-dashed border-slate-300" />
-                      </div>
-                      <div className="relative flex justify-center w-full">
-                        <span className="bg-[#EEF1F5] px-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                          ✦ Next Batch ✦
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+            <div className="flex flex-wrap gap-5 justify-center">
+              {sortedProfiles.map((profile, i) => (
+                <CoordinatorCard key={profile._id} profile={profile} index={i} />
               ))}
             </div>
           )}

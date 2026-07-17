@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import api from '../api/axios';
 import EventCard from '../components/EventCard';
 import PageTransition from '../components/ui/PageTransition';
 import ClayCard from '../components/ui/ClayCard';
-import BentoGrid from '../components/ui/BentoGrid';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const BRANCHES = ['All', 'CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
@@ -27,11 +26,7 @@ const Events = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  useEffect(() => {
-    fetchEvents();
-  }, [activeTab]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get('/events', {
@@ -46,7 +41,11 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleBranchClick = (branch) => {
     if (activeBranch === branch) {
@@ -243,11 +242,14 @@ const Events = () => {
               {chunkArray(filteredEvents, 3).map((rowEvents, rowIndex, allRows) => (
                 <div key={`row-${rowIndex}`} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {rowEvents.map((event) => (
-                      <div key={event._id} className="w-full">
-                        <EventCard event={event} />
-                      </div>
-                    ))}
+                    {rowEvents.map((event, colIndex) => {
+                      const absIndex = rowIndex * 3 + colIndex;
+                      return (
+                        <div key={event._id} className="w-full">
+                          <EventCard event={event} index={absIndex} />
+                        </div>
+                      );
+                    })}
                   </div>
                   {rowIndex < allRows.length - 1 && (
                     <div className="relative flex items-center justify-center py-4 select-none">

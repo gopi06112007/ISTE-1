@@ -100,7 +100,7 @@ const AlbumGrid = ({ album, onClick }) => {
         {album.eventId?.title && (
           <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-bold">
             <span className="truncate text-iste-blue flex items-center gap-1" title={album.eventId.title}>
-              <span>📅</span>
+              <span></span>
               <span className="truncate max-w-[180px] text-left">{album.eventId.title}</span>
             </span>
           </div>

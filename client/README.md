@@ -1,16 +1,48 @@
-# React + Vite
+# ISTE GMRIT Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React/Vite frontend for the ISTE GMRIT Student Chapter website.
 
-Currently, two official plugins are available:
+## Local Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Install dependencies:
 
-## React Compiler
+   ```bash
+   npm install
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. Start the backend from `../server` first.
 
-## Expanding the Oxlint configuration
+3. Start the client:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+   ```bash
+   npm run dev
+   ```
+
+The Vite dev server proxies `/api` and `/uploads` to `http://localhost:5000`.
+
+## Environment
+
+Most local development works without a client env file because the Vite proxy handles API calls.
+
+If the API is hosted somewhere else, create `client/.env.local`:
+
+```bash
+VITE_API_URL=http://localhost:5000/api
+```
+
+## Quality Checks
+
+```bash
+npm run lint
+npm run test
+npm run build
+```
+
+## Performance Notes
+
+Routes are lazy-loaded in `src/App.jsx`. Heavy visual/editor code is also split:
+
+- `src/components/home/HeroBackdrop.jsx` lazy-loads the Three.js hero.
+- `src/components/LazyRichTextEditor.jsx` lazy-loads TipTap.
+
+Keep new dashboard-only or media-heavy features behind route/component lazy boundaries.

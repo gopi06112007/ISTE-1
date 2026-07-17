@@ -10,7 +10,7 @@ import ClayCard from '../../components/ui/ClayCard';
 import BentoGrid from '../../components/ui/BentoGrid';
 
 const BranchFacultyDashboard = () => {
-  const { user, profile, userName, userBranch, setProfile, checkAuth } = useAuth();
+  const { profile, userName, userBranch, setProfile, checkAuth } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Faculty Profile Edit State
@@ -109,6 +109,7 @@ const BranchFacultyDashboard = () => {
     fetchCoordinators();
     fetchEvents();
     fetchAlbums();
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, [userBranch]);
 
   const fetchStats = async () => {

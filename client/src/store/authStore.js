@@ -4,7 +4,7 @@ import { setCookie, getCookie, eraseCookie } from '../utils/cookies';
 
 const savedInfo = getCookie('iste_login_info');
 
-const useAuthStore = create((set, get) => ({
+const useAuthStore = create((set) => ({
   // State
   user: savedInfo?.user || null,
   profile: savedInfo?.profile || null,
@@ -65,7 +65,7 @@ const useAuthStore = create((set, get) => ({
           isLoading: false,
         });
       }
-    } catch (error) {
+    } catch {
       eraseCookie('iste_login_info');
       set({
         user: null,

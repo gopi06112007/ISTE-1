@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
@@ -8,56 +8,66 @@ import useAuth from './hooks/useAuth';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Public Pages
-import Home from './pages/Home';
-import Coordinators from './pages/Coordinators';
-import Events from './pages/Events';
-import Gallery from './pages/Gallery';
-import Blog from './pages/Blog';
-import Login from './pages/Login';
-import ProfileDetailPage from './pages/ProfileDetailPage';
-
 // Protected wrapper
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Dashboard Pages
-import StudentDashboard from './pages/dashboard/StudentDashboard';
-import BranchFacultyDashboard from './pages/dashboard/BranchFacultyDashboard';
-import CentralDashboard from './pages/dashboard/CentralDashboard';
+const Home = lazy(() => import('./pages/Home'));
+const Coordinators = lazy(() => import('./pages/Coordinators'));
+const Events = lazy(() => import('./pages/Events'));
+const Gallery = lazy(() => import('./pages/Gallery'));
+const Blog = lazy(() => import('./pages/Blog'));
+const Login = lazy(() => import('./pages/Login'));
+const ProfileDetailPage = lazy(() => import('./pages/ProfileDetailPage'));
+const StudentDashboard = lazy(() => import('./pages/dashboard/StudentDashboard'));
+const BranchFacultyDashboard = lazy(() => import('./pages/dashboard/BranchFacultyDashboard'));
+const CentralDashboard = lazy(() => import('./pages/dashboard/CentralDashboard'));
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
+        <p className="text-slate-500 font-bold">Loading page...</p>
+      </div>
+    </div>
+  );
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/coordinators" element={<Coordinators />} />
-        <Route path="/coordinators/:id" element={<ProfileDetailPage />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<Blog />} />
-        <Route path="/login" element={<Login />} />
+      <Suspense fallback={<PageLoader />}>
+        <Routes location={location} key={location.pathname}>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/coordinators" element={<Coordinators />} />
+          <Route path="/coordinators/:id" element={<ProfileDetailPage />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<Blog />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Protected Dashboard Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardRouter />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard/*"
-          element={
-            <ProtectedRoute>
-              <DashboardRouter />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          {/* Protected Dashboard Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardRouter />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/*"
+            element={
+              <ProtectedRoute>
+                <DashboardRouter />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   );
 }
@@ -91,7 +101,7 @@ function App() {
   useEffect(() => {
     // initialization
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   return (
     <Router>

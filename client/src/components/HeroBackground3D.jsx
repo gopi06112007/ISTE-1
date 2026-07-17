@@ -10,7 +10,6 @@ function GearCog({ position, scale, speed, color, teeth = 12, innerRadius = 0.6,
   const meshRef = useRef();
   const geometry = useMemo(() => {
     const shape = new THREE.Shape();
-    const toothDepth = outerRadius - innerRadius;
     const anglePerTooth = (Math.PI * 2) / teeth;
     const halfTooth = anglePerTooth * 0.25;
 
@@ -139,21 +138,6 @@ function CircuitNetwork({ position, scale, color, nodeCount = 8 }) {
 /* ────────────────────────────────────────────────────
    4. TECHNICAL GRID PLANE — engineering blueprint floor
    ──────────────────────────────────────────────────── */
-function GridPlane({ position, rotation, size = 6, divisions = 12, color }) {
-  const gridRef = useRef();
-
-  useFrame((state) => {
-    if (!gridRef.current) return;
-    gridRef.current.position.y = position[1] + Math.sin(state.clock.getElapsedTime() * 0.3) * 0.1;
-  });
-
-  return (
-    <group ref={gridRef} position={position} rotation={rotation}>
-      <gridHelper args={[size, divisions, color, color]} material-transparent material-opacity={0.08} />
-    </group>
-  );
-}
-
 /* ────────────────────────────────────────────────────
    5. PRECISION RING — mechanical bearing ring
    ──────────────────────────────────────────────────── */

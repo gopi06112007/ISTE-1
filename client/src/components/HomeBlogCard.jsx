@@ -133,7 +133,7 @@ const HomeBlogCard = ({ blog }) => {
       {/* ── Card Content ── */}
       <div className="flex flex-col flex-1 pt-3.5">
         {/* Title */}
-        <h3 className="text-base font-black text-slate-850 line-clamp-2 mb-1.5 leading-snug group-hover:text-iste-blue transition-colors duration-200">
+        <h3 className="text-base font-black text-slate-800 line-clamp-2 mb-1.5 leading-snug group-hover:text-iste-blue transition-colors duration-200">
           {blog.title}
         </h3>
 

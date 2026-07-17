@@ -4,16 +4,17 @@ import { toast } from 'react-hot-toast';
 import useAuth from '../../hooks/useAuth';
 import api from '../../api/axios';
 import EventCard from '../../components/EventCard';
-import RichTextEditor from '../../components/RichTextEditor';
+import RichTextEditor from '../../components/LazyRichTextEditor';
 import Modal from '../../components/ui/Modal';
 import FileUpload from '../../components/ui/FileUpload';
 import ClayCard from '../../components/ui/ClayCard';
 import BentoGrid from '../../components/ui/BentoGrid';
+import { htmlToPlainText } from '../../utils/html';
 
 const BRANCHES = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
 
 const CentralDashboard = () => {
-  const { user, profile, userName, userBranch, setProfile, checkAuth } = useAuth();
+  const { profile, userName, userBranch, setProfile, checkAuth } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Central Profile Edit State
@@ -138,6 +139,7 @@ const CentralDashboard = () => {
     fetchBlogs();
     fetchAlbums();
     fetchActivityLogs();
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchStats = async () => {
@@ -1504,7 +1506,9 @@ const CentralDashboard = () => {
                               <span className="text-xs text-slate-400 font-bold select-none">{new Date(blog.publishedAt).toLocaleDateString()}</span>
                             </div>
                             <h4 className="font-extrabold text-slate-800 text-base line-clamp-2">{blog.title}</h4>
-                            <p className="text-xs text-slate-550 font-semibold mt-2 line-clamp-2" dangerouslySetInnerHTML={{ __html: blog.content }}></p>
+                            <p className="text-xs text-slate-500 font-semibold mt-2 line-clamp-2">
+                              {htmlToPlainText(blog.content) || 'No summary available.'}
+                            </p>
                           </div>
                           <div className="flex justify-end gap-3 mt-4 pt-3 border-t border-slate-200/50 select-none border-slate-200">
                             <button onClick={() => openEditBlog(blog)} className="text-xs font-bold text-iste-blue hover:text-sky-600">Edit</button>

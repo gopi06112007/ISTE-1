@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useAuth from '../hooks/useAuth';
@@ -9,6 +9,9 @@ const Navbar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, logout } = useAuth();
+  const menuButtonRef = useRef(null);
+  const drawerRef = useRef(null);
+  const closeButtonRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,6 +28,53 @@ const Navbar = () => {
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isMobileOpen) {
+      document.body.style.overflow = '';
+      return undefined;
+    }
+
+    const previousActiveElement = document.activeElement;
+    const menuButton = menuButtonRef.current;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMobileOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab' || !drawerRef.current) return;
+
+      const focusable = drawerRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+      if (previousActiveElement instanceof HTMLElement) {
+        previousActiveElement.focus();
+      } else {
+        menuButton?.focus();
+      }
+    };
+  }, [isMobileOpen]);
 
   const handleLogout = async () => {
     await logout();
@@ -138,9 +188,12 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <div className="flex items-center gap-3 lg:hidden relative z-10">
               <button
+                ref={menuButtonRef}
                 onClick={() => setIsMobileOpen(true)}
                 className="p-2.5 rounded-full text-slate-700 bg-[#EEF1F5] shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300"
                 aria-label="Open menu"
+                aria-expanded={isMobileOpen}
+                aria-controls="mobile-menu-drawer"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -154,6 +207,9 @@ const Navbar = () => {
       {/* Mobile Menu Drawer */}
       <div
         className={`fixed inset-0 z-[100] lg:hidden transition-opacity duration-300 ${isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mobile-menu-title"
       >
         <div
           className="absolute inset-0 bg-slate-900/40 transition-opacity duration-300"
@@ -161,11 +217,14 @@ const Navbar = () => {
         ></div>
 
         <div
+          id="mobile-menu-drawer"
+          ref={drawerRef}
           className={`absolute top-0 right-0 bottom-0 w-[320px] bg-[#EEF1F5] shadow-clay-lg transform transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] flex flex-col ${isMobileOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           <div className="flex justify-between items-center px-6 py-5 border-b border-slate-200">
-            <span className="font-extrabold text-slate-900 text-xl font-display">Menu</span>
+            <span id="mobile-menu-title" className="font-extrabold text-slate-900 text-xl font-display">Menu</span>
             <button
+              ref={closeButtonRef}
               onClick={() => setIsMobileOpen(false)}
               className="flex items-center justify-center w-10 h-10 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               aria-label="Close menu"

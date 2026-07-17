@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import DOMPurify from 'dompurify';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import ClayCard from '../components/ui/ClayCard';
+import { sanitizeBlogContent } from '../utils/html';
 
 const BlogDetail = ({ blogId }) => {
   const [blog, setBlog] = useState(null);
@@ -17,11 +17,7 @@ const BlogDetail = ({ blogId }) => {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
-  useEffect(() => {
-    fetchBlog();
-  }, [blogId]);
-
-  const fetchBlog = async () => {
+  const fetchBlog = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get(`/blogs/${blogId}`);
@@ -39,7 +35,11 @@ const BlogDetail = ({ blogId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogId]);
+
+  useEffect(() => {
+    fetchBlog();
+  }, [fetchBlog]);
 
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString('en-IN', {
@@ -83,15 +83,7 @@ const BlogDetail = ({ blogId }) => {
   const authorName = blog.author?.profileId?.name || blog.author?.email || 'ISTE GMRIT';
   const authorPhoto = blog.author?.profileId?.photoUrl;
 
-  // Sanitize TipTap HTML content with DOMPurify
-  const sanitizedContent = DOMPurify.sanitize(blog.content, {
-    ALLOWED_TAGS: [
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'u',
-      's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img',
-      'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr', 'span', 'div', 'sub', 'sup',
-    ],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'class', 'style', 'colspan', 'rowspan'],
-  });
+  const sanitizedContent = sanitizeBlogContent(blog.content);
 
   const handleSwipeLeft = () => {
     if (blogIds.length <= 1) return;
