@@ -5,7 +5,7 @@ import SafeImage from './SafeImage';
 const getInitials = (name = '?') =>
   name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
 
-const CoordinatorCard = ({ profile, index = 0 }) => {
+const CoordinatorCard = ({ profile, index = 0, isSingle = false }) => {
   const user = profile.userId || {};
   const isStudent = user.role === 'student_coordinator';
 
@@ -43,6 +43,165 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
   const socials = profile.socialLinks || {};
 
   const hasSocials = socials.linkedin || socials.github || socials.instagram;
+
+  if (isSingle) {
+    return (
+      <MotionLink
+        to={`/coordinators/${profile._id}`}
+        custom={index}
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ delay: index * 0.07, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="coord-horizontal-card"
+      >
+        {/* Left Side: Avatar Panel */}
+        <div className="avatar-panel">
+          <div className="avatar-container">
+            {profile.photoUrl ? (
+              <SafeImage
+                src={profile.photoUrl}
+                alt={`${profile.name} - ISTE GMRIT`}
+                fallbackType="profile"
+                name={profile.name}
+                className="horizontal-avatar"
+                objectPosition="center top"
+              />
+            ) : (
+              <div className="horizontal-avatar coord-fallback flex items-center justify-center" style={{ background: gradient }}>
+                <span className="text-3xl font-black text-white/90 select-none">
+                  {getInitials(profile.name)}
+                </span>
+              </div>
+            )}
+          </div>
+          
+          <div className="panel-buttons">
+            <span className="btn-view-profile">View profile</span>
+            <span className="btn-invite">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="8.5" cy="7" r="4" />
+                <line x1="20" y1="8" x2="20" y2="14" />
+                <line x1="23" y1="11" x2="17" y2="11" />
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        {/* Right Side: Details Panel */}
+        <div className="details-panel">
+          <div className="top-badge-container">
+            <span className="role-type-badge" style={{ background: badgeStyle.bg, color: badgeStyle.color }}>
+              {roleLabels[user.role] || user.role}
+            </span>
+          </div>
+
+          <h3 className="horizontal-name">
+            {profile.name}
+            <span className="verified-tick">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#22C55E" />
+              </svg>
+            </span>
+          </h3>
+
+          {profile.role && (
+            <p className="horizontal-role-title">
+              {profile.role}
+            </p>
+          )}
+
+          <div className="horizontal-stats-row">
+            {isStudent && studentId && (
+              <span className="stat-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="16" y1="9" x2="20" y2="9" />
+                  <line x1="16" y1="13" x2="20" y2="13" />
+                  <circle cx="8" cy="12" r="3" />
+                  <path d="M4 19c0-2 2-3.5 4-3.5s4 1.5 4 3.5" />
+                </svg>
+                {studentId}
+              </span>
+            )}
+            {!isStudent && user.email && (
+              <span className="stat-item truncate max-w-[160px]" title={user.email}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {user.email}
+              </span>
+            )}
+            {isStudent && year && (
+              <span className="stat-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                  <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg>
+                {year}
+              </span>
+            )}
+            {!isStudent && profile.designation && (
+              <span className="stat-item truncate">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {profile.designation}
+              </span>
+            )}
+          </div>
+
+          <div className="horizontal-footer-tags">
+            {profile.branch && (
+              <span className="footer-tag branch-tag">
+                {profile.branch}
+              </span>
+            )}
+            
+            {hasSocials && (
+              <div className="footer-social-inline">
+                {socials.linkedin && (
+                  <span
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(socials.linkedin, '_blank', 'noopener,noreferrer'); }}
+                    className="inline-social-icon text-[#0A66C2]"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" />
+                      <rect x="2" y="9" width="4" height="12" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </span>
+                )}
+                {socials.github && (
+                  <span
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(socials.github, '_blank', 'noopener,noreferrer'); }}
+                    className="inline-social-icon text-[#24292F]"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" />
+                    </svg>
+                  </span>
+                )}
+                {socials.instagram && (
+                  <span
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(socials.instagram, '_blank', 'noopener,noreferrer'); }}
+                    className="inline-social-icon text-[#DD2A7B]"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </MotionLink>
+    );
+  }
 
   return (
     <MotionLink
@@ -145,8 +304,6 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
           </p>
         )}
 
-
-
         {/* Stats row */}
         <div className="flex items-center gap-3 mt-1 mb-3">
           {/* Student ID */}
@@ -238,7 +395,6 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
           </div>
         )}
       </div>
-    </MotionLink>
   );
 };
 
