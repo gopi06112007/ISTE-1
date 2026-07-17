@@ -279,8 +279,8 @@ const Navbar = () => {
                     to={link.to}
                     className={`relative flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-1 ${
                       active
-                        ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-2.5 py-2'
-                        : 'text-slate-400 py-2'
+                        ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-2.5 py-2.5'
+                        : 'text-slate-400 py-2.5'
                     }`}
                   >
                     <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
@@ -314,8 +314,8 @@ const Navbar = () => {
                   to="/dashboard"
                   className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
                     isActive('/dashboard')
-                      ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
-                      : 'text-iste-blue px-2 py-2'
+                      ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2.5'
+                      : 'text-iste-blue px-2 py-2.5'
                   }`}
                 >
                   <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
@@ -350,8 +350,8 @@ const Navbar = () => {
                 to="/login"
                 className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
                   isActive('/login')
-                    ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3.5 py-2'
-                    : 'bg-iste-blue/10 text-iste-blue px-3 py-2'
+                    ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3.5 py-2.5'
+                    : 'bg-iste-blue/10 text-iste-blue px-3 py-2.5'
                 }`}
               >
                 <svg className="w-[20px] h-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
