@@ -106,6 +106,20 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Mobile-only floating ISTE logo — top left corner */}
+      <Link
+        to="/"
+        className="fixed top-4 left-4 z-50 lg:hidden flex items-center gap-2 group"
+      >
+        <div className="w-11 h-11 flex items-center justify-center group-active:scale-95 transition-transform">
+          <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-md" />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
+          <span className="text-[8px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold">GMRIT</span>
+        </div>
+      </Link>
+
       {/* Top Floating Header — Desktop only */}
       <div className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 pointer-events-none">
         <ClayCard
