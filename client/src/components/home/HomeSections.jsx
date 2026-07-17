@@ -900,7 +900,7 @@ export const GalleryHighlightsSection = ({ albums = [], loading, error, onRetry 
           </div>
           <Link
             to="/gallery"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300 text-sm font-extrabold group"
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300 text-sm font-extrabold group"
           >
             <span>View All Albums</span>
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -943,22 +943,37 @@ export const GalleryHighlightsSection = ({ albums = [], loading, error, onRetry 
             <p className="text-slate-400 text-sm max-w-xs font-semibold">Gallery albums will appear here once events are photographed.</p>
           </motion.div>
         ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-          >
-            {displayAlbums.map((album) => (
-              <div key={album._id} className="h-full">
-                <AlbumGrid
-                  album={album}
-                  onClick={() => openLightbox(album)}
-                />
-              </div>
-            ))}
-          </motion.div>
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+            >
+              {displayAlbums.map((album) => (
+                <div key={album._id} className="h-full">
+                  <AlbumGrid
+                    album={album}
+                    onClick={() => openLightbox(album)}
+                  />
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Mobile CTA (Centered View All Button below cards) */}
+            <div className="flex justify-center mt-8 sm:hidden">
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#EEF1F5] text-iste-blue shadow-clay-sm active:shadow-clay-pressed active:scale-95 transition-all duration-300 text-sm font-extrabold group"
+              >
+                <span>View All Albums</span>
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </>
         )}
       </div>
 
