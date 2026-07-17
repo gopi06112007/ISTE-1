@@ -218,47 +218,52 @@ const Navbar = () => {
         </ClayCard>
       </div>
 
-      {/* Mobile Animated Floating Segmented Bottom Navigation Bar */}
-      <div className="fixed bottom-4 left-0 right-0 z-50 flex justify-center px-3 lg:hidden pointer-events-none select-none">
-        <nav
-          className="pointer-events-auto flex items-center gap-1 sm:gap-1.5 p-1.5 sm:p-2 rounded-full bg-[#EEF1F5]/90 backdrop-blur-xl border border-white/60 shadow-clay-lg max-w-[96vw] overflow-x-auto scrollbar-hide"
-          aria-label="Mobile Navigation"
-        >
-          {mobileNavLinks.map((link) => {
-            const active = isActive(link.to);
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`relative flex items-center gap-2 px-3.5 py-2.5 rounded-full transition-all duration-300 ${
-                  active
-                    ? 'bg-slate-900 text-white shadow-md'
-                    : 'bg-[#EEF1F5] text-slate-600 hover:text-slate-900 shadow-clay-sm hover:shadow-clay-md active:scale-95'
-                }`}
-              >
-                {/* Icon */}
-                <span className="flex items-center justify-center">
-                  {link.icon}
-                </span>
+      {/* Mobile Animated Bottom Navigation Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none select-none pb-[env(safe-area-inset-bottom)]">
+        {/* Gradient fade backdrop */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#EEF1F5] via-[#EEF1F5]/80 to-transparent pointer-events-none" />
+        
+        <div className="relative flex justify-center px-4 pb-3">
+          <nav
+            className="pointer-events-auto flex items-center gap-1.5 p-2 rounded-[28px] bg-white/80 backdrop-blur-2xl border border-white/70 shadow-[0_4px_30px_rgba(0,0,0,0.08),0_1px_3px_rgba(0,0,0,0.06)] w-full max-w-md"
+            aria-label="Mobile Navigation"
+          >
+            {mobileNavLinks.map((link) => {
+              const active = isActive(link.to);
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`relative flex items-center justify-center gap-2 rounded-full transition-all duration-300 flex-1 min-w-0 ${
+                    active
+                      ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-4 py-2.5'
+                      : 'text-slate-500 hover:text-slate-800 py-2.5'
+                  }`}
+                >
+                  {/* Icon */}
+                  <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-110' : ''}`}>
+                    {link.icon}
+                  </span>
 
-                {/* Animated Label expansion when active */}
-                <AnimatePresence initial={false}>
-                  {active && (
-                    <motion.span
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: 'auto' }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="overflow-hidden whitespace-nowrap text-xs font-black tracking-tight"
-                    >
-                      {link.label}
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </Link>
-            );
-          })}
-        </nav>
+                  {/* Animated Label expansion when active */}
+                  <AnimatePresence initial={false}>
+                    {active && (
+                      <motion.span
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: 'auto' }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                        className="overflow-hidden whitespace-nowrap text-[11px] font-black tracking-tight"
+                      >
+                        {link.label}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
     </>
   );
