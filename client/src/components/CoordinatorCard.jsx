@@ -170,29 +170,29 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
           >
             View profile
           </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (socials.linkedin) {
-                window.open(socials.linkedin, '_blank', 'noopener,noreferrer');
-              } else if (socials.github) {
-                window.open(socials.github, '_blank', 'noopener,noreferrer');
-              } else if (socials.instagram) {
-                window.open(socials.instagram, '_blank', 'noopener,noreferrer');
-              } else if (user.email) {
-                window.open(`mailto:${user.email}`);
-              }
-            }}
-            className="flex-1 flex items-center justify-center gap-1 rounded-full py-[10px] text-[13px] font-semibold text-white"
-            style={{ background: '#111111' }}
-          >
-            Connect
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="7 7 17 7 17 17"></polyline>
-            </svg>
-          </button>
+          {hasSocials && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (socials.linkedin) {
+                  window.open(socials.linkedin, '_blank', 'noopener,noreferrer');
+                } else if (socials.github) {
+                  window.open(socials.github, '_blank', 'noopener,noreferrer');
+                } else if (socials.instagram) {
+                  window.open(socials.instagram, '_blank', 'noopener,noreferrer');
+                }
+              }}
+              className="flex-1 flex items-center justify-center gap-1 rounded-full py-[10px] text-[13px] font-semibold text-white"
+              style={{ background: '#111111' }}
+            >
+              Connect
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </button>
+          )}
         </div>
       </MotionLink>
     );
