@@ -106,8 +106,8 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top Floating Header — Displays Logo everywhere; Desktop displays Nav links */}
-      <div className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 pointer-events-none">
+      {/* Top Floating Header — Desktop only */}
+      <div className="hidden lg:block fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 pointer-events-none">
         <ClayCard
           as="header"
           variant="raised"
