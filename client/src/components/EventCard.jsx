@@ -320,10 +320,10 @@ export const EventDetailsModal = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-5xl md:h-[82vh] max-h-[820px] bg-white rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-slate-100 z-[130] my-auto"
+            className="relative w-full max-w-5xl max-h-[90vh] md:h-[82vh] md:max-h-[820px] bg-white rounded-[24px] sm:rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-y-auto md:overflow-hidden border border-slate-100 z-[130] my-auto"
           >
             {/* ── Left Side: Poster Studio View (Framed Box View) ── */}
-            <div className="relative w-full md:w-[55%] h-[360px] sm:h-[450px] md:h-full bg-slate-950 flex flex-col p-4 md:p-6 overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[55%] h-[200px] sm:h-[280px] md:h-full bg-slate-950 flex flex-col p-3 sm:p-4 md:p-6 overflow-hidden flex-shrink-0">
               {/* Ambient Blurred Background Poster Glow */}
               {event.posterUrl && (
                 <img
@@ -337,14 +337,14 @@ export const EventDetailsModal = ({
               <div className="absolute inset-0 bg-slate-950/50 pointer-events-none z-0" />
 
               {/* Top Badges Header Bar (Cleanly separated above poster) */}
-              <div className="relative z-20 flex items-center justify-between gap-2 mb-3 flex-shrink-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold border border-white/10 shadow-md">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <div className="relative z-20 flex items-center justify-between gap-2 mb-2 sm:mb-3 flex-shrink-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold border border-white/10 shadow-md">
+                    <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-blue-500 animate-pulse" />
                     ISTE Event
                   </span>
                   {event.category && (
-                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-semibold border border-white/20 shadow-md">
+                    <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold border border-white/20 shadow-md">
                       {categoryIcons[event.category] || ''} {event.category}
                     </span>
                   )}
@@ -353,7 +353,7 @@ export const EventDetailsModal = ({
                 {/* Mobile Close Button */}
                 <button
                   onClick={onClose}
-                  className="md:hidden p-2 rounded-full bg-slate-900/80 backdrop-blur-md text-white hover:bg-slate-900 transition-all border border-white/10"
+                  className="md:hidden p-1.5 sm:p-2 rounded-full bg-slate-900/80 backdrop-blur-md text-white hover:bg-slate-900 transition-all border border-white/10"
                   aria-label="Close modal"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -363,11 +363,11 @@ export const EventDetailsModal = ({
               </div>
 
               {/* Inner Frame Box for Poster Image (Fits completely inside) */}
-              <div className="relative z-10 w-full flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm p-2">
+              <div className="relative z-10 w-full flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-xl sm:rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm p-1.5 sm:p-2">
                 <SafeImage
                   src={event.posterUrl}
                   alt={event.title}
-                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
+                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
                   fallbackType="full"
                   eager
                 />
@@ -375,21 +375,21 @@ export const EventDetailsModal = ({
             </div>
 
             {/* ── Right Side: Social Media Details Feed ── */}
-            <div className="w-full md:w-[42%] flex flex-col h-full bg-white overflow-hidden">
+            <div className="w-full md:w-[45%] flex flex-col md:h-full bg-white md:overflow-hidden">
               {/* Header: Organizer Info & Desktop Close */}
-              <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-3 bg-white flex-shrink-0">
+              <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-3 bg-white flex-shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-blue-500/20 flex-shrink-0">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-xs sm:text-sm shadow-md shadow-blue-500/20 flex-shrink-0">
                     ISTE
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <h4 className="text-sm font-bold text-slate-900">ISTE GMRIT</h4>
-                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-900">ISTE GMRIT</h4>
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <p className="text-xs text-slate-500 font-medium">Official Chapter Event • {event.branch || 'CENTRAL'}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Official Chapter Event • {event.branch || 'CENTRAL'}</p>
                   </div>
                 </div>
 
@@ -404,8 +404,8 @@ export const EventDetailsModal = ({
                 </button>
               </div>
 
-              {/* Body Feed: Scrollable Event Content */}
-              <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 custom-scrollbar">
+              {/* Body Feed: Event Content */}
+              <div className="p-4 sm:p-6 md:overflow-y-auto flex-1 space-y-4 sm:space-y-5 custom-scrollbar">
                 {/* Event Status & Category Pills */}
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
@@ -425,35 +425,35 @@ export const EventDetailsModal = ({
                 </div>
 
                 {/* Event Title */}
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight tracking-tight">
+                <h2 className="text-lg sm:text-2xl font-black text-slate-900 leading-snug tracking-tight">
                   {event.title}
                 </h2>
 
                 {/* Event Highlights Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 pt-1">
                   {/* Date Card */}
-                  <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                    <div className="w-9 h-9 rounded-xl bg-blue-100/70 text-blue-600 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-blue-100/70 text-blue-600 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Date</p>
+                      <p className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Date</p>
                       <p className="text-xs font-bold text-slate-800">{formatDate(event.date) || 'TBA'}</p>
                     </div>
                   </div>
 
                   {/* Time Card */}
                   {event.time && (
-                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                      <div className="w-9 h-9 rounded-xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
                       <div>
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Time</p>
+                        <p className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Time</p>
                         <p className="text-xs font-bold text-slate-800">{event.time}</p>
                       </div>
                     </div>
@@ -461,25 +461,25 @@ export const EventDetailsModal = ({
 
                   {/* Venue Card */}
                   {event.venue && (
-                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2">
-                      <div className="w-9 h-9 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                       </div>
                       <div className="overflow-hidden">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Venue / Location</p>
+                        <p className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider">Venue / Location</p>
                         <p className="text-xs font-bold text-slate-800 truncate">{event.venue}</p>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* About Section */}
-                <div className="pt-2 border-t border-slate-100">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">About Event</h4>
-                  <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line font-normal">
+                {/* About Section - Formatted as a clean readable post card */}
+                <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50/70 border border-slate-100 space-y-1.5">
+                  <h4 className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">About Event</h4>
+                  <p className="text-slate-700 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium">
                     {event.description || 'No detailed description available for this event.'}
                   </p>
                 </div>
