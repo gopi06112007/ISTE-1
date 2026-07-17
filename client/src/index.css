@@ -725,12 +725,60 @@
   }
 }
 
-/* Mobile / touch — full-bleed by default */
+/* Mobile — 2 cards per row, smaller sizing */
 @media (max-width: 639px) {
+  .coord-card {
+    width: calc((100vw - 56px) / 2); /* 16px page padding each side + 20px gap + 4px buffer */
+    border-radius: 18px;
+  }
+  .coord-photo-wrapper {
+    padding: 8px 8px 0 8px;
+  }
+  .coord-photo {
+    border-radius: 12px;
+  }
+  /* Full-bleed on touch */
   .coord-photo-wrapper {
     padding: 0;
   }
   .coord-photo {
-    border-radius: 24px 24px 0 0;
+    border-radius: 18px 18px 0 0;
+  }
+  .coord-card .coord-content {
+    padding: 10px 12px 14px 12px;
+  }
+  .coord-card .coord-content h3 {
+    font-size: 14px;
+  }
+  .coord-card .coord-content p {
+    font-size: 10px;
+  }
+  .coord-card .coord-content .flex {
+    font-size: 11px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .coord-card .coord-content .flex svg {
+    width: 12px;
+    height: 12px;
+  }
+  .coord-card .coord-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    top: 12px !important;
+  }
+  .coord-card .coord-badge:first-of-type {
+    left: 12px !important;
+  }
+  .coord-card .coord-badge:last-of-type {
+    right: 12px !important;
+  }
+  .coord-social-btn {
+    width: 28px;
+    height: 28px;
+  }
+  .coord-social-btn svg {
+    width: 12px;
+    height: 12px;
   }
 }

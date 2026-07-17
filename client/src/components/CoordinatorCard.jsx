@@ -77,7 +77,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
       {/* ─── Badges — anchored to card corners, NOT photo ─── */}
       {profile.branch && (
         <span
-          className="absolute z-10 rounded-full"
+          className="absolute z-10 rounded-full coord-badge"
           style={{
             top: '18px',
             left: '18px',
@@ -96,7 +96,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
         </span>
       )}
       <span
-        className="absolute z-10 rounded-full"
+        className="absolute z-10 rounded-full coord-badge"
         style={{
           top: '18px',
           right: '18px',
@@ -112,7 +112,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
       </span>
 
       {/* ─── Content section ─── */}
-      <div style={{ padding: '14px 18px 18px 18px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <div className="coord-content" style={{ padding: '14px 18px 18px 18px', display: 'flex', flexDirection: 'column', gap: 0 }}>
         {/* Name */}
         <h3
           style={{
