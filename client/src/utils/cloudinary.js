@@ -15,6 +15,7 @@ export const buildCloudinaryUrl = (url, type = 'gallery') => {
   const transformations = {
     profile: 'c_fill,g_face,w_400,h_400,q_auto,f_auto',
     event: 'c_fill,w_800,h_450,q_auto,f_auto',
+    full: 'c_limit,w_1200,q_auto,f_auto',
     gallery: 'c_fill,w_400,h_300,q_auto,f_auto',
     blog: 'c_fill,w_1200,h_630,q_auto,f_auto',
   };

@@ -32,7 +32,9 @@ const getInitialsDataUrl = (name = '?') => {
  */
 const getPlaceholderDataUrl = (type, label = '') => {
   const configs = {
+    profile: { bg: '#EFF6FF', accent: '#1A56DB', icon: '👤', text: label || 'Profile' },
     event: { bg: '#EFF6FF', accent: '#1A56DB', icon: '📅', text: label || 'Event' },
+    full: { bg: '#EFF6FF', accent: '#1A56DB', icon: '📅', text: label || 'Event' },
     gallery: { bg: '#F0FDF4', accent: '#059669', icon: '🖼️', text: label || 'Photo' },
     blog: { bg: '#FDF4FF', accent: '#7C3AED', icon: '📝', text: label || 'Blog' },
   };

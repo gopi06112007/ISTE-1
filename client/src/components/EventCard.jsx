@@ -341,8 +341,8 @@ export const EventDetailsModal = ({
                 <SafeImage
                   src={event.posterUrl}
                   alt={event.title}
-                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
-                  fallbackType="event"
+                  className="max-h-[280px] sm:max-h-[360px] md:max-h-[92%] max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
+                  fallbackType="full"
                   eager
                 />
               </div>
