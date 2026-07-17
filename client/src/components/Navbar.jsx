@@ -134,18 +134,7 @@ const Navbar = () => {
     touchStartY.current = null;
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    // Only attach on mobile
-    const isMobile = window.innerWidth < 1024;
-    if (!isMobile) return;
-
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
-    document.addEventListener('touchend', handleTouchEnd, { passive: true });
-    return () => {
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [handleTouchStart, handleTouchEnd]);
+  /* Removed global document touch listeners so swipe gestures only work when initiated on the bottom bar itself */
 
   return (
     <>
@@ -270,6 +259,8 @@ const Navbar = () => {
 
         <div className="relative flex justify-center px-3 pb-2.5">
           <nav
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className="pointer-events-auto flex items-center w-full max-w-[420px] p-1.5 rounded-[22px] bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_-2px_20px_rgba(0,0,0,0.06),0_4px_30px_rgba(0,0,0,0.08)]"
             aria-label="Mobile Navigation"
           >
