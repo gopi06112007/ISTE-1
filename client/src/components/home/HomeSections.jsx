@@ -420,7 +420,7 @@ export const UpcomingEventsSection = ({ events, loading, error, onRetry }) => {
           </motion.div>
         ) : (
           <div
-            className="relative w-full h-[460px] flex items-center justify-center overflow-hidden group select-none"
+            className="relative w-full h-[560px] flex items-center justify-center overflow-hidden group select-none"
             onWheel={handleWheel}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
@@ -448,20 +448,20 @@ export const UpcomingEventsSection = ({ events, loading, error, onRetry }) => {
                 if (!isVisible) return null;
 
                 const isMobile = windowWidth < 640;
-                const offsetMultiplier = isMobile ? 140 : 185;
+                const offsetMultiplier = isMobile ? 160 : 230;
 
                 const translateX = diff * offsetMultiplier;
-                const rotateY = diff * -8;
-                const translateZ = Math.abs(diff) * -120;
-                const scale = diff === 0 ? 1 : 0.85;
-                const opacity = diff === 0 ? 1 : diff === 1 || diff === -1 ? 0.5 : 0.25;
+                const rotateY = diff * -6;
+                const translateZ = Math.abs(diff) * -100;
+                const scale = diff === 0 ? 1 : 0.82;
+                const opacity = diff === 0 ? 1 : diff === 1 || diff === -1 ? 0.55 : 0.2;
                 const zIndex = diff === 0 ? 30 : diff === 1 || diff === -1 ? 20 : 10;
                 const blurVal = diff === 0 ? '0px' : diff === 1 || diff === -1 ? '2px' : '4px';
 
                 return (
                   <motion.div
                     key={event._id}
-                    className="absolute w-[280px] sm:w-[300px] h-[380px] flex-shrink-0 cursor-pointer"
+                    className="absolute w-[320px] sm:w-[360px] h-[490px] flex-shrink-0 cursor-pointer"
                     style={{
                       x: translateX,
                       transformStyle: 'preserve-3d',
