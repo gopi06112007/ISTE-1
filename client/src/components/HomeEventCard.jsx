@@ -108,7 +108,7 @@ const HomeEventCard = ({ event, index = 0 }) => {
             className="relative w-full overflow-hidden"
             style={{
               borderRadius: '20px',
-              height: '230px',
+              height: '280px',
               background: gradient,
             }}
           >
@@ -222,28 +222,6 @@ const HomeEventCard = ({ event, index = 0 }) => {
               </div>
             )}
           </div>
-
-          {/* View Details button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
-            className="mt-auto w-full inline-flex items-center justify-center gap-2 transition-all duration-300"
-            style={{
-              background: '#F8FAFF',
-              borderRadius: '14px',
-              padding: '11px 0',
-              fontSize: '13px',
-              fontWeight: 700,
-              color: '#1A56DB',
-              border: 'none',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = '#EFF6FF'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = '#F8FAFF'; }}
-          >
-            <span>View Details</span>
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
         </div>
       </motion.div>
 
