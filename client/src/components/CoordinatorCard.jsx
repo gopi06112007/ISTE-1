@@ -395,6 +395,7 @@ const CoordinatorCard = ({ profile, index = 0, isSingle = false }) => {
           </div>
         )}
       </div>
+    </MotionLink>
   );
 };
 
