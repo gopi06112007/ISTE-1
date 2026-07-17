@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useAuth from '../hooks/useAuth';
@@ -32,21 +32,22 @@ const Navbar = () => {
     { to: '/blog', label: 'Blog' },
   ];
 
+  /* ── Mobile bottom bar tabs (5 main + Login/Dashboard) ── */
   const mobileNavLinks = [
     {
       to: '/',
       label: 'Home',
       icon: (
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
         </svg>
       ),
     },
     {
       to: '/coordinators',
-      label: 'Coordinators',
+      label: 'Team',
       icon: (
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       ),
@@ -55,7 +56,7 @@ const Navbar = () => {
       to: '/events',
       label: 'Events',
       icon: (
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
@@ -64,7 +65,7 @@ const Navbar = () => {
       to: '/gallery',
       label: 'Gallery',
       icon: (
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
@@ -73,7 +74,7 @@ const Navbar = () => {
       to: '/blog',
       label: 'Blog',
       icon: (
-        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
       ),
@@ -81,9 +82,9 @@ const Navbar = () => {
     isAuthenticated
       ? {
           to: '/dashboard',
-          label: 'Dashboard',
+          label: 'Board',
           icon: (
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           ),
@@ -92,7 +93,7 @@ const Navbar = () => {
           to: '/login',
           label: 'Login',
           icon: (
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
           ),
@@ -103,6 +104,48 @@ const Navbar = () => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
+
+  /* ── Swipe right-to-left on mobile → navigate to Login ── */
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (touchStartX.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = touchStartX.current - endX;
+    const diffY = Math.abs(touchStartY.current - endY);
+    const minSwipe = 120; // strong swipe threshold
+
+    // Strong horizontal left-swipe and not vertical scroll
+    if (diffX > minSwipe && diffY < 80) {
+      if (!isAuthenticated) {
+        navigate('/login');
+      } else {
+        navigate('/dashboard');
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    // Only attach on mobile
+    const isMobile = window.innerWidth < 1024;
+    if (!isMobile) return;
+
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [handleTouchStart, handleTouchEnd]);
 
   return (
     <>
@@ -133,7 +176,7 @@ const Navbar = () => {
           }`}
         >
           <nav className="flex items-center justify-between px-4 sm:px-6">
-            {/* Logo — Kept in same place for all screen sizes */}
+            {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group relative z-10">
               <div className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition-transform duration-spring">
                 <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-sm" />
@@ -218,34 +261,45 @@ const Navbar = () => {
         </ClayCard>
       </div>
 
-      {/* Mobile Animated Bottom Navigation Bar */}
+      {/* ══════════════════════════════════════════════════════ */}
+      {/* Mobile Bottom Navigation Bar                         */}
+      {/* ══════════════════════════════════════════════════════ */}
       <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none select-none pb-[env(safe-area-inset-bottom)]">
-        {/* Gradient fade backdrop */}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#EEF1F5] via-[#EEF1F5]/80 to-transparent pointer-events-none" />
-        
-        <div className="relative flex justify-center px-4 pb-3">
+        {/* Gradient fade */}
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#EEF1F5] via-[#EEF1F5]/70 to-transparent pointer-events-none" />
+
+        <div className="relative flex justify-center px-3 pb-2.5">
           <nav
-            className="pointer-events-auto flex items-center gap-1.5 p-2 rounded-[28px] bg-white/80 backdrop-blur-2xl border border-white/70 shadow-[0_4px_30px_rgba(0,0,0,0.08),0_1px_3px_rgba(0,0,0,0.06)] w-full max-w-md"
+            className="pointer-events-auto flex items-center justify-between w-full max-w-sm p-1.5 rounded-[22px] bg-white/90 backdrop-blur-2xl border border-white/60 shadow-[0_-2px_20px_rgba(0,0,0,0.06),0_4px_30px_rgba(0,0,0,0.08)]"
             aria-label="Mobile Navigation"
           >
             {mobileNavLinks.map((link) => {
               const active = isActive(link.to);
+              const isLogin = link.to === '/login';
+              const isDashboard = link.to === '/dashboard';
+
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`relative flex items-center justify-center gap-2 rounded-full transition-all duration-300 flex-1 min-w-0 ${
+                  className={`relative flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
                     active
-                      ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-4 py-2.5'
-                      : 'text-slate-500 hover:text-slate-800 py-2.5'
+                      ? isLogin
+                        ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
+                        : isDashboard
+                          ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2'
+                          : 'bg-slate-900 text-white shadow-lg shadow-slate-900/25 px-3 py-2'
+                      : isLogin
+                        ? 'text-iste-blue px-2 py-2'
+                        : isDashboard
+                          ? 'text-iste-blue px-2 py-2'
+                          : 'text-slate-400 px-2 py-2'
                   }`}
                 >
-                  {/* Icon */}
-                  <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-110' : ''}`}>
+                  <span className={`flex items-center justify-center flex-shrink-0 transition-transform duration-200 ${active ? 'scale-105' : ''}`}>
                     {link.icon}
                   </span>
 
-                  {/* Animated Label expansion when active */}
                   <AnimatePresence initial={false}>
                     {active && (
                       <motion.span
