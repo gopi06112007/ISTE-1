@@ -4,21 +4,21 @@ import { toast } from 'react-hot-toast';
 import { EventDetailsModal } from './EventCard';
 
 const branchGradients = {
-  CSE:     'linear-gradient(135deg, #1A56DB, #60A5FA)',
-  ECE:     'linear-gradient(135deg, #7C3AED, #A78BFA)',
-  EEE:     'linear-gradient(135deg, #D97706, #FBBF24)',
-  MECH:    'linear-gradient(135deg, #475569, #94A3B8)',
-  CIVIL:   'linear-gradient(135deg, #0D9488, #5EEAD4)',
-  IT:      'linear-gradient(135deg, #DB2777, #F472B6)',
+  CSE: 'linear-gradient(135deg, #1A56DB, #60A5FA)',
+  ECE: 'linear-gradient(135deg, #7C3AED, #A78BFA)',
+  EEE: 'linear-gradient(135deg, #D97706, #FBBF24)',
+  MECH: 'linear-gradient(135deg, #475569, #94A3B8)',
+  CIVIL: 'linear-gradient(135deg, #0D9488, #5EEAD4)',
+  IT: 'linear-gradient(135deg, #DB2777, #F472B6)',
   CENTRAL: 'linear-gradient(135deg, #1A56DB, #7C3AED)',
 };
 
 const categoryChipStyles = {
-  Workshop:    { bg: '#F3E8FD', color: '#7E22CE' },
-  Seminar:     { bg: '#DBEAFE', color: '#1E40AF' },
+  Workshop: { bg: '#F3E8FD', color: '#7E22CE' },
+  Seminar: { bg: '#DBEAFE', color: '#1E40AF' },
   Competition: { bg: '#FEF3C7', color: '#92400E' },
-  Cultural:    { bg: '#FCE7F3', color: '#9D174D' },
-  Other:       { bg: '#F1F5F9', color: '#475569' },
+  Cultural: { bg: '#FCE7F3', color: '#9D174D' },
+  Other: { bg: '#F1F5F9', color: '#475569' },
 };
 
 const formatDate = (dateStr) => {
@@ -108,7 +108,7 @@ const HomeEventCard = ({ event, index = 0 }) => {
             className="relative w-full overflow-hidden"
             style={{
               borderRadius: '20px',
-              height: '225px',
+              height: '285px',
               background: gradient,
             }}
           >

@@ -298,143 +298,220 @@ export const EventDetailsModal = ({
   getGoogleCalendarUrl,
   handleShare
 }) => {
+  if (!event) return null;
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-          {/* Backdrop with blur */}
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          {/* Ambient Backdrop with blur */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.25 }}
             onClick={onClose}
-            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
           />
 
           {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-3xl bg-[#EEF1F5] rounded-[20px] shadow-[0_16px_32px_rgba(0,0,0,0.12)] flex flex-col overflow-hidden max-h-[90vh] z-[130] p-2"
+            initial={{ opacity: 0, scale: 0.96, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 12 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-5xl md:h-[82vh] max-h-[820px] bg-white rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-hidden border border-slate-100 z-[130] my-auto"
           >
-            {/* Header image area */}
-            <div className="relative w-full aspect-video md:aspect-[21/9] overflow-hidden rounded-[16px] bg-[#EEF1F5] shadow-clay-inset p-3 flex-shrink-0">
-              <div className="w-full h-full rounded-[12px] overflow-hidden shadow-clay-inset">
+            {/* ── Left Side: Poster Studio View (Uncropped Full View) ── */}
+            <div className="relative w-full md:w-[58%] h-[320px] sm:h-[400px] md:h-full bg-slate-950 flex items-center justify-center overflow-hidden flex-shrink-0">
+              {/* Ambient Blurred Background Poster Glow */}
+              {event.posterUrl && (
+                <img
+                  src={event.posterUrl}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125 pointer-events-none select-none"
+                />
+              )}
+
+              {/* Subtly darkened overlay grid pattern */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-slate-950/60 pointer-events-none z-0" />
+
+              {/* Poster Image (Uncropped, Object Contain) */}
+              <div className="relative z-10 w-full h-full p-4 md:p-6 flex items-center justify-center">
                 <SafeImage
                   src={event.posterUrl}
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  className="max-w-full max-h-full object-contain rounded-2xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
                   fallbackType="event"
                   eager
                 />
               </div>
 
-              {/* Close Button */}
+              {/* Top Left Badge Overlay */}
+              <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-xs font-semibold border border-white/10 shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                  ISTE Event
+                </span>
+                {event.category && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-semibold border border-white/20 shadow-lg">
+                    {categoryIcons[event.category] || ''} {event.category}
+                  </span>
+                )}
+              </div>
+
+              {/* Mobile Close Button Overlay */}
               <button
                 onClick={onClose}
-                className="absolute top-6 right-6 z-10 p-2.5 rounded-full bg-[#EEF1F5] text-slate-700 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
+                className="md:hidden absolute top-4 right-4 z-20 p-2.5 rounded-full bg-slate-900/80 backdrop-blur-md text-white hover:bg-slate-900 transition-all border border-white/10"
                 aria-label="Close modal"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-
-              {/* Category overlay */}
-              <div className="absolute bottom-6 left-6 flex gap-2">
-                <span className={`inline-flex items-center gap-1 text-xs font-bold px-3.5 py-1.5 rounded-full ${categoryChipColors[event.category] || categoryChipColors.Other}`}>
-                  {categoryIcons[event.category] || ''}{event.category}
-                </span>
-                <span className="px-3.5 py-1.5 text-xs font-bold rounded-full bg-[#EEF1F5] text-slate-800 shadow-clay-sm">
-                  {event.branch} Branch
-                </span>
-              </div>
             </div>
 
-            {/* Scrollable details area */}
-            <div className="p-6 sm:p-8 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Left Details Panel (2/3 width on desktop) */}
-              <div className="md:col-span-2 space-y-4">
-                <div>
-                  <span className={`inline-block text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-clay-sm shadow-clay-sm bg-[#EEF1F5] mb-2 ${
-                    isUpcoming ? 'text-emerald-600' : 'text-slate-600'
-                  }`}>
-                    {isUpcoming ? '🟢 Upcoming Event' : 'Past Event'}
-                  </span>
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
-                    {event.title}
-                  </h2>
+            {/* ── Right Side: Social Media Details Feed ── */}
+            <div className="w-full md:w-[42%] flex flex-col h-full bg-white overflow-hidden">
+              {/* Header: Organizer Info & Desktop Close */}
+              <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between gap-3 bg-white flex-shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-sm shadow-md shadow-blue-500/20 flex-shrink-0">
+                    ISTE
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-sm font-bold text-slate-900">ISTE GMRIT</h4>
+                      <svg className="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-slate-500 font-medium">Official Chapter Event • {event.branch || 'CENTRAL'}</p>
+                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200/40">
+                <button
+                  onClick={onClose}
+                  className="hidden md:flex p-2.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Body Feed: Scrollable Event Content */}
+              <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5 custom-scrollbar">
+                {/* Event Status & Category Pills */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                    isUpcoming
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
+                      : 'bg-slate-100 text-slate-600 border border-slate-200/60'
+                  }`}>
+                    <span className={`w-2 h-2 rounded-full ${isUpcoming ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+                    {isUpcoming ? 'Upcoming Event' : 'Past Event'}
+                  </span>
+
+                  {event.branch && (
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-wide">
+                      {event.branch}
+                    </span>
+                  )}
+                </div>
+
+                {/* Event Title */}
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight tracking-tight">
+                  {event.title}
+                </h2>
+
+                {/* Event Highlights Info Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  {/* Date Card */}
+                  <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100/70 text-blue-600 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Date</p>
+                      <p className="text-xs font-bold text-slate-800">{formatDate(event.date) || 'TBA'}</p>
+                    </div>
+                  </div>
+
+                  {/* Time Card */}
+                  {event.time && (
+                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Time</p>
+                        <p className="text-xs font-bold text-slate-800">{event.time}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Venue Card */}
+                  {event.venue && (
+                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2">
+                      <div className="w-9 h-9 rounded-xl bg-purple-100/70 text-purple-600 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Venue / Location</p>
+                        <p className="text-xs font-bold text-slate-800 truncate">{event.venue}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* About Section */}
+                <div className="pt-2 border-t border-slate-100">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">About Event</h4>
-                  <p className="text-slate-650 text-sm leading-relaxed whitespace-pre-line font-medium text-justify">
-                    {event.description}
+                  <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line font-normal">
+                    {event.description || 'No detailed description available for this event.'}
                   </p>
                 </div>
               </div>
 
-              {/* Right Sidebar Metadata Panel (1/3 width on desktop) */}
-              <div className="space-y-4 md:border-l md:border-slate-200/40 md:pl-6">
-                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Details</h4>
-                
-                <div className="space-y-3.5 text-sm text-slate-700 font-bold">
-                  <div className="flex gap-3">
-                    <span className="text-lg flex-shrink-0">📅</span>
-                    <div>
-                      <p className="font-extrabold text-slate-900">Date</p>
-                      <p className="text-xs text-slate-500 font-bold">{formatDate(event.date)}</p>
-                    </div>
-                  </div>
-
-                  {event.time && (
-                    <div className="flex gap-3">
-                      <span className="text-lg flex-shrink-0">🕐</span>
-                      <div>
-                        <p className="font-extrabold text-slate-900">Time</p>
-                        <p className="text-xs text-slate-500 font-bold">{event.time}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {event.venue && (
-                    <div className="flex gap-3">
-                      <span className="text-lg flex-shrink-0">📍</span>
-                      <div>
-                        <p className="font-extrabold text-slate-900">Venue</p>
-                        <p className="text-xs text-slate-500 font-bold">{event.venue}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Event Actions */}
-                <div className="pt-4 border-t border-slate-200/40 space-y-2">
-                  {isUpcoming ? (
-                    <a
-                      href={getGoogleCalendarUrl(event)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-2.5 rounded-clay-sm bg-[#EEF1F5] text-iste-blue text-xs font-bold shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
-                    >
-                      <span>📅 Add to Calendar</span>
-                    </a>
-                  ) : (
-                    <div className="text-center p-3 rounded-clay-sm bg-[#EEF1F5] text-slate-500 text-xs font-bold shadow-clay-inset">
-                      This event has concluded.
-                    </div>
-                  )}
-
-                  <button
-                    onClick={handleShare}
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-clay-sm bg-[#EEF1F5] text-slate-700 text-xs font-bold shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all"
+              {/* Action Bar Footer */}
+              <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center gap-2.5 flex-shrink-0">
+                {isUpcoming ? (
+                  <a
+                    href={getGoogleCalendarUrl(event)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-xs font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all"
                   >
-                    <span>🔗 Share Event</span>
-                  </button>
-                </div>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Add to Calendar</span>
+                  </a>
+                ) : (
+                  <div className="w-full sm:flex-1 text-center py-2.5 px-4 rounded-full bg-slate-100 text-slate-500 text-xs font-bold border border-slate-200">
+                    Event Completed
+                  </div>
+                )}
+
+                <button
+                  onClick={handleShare}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-xs font-extrabold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 shadow-sm active:scale-[0.98] transition-all"
+                >
+                  <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>Share</span>
+                </button>
               </div>
             </div>
           </motion.div>
