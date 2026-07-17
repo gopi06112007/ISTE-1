@@ -309,7 +309,7 @@ const Coordinators = () => {
           ) : (
             <div className="flex flex-wrap gap-5 justify-center w-full">
               {sortedProfiles.map((profile, i) => (
-                <CoordinatorCard key={profile._id} profile={profile} index={i} isSingle={sortedProfiles.length === 1} />
+                <CoordinatorCard key={profile._id} profile={profile} index={i} />
               ))}
             </div>
           )}
