@@ -298,6 +298,8 @@ export const EventDetailsModal = ({
   getGoogleCalendarUrl,
   handleShare
 }) => {
+  const [isPosterFullscreen, setIsPosterFullscreen] = useState(false);
+
   if (!event) return null;
 
   return createPortal(
@@ -323,7 +325,7 @@ export const EventDetailsModal = ({
             className="relative w-full max-w-5xl max-h-[90vh] md:h-[82vh] md:max-h-[820px] bg-white rounded-[24px] sm:rounded-[28px] shadow-2xl flex flex-col md:flex-row overflow-y-auto md:overflow-hidden border border-slate-100 z-[130] my-auto"
           >
             {/* ── Left Side: Poster Studio View (Framed Box View) ── */}
-            <div className="relative w-full md:w-[55%] h-[200px] sm:h-[280px] md:h-full bg-slate-950 flex flex-col p-3 sm:p-4 md:p-6 overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[55%] h-[220px] sm:h-[300px] md:h-full bg-slate-950 flex flex-col p-3 sm:p-4 md:p-6 overflow-hidden flex-shrink-0">
               {/* Ambient Blurred Background Poster Glow */}
               {event.posterUrl && (
                 <img
@@ -362,15 +364,29 @@ export const EventDetailsModal = ({
                 </button>
               </div>
 
-              {/* Inner Frame Box for Poster Image (Fits completely inside) */}
-              <div className="relative z-10 w-full flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-xl sm:rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm p-1.5 sm:p-2">
+              {/* Inner Frame Box for Poster Image (Clickable to open Fullscreen Lightbox) */}
+              <div
+                onClick={() => event.posterUrl && setIsPosterFullscreen(true)}
+                className="relative z-10 w-full flex-1 flex items-center justify-center min-h-0 overflow-hidden rounded-xl sm:rounded-2xl bg-black/30 border border-white/10 backdrop-blur-sm p-1.5 sm:p-2 cursor-pointer group hover:border-blue-400/50 transition-all"
+                title="Click to view full poster"
+              >
                 <SafeImage
                   src={event.posterUrl}
                   alt={event.title}
-                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-transform duration-300 hover:scale-[1.01]"
+                  className="max-h-full max-w-full w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]"
                   fallbackType="full"
                   eager
                 />
+
+                {/* Click-to-expand pill indicator */}
+                <div className="absolute bottom-3 right-3 z-20 opacity-90 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-bold border border-white/15 shadow-lg">
+                    <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                    </svg>
+                    View Full Poster
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -519,6 +535,72 @@ export const EventDetailsModal = ({
           </motion.div>
         </div>
       )}
+
+      {/* Fullscreen Poster Lightbox */}
+      <AnimatePresence>
+        {isPosterFullscreen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-6 overflow-hidden">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsPosterFullscreen(false)}
+              className="fixed inset-0 bg-slate-950/90 backdrop-blur-xl cursor-pointer"
+            />
+
+            {/* Top Control Bar */}
+            <div className="fixed top-4 left-4 right-4 z-[220] flex items-center justify-between gap-3 text-white pointer-events-auto">
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-xs font-bold shadow-lg max-w-[60%] truncate">
+                <span className="truncate">{event.title}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {event.posterUrl && (
+                  <a
+                    href={event.posterUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 sm:px-3 sm:py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md hover:bg-slate-800 text-white text-xs font-bold border border-white/10 shadow-lg flex items-center gap-1.5 transition-all"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    <span className="hidden sm:inline">Open Original</span>
+                  </a>
+                )}
+
+                <button
+                  onClick={() => setIsPosterFullscreen(false)}
+                  className="p-2 rounded-full bg-slate-900/80 backdrop-blur-md hover:bg-slate-800 text-white border border-white/10 shadow-lg transition-all"
+                  aria-label="Close fullscreen view"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Image Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-[210] max-w-[95vw] max-h-[92vh] flex items-center justify-center p-2"
+            >
+              <SafeImage
+                src={event.posterUrl}
+                alt={event.title}
+                className="max-h-[90vh] max-w-[94vw] w-auto h-auto object-contain rounded-2xl shadow-2xl"
+                fallbackType="full"
+                eager
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </AnimatePresence>,
     document.body
   );
