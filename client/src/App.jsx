@@ -7,7 +7,6 @@ import useAuth from './hooks/useAuth';
 // Layout
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import { ThemeProvider } from './context/ThemeContext';
 
 // Protected wrapper
 import ProtectedRoute from './components/ProtectedRoute';
@@ -96,26 +95,26 @@ function ScrollProgress() {
 }
 
 function App() {
+  // removed theme initialization
   const { checkAuth } = useAuth();
 
   useEffect(() => {
+    // initialization
     checkAuth();
   }, [checkAuth]);
 
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col relative font-inter transition-colors duration-300">
-          <ScrollProgress />
-          <Toaster position="top-right" toastOptions={{ className: 'font-sans' }} />
-          <Navbar />
-          <main className="flex-1">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <div className="min-h-screen flex flex-col relative text-slate-800  font-inter transition-colors duration-300">
+        <ScrollProgress />
+        <Toaster position="top-right" toastOptions={{ className: 'font-sans' }} />
+        <Navbar />
+        <main className="flex-1">
+          <AnimatedRoutes />
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

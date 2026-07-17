@@ -1,53 +1,34 @@
 import { useLocation } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
-
-const SunIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="5" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-  </svg>
-);
 
 const Footer = ({ forceRender = false }) => {
   const location = useLocation();
   const currentYear = new Date().getFullYear();
-  const { theme, toggleTheme } = useTheme();
 
   if (location.pathname === '/' && !forceRender) {
     return null;
   }
 
+
   return (
     <footer className="w-full px-4 sm:px-6 lg:px-8 pb-4 pt-2">
-      <div
-        className="mx-auto max-w-6xl rounded-clay-lg shadow-clay-inset p-5 sm:p-6 transition-colors duration-300"
-        style={{
-          background: `linear-gradient(135deg, var(--bg-footer), var(--bg-footer-end))`
-        }}
-      >
+      <div className="mx-auto max-w-6xl bg-gradient-to-br from-[#EBF2FC] to-[#F2EFFF] rounded-clay-lg shadow-clay-inset p-5 sm:p-6 transition-colors duration-300">
         <div className="flex flex-col gap-6">
           {/* Brand */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-5" style={{ borderColor: 'var(--border-subtle)' }}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-200/50 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-clay-sm flex items-center justify-center shadow-clay-inset font-extrabold text-lg text-iste-blue" style={{ background: 'var(--bg-card-subtle)' }}>
+              <div className="w-10 h-10 bg-[#EEF1F5] rounded-clay-sm flex items-center justify-center shadow-clay-inset text-iste-blue font-extrabold text-lg">
                 I
               </div>
               <div>
-                <span className="text-lg font-extrabold block leading-tight" style={{ color: 'var(--text-primary)' }}>
+                <span className="text-lg font-extrabold text-gray-900 block leading-tight">
                   ISTE GMRIT
                 </span>
-                <span className="text-xs font-bold block" style={{ color: 'var(--text-muted)' }}>
+                <span className="text-xs text-gray-500 font-bold block">
                   Student Chapter
                 </span>
               </div>
             </div>
-            <p className="text-sm leading-relaxed font-medium md:max-w-md" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-sm text-gray-600 leading-relaxed font-medium md:max-w-md">
               Indian Society for Technical Education, GMRIT Student Chapter —
               fostering technical excellence and innovation among students.
             </p>
@@ -58,8 +39,7 @@ const Footer = ({ forceRender = false }) => {
             <div className="grid grid-cols-5 gap-3 sm:gap-4 justify-items-center">
               <a
                 href="mailto:iste_student@gmrit.edu.in"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
-                style={{ background: 'var(--bg-card-subtle)', color: 'var(--text-secondary)' }}
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
                 aria-label="Email"
               >
                 <svg className="w-4.5 h-4.5 sm:w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,8 +50,7 @@ const Footer = ({ forceRender = false }) => {
                 href="https://www.google.com/maps/search/?api=1&query=GMR+Institute+of+Technology+Rajam"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
-                style={{ background: 'var(--bg-card-subtle)', color: 'var(--text-secondary)' }}
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
                 aria-label="Location"
               >
                 <svg className="w-4.5 h-4.5 sm:w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,8 +62,7 @@ const Footer = ({ forceRender = false }) => {
                 href="https://www.instagram.com/_iste_gmrit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
-                style={{ background: 'var(--bg-card-subtle)', color: 'var(--text-secondary)' }}
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
                 aria-label="Instagram"
               >
                 <svg className="w-4.5 h-4.5 sm:w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -95,8 +73,7 @@ const Footer = ({ forceRender = false }) => {
                 href="https://linkedin.com/company/iste-gmrit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
-                style={{ background: 'var(--bg-card-subtle)', color: 'var(--text-secondary)' }}
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
                 aria-label="LinkedIn"
               >
                 <svg className="w-4.5 h-4.5 sm:w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -107,8 +84,7 @@ const Footer = ({ forceRender = false }) => {
                 href="https://github.com/iste-gmrit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
-                style={{ background: 'var(--bg-card-subtle)', color: 'var(--text-secondary)' }}
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EEF1F5] flex items-center justify-center text-gray-600 shadow-clay-sm hover:shadow-clay-md hover:text-iste-blue active:shadow-clay-pressed active:scale-[0.95] transition-all duration-300"
                 aria-label="GitHub"
               >
                 <svg className="w-4.5 h-4.5 sm:w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -119,23 +95,11 @@ const Footer = ({ forceRender = false }) => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-4 pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4" style={{ borderColor: 'var(--border-subtle)' }}>
-            <p className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>
+          <div className="mt-4 pt-4 border-t border-gray-200/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-500 font-bold">
               © {currentYear} ISTE Student Chapter, GMRIT. All rights reserved.
             </p>
-
-            {/* Theme Toggle */}
-            <button
-              id="theme-toggle-btn"
-              onClick={toggleTheme}
-              className="theme-toggle-btn"
-              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-              title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-            >
-              {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-            </button>
-
-            <p className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-xs text-gray-400 font-bold">
               Built with ❤️ by ISTE GMRIT Team
             </p>
           </div>
