@@ -254,8 +254,8 @@ const Navbar = () => {
       {/* Mobile Bottom Navigation Bar                         */}
       {/* ══════════════════════════════════════════════════════ */}
       <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none select-none pb-[env(safe-area-inset-bottom)]">
-        {/* Gradient fade */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#EEF1F5] via-[#EEF1F5]/70 to-transparent pointer-events-none" />
+        {/* Stronger gradient fade mask to completely hide footer text and background details scrolling behind bottom bar */}
+        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#EEF1F5] via-[#EEF1F5] to-transparent pointer-events-none" />
 
         <div className="relative flex justify-center px-3 pb-2.5">
           <nav
