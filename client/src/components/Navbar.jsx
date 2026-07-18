@@ -11,6 +11,8 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [hoveredLink, setHoveredLink] = useState(null);
+  
+  const showLogin = location.pathname.startsWith('/coordinator') || location.pathname.startsWith('/login');
 
   // Track scroll for navbar visual adjustments
   useEffect(() => {
@@ -243,12 +245,14 @@ const Navbar = () => {
                   </button>
                 </div>
               ) : (
-                <Link
-                  to="/login"
-                  className="px-6 py-2 rounded-full text-sm font-bold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300"
-                >
-                  Login
-                </Link>
+                showLogin && (
+                  <Link
+                    to="/login"
+                    className="px-6 py-2 rounded-full text-sm font-bold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300"
+                  >
+                    Login
+                  </Link>
+                )
               )}
             </div>
           </nav>
@@ -304,75 +308,77 @@ const Navbar = () => {
               })}
             </div>
 
-            {/* ── Separator ── */}
-            <div className="w-px h-6 bg-slate-200/80 mx-1 flex-shrink-0" />
-
-            {/* ── Login / Dashboard Button ── */}
-            {isAuthenticated ? (
-              <div className="flex items-center gap-1 flex-shrink-0">
-                <Link
-                  to="/dashboard"
-                  className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
-                    isActive('/dashboard')
-                      ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2.5'
-                      : 'text-iste-blue px-2 py-2.5'
-                  }`}
-                >
-                  <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <AnimatePresence initial={false}>
-                    {isActive('/dashboard') && (
-                      <motion.span
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                        className="overflow-hidden whitespace-nowrap text-[11px] font-black"
-                      >
-                        Board
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center justify-center w-9 h-9 rounded-full text-red-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200"
-                  aria-label="Logout"
-                >
-                  <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                  </svg>
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
-                  isActive('/login')
-                    ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3.5 py-2.5'
-                    : 'bg-iste-blue/10 text-iste-blue px-3 py-2.5'
-                }`}
-              >
-                <svg className="w-[20px] h-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
-                <AnimatePresence initial={false}>
-                  {isActive('/login') ? (
-                    <motion.span
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: 'auto' }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                      className="overflow-hidden whitespace-nowrap text-[11px] font-black"
+            {/* ── Separator & Login/Dashboard Button ── */}
+            {(isAuthenticated || showLogin) && (
+              <>
+                <div className="w-px h-6 bg-slate-200/80 mx-1 flex-shrink-0" />
+                {isAuthenticated ? (
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Link
+                      to="/dashboard"
+                      className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 ${
+                        isActive('/dashboard')
+                          ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3 py-2.5'
+                          : 'text-iste-blue px-2 py-2.5'
+                      }`}
                     >
-                      Login
-                    </motion.span>
-                  ) : (
-                    <span className="text-[11px] font-black">Login</span>
-                  )}
-                </AnimatePresence>
-              </Link>
+                      <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      <AnimatePresence initial={false}>
+                        {isActive('/dashboard') && (
+                          <motion.span
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: 'auto' }}
+                            exit={{ opacity: 0, width: 0 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                            className="overflow-hidden whitespace-nowrap text-[11px] font-black"
+                          >
+                            Board
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center justify-center w-9 h-9 rounded-full text-red-400 hover:text-red-600 hover:bg-red-50 transition-all duration-200"
+                      aria-label="Logout"
+                    >
+                      <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className={`flex items-center justify-center gap-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
+                      isActive('/login')
+                        ? 'bg-iste-blue text-white shadow-lg shadow-iste-blue/30 px-3.5 py-2.5'
+                        : 'bg-iste-blue/10 text-iste-blue px-3 py-2.5'
+                    }`}
+                  >
+                    <svg className="w-[20px] h-[20px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                    <AnimatePresence initial={false}>
+                      {isActive('/login') ? (
+                        <motion.span
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: 'auto' }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                          className="overflow-hidden whitespace-nowrap text-[11px] font-black"
+                        >
+                          Login
+                        </motion.span>
+                      ) : (
+                        <span className="text-[11px] font-black">Login</span>
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                )}
+              </>
             )}
           </nav>
         </div>
