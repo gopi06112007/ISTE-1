@@ -43,11 +43,7 @@ const SkeletonHero = () => (
           <div className="h-5 bg-slate-200 rounded w-1/2 mt-2" />
         </div>
         
-        {/* Buttons skeleton */}
-        <div className="flex gap-3 mt-6">
-          <div className="h-10 w-28 bg-slate-200 rounded-xl" />
-          <div className="h-10 w-32 bg-slate-200 rounded-xl" />
-        </div>
+
       </div>
     </div>
     
@@ -180,6 +176,7 @@ const ProfileDetailPage = () => {
   const user = profile?.userId || {};
   const isStudent = user.role === 'student_coordinator';
   const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
+  const isActive = user.isActive !== false;
 
   const handleCopyEmail = () => {
     if (user?.email) {
@@ -368,51 +365,34 @@ const ProfileDetailPage = () => {
             </div>
 
             {/* Tags and Handle */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-4 text-xs sm:text-sm text-slate-400 font-medium">
-              <span className="text-slate-800 font-semibold bg-slate-100 px-2 py-0.5 rounded-md font-mono text-[11px] sm:text-xs">
+            {/* Tags and Handle */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-x-4 gap-y-2.5 mt-4 text-xs sm:text-sm text-slate-400 font-medium">
+              <span className="text-slate-800 font-semibold bg-slate-100 px-2 py-0.5 rounded-md font-mono text-[11px] sm:text-xs w-fit">
                 @{profile.name.toLowerCase().replace(/[^a-z0-9]/g, '')}
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
               
-              <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
-                <div className="w-5 h-5 rounded-md bg-[#1A56DB] flex items-center justify-center text-white p-1 shadow-sm select-none">
-                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2L2 22h20L12 2zm0 4l6.5 13H5.5L12 6z"/>
-                  </svg>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-200 hidden sm:inline" />
+                <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
+                  <div className="w-5 h-5 rounded-md bg-[#1A56DB] flex items-center justify-center text-white p-1 shadow-sm select-none">
+                    <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 2L2 22h20L12 2zm0 4l6.5 13H5.5L12 6z"/>
+                    </svg>
+                  </div>
+                  <span>{profile.role || roleLabels[user.role] || 'Member'}</span>
                 </div>
-                <span>{profile.role || roleLabels[user.role] || 'Member'}</span>
+
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${
+                  isActive 
+                    ? 'text-emerald-600 bg-emerald-50 border border-emerald-100/50' 
+                    : 'text-slate-500 bg-slate-50 border border-slate-200/60'
+                }`}>
+                  {isActive 
+                    ? (user.role === 'student_coordinator' ? 'Active Coordinator' : 'Active Faculty') 
+                    : (user.role === 'student_coordinator' ? 'Passive Coordinator' : 'Passive Faculty')}
+                </span>
               </div>
-
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
-              <span className="text-emerald-600 bg-emerald-50 border border-emerald-100/50 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                {user.role === 'student_coordinator' ? 'Active Coordinator' : 'Official Faculty'}
-              </span>
-            </div>
-
-            {/* Primary Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 mt-6">
-              <a
-                href={user.email ? `mailto:${user.email}` : '#'}
-                onClick={(e) => {
-                  if (!user.email) {
-                    e.preventDefault();
-                    toast.error("No email address configured for this profile.");
-                  }
-                }}
-                className="px-6 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 active:scale-[0.98] transition-all flex items-center gap-2 shadow-sm"
-              >
-                Message
-              </a>
-
-              <button
-                onClick={handleShareProfile}
-                className="px-6 py-2.5 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/95 text-sm font-bold text-white active:scale-[0.98] transition-all flex items-center gap-2 shadow-md shadow-blue-500/10"
-              >
-                <svg className="w-4 h-4 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l5.084-2.542m0 0a3 3 0 10-3.3-3.3m3.3 3.3L8.684 13.258m0 0a3 3 0 11-3.3-3.3m3.3 3.3l5.084 2.542m0 0a3 3 0 105.3-2.2H18" />
-                </svg>
-                Share profile
-              </button>
             </div>
           </div>
         </div>
