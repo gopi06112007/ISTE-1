@@ -3,6 +3,7 @@ import api from '../api/axios';
 import EventCard from '../components/EventCard';
 import PageTransition from '../components/ui/PageTransition';
 import ClayCard from '../components/ui/ClayCard';
+import { EventCardSkeleton } from '../components/ui/SkeletonLoaders';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const BRANCHES = ['All', 'CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
@@ -205,11 +206,10 @@ const Events = () => {
 
           {/* Content */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                <p className="text-slate-600 font-bold">Loading events...</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <EventCardSkeleton key={i} delay={i} />
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-20 flex justify-center px-4">

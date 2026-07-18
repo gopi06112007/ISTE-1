@@ -4,6 +4,7 @@ import api from '../api/axios';
 import BlogCard from '../components/BlogCard';
 import BlogDetail from './BlogDetail';
 import PageTransition from '../components/ui/PageTransition';
+import { BlogCardSkeleton } from '../components/ui/SkeletonLoaders';
 
 const CATEGORIES = ['All', 'Announcement', 'Achievement', 'Technical', 'ISTE News'];
 
@@ -81,11 +82,10 @@ const Blog = () => {
 
           {/* Content */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                <p className="text-slate-500 font-medium">Loading posts...</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <BlogCardSkeleton key={i} delay={i} />
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-20 flex justify-center px-4">

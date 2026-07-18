@@ -4,6 +4,7 @@ import AlbumGrid from '../components/AlbumGrid';
 import Lightbox from '../components/Lightbox';
 import PageTransition from '../components/ui/PageTransition';
 import ClayCard from '../components/ui/ClayCard';
+import { GalleryAlbumSkeleton } from '../components/ui/SkeletonLoaders';
 
 const BRANCHES = ['All', 'CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
 
@@ -100,11 +101,10 @@ const Gallery = () => {
 
           {/* Content Grid */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                <p className="text-slate-600 font-bold">Loading gallery...</p>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <GalleryAlbumSkeleton key={i} delay={i} />
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-20 flex justify-center px-4">

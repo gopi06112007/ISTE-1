@@ -8,6 +8,7 @@ import Modal from '../../components/ui/Modal';
 import FileUpload from '../../components/ui/FileUpload';
 import ClayCard from '../../components/ui/ClayCard';
 import BentoGrid from '../../components/ui/BentoGrid';
+import { DashboardTableSkeleton, EventCardSkeleton, DashboardAlbumSkeleton } from '../../components/ui/SkeletonLoaders';
 
 const BranchFacultyDashboard = () => {
   const { profile, userName, userBranch, setProfile, checkAuth } = useAuth();
@@ -26,6 +27,25 @@ const BranchFacultyDashboard = () => {
   
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+
+  // Password Reset & Change States
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [resetCoord, setResetCoord] = useState(null);
+  const [resetPasswordVal, setResetPasswordVal] = useState('');
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
+
+  // Password Visibility States
+  const [isChangePasswordExpanded, setIsChangePasswordExpanded] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [showAssignPassword, setShowAssignPassword] = useState(false);
 
   // Stats
   const [stats, setStats] = useState({ coordinators: 0, upcomingEvents: 0, albums: 0 });
@@ -254,6 +274,68 @@ const BranchFacultyDashboard = () => {
     }
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      toast.error('New passwords do not match.');
+      return;
+    }
+    setIsChangingPassword(true);
+    const loadingToast = toast.loading('Changing password...');
+    try {
+      const response = await api.patch('/auth/change-password', {
+        currentPassword,
+        newPassword
+      });
+      if (response.data.success) {
+        toast.success('Password changed successfully!', { id: loadingToast });
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setShowCurrentPassword(false);
+        setShowNewPassword(false);
+        setShowConfirmPassword(false);
+        setIsChangePasswordExpanded(false);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to change password.', { id: loadingToast });
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const openResetPasswordModal = (coord) => {
+    setResetCoord(coord);
+    setResetPasswordVal('');
+    setShowResetPassword(false);
+    setShowResetPasswordModal(true);
+  };
+
+  const handleResetCoordinatorPassword = async (e) => {
+    e.preventDefault();
+    if (!resetPasswordVal || resetPasswordVal.length < 8) {
+      toast.error('Password must be at least 8 characters long.');
+      return;
+    }
+    setIsResettingPassword(true);
+    const loadingToast = toast.loading(`Resetting password for ${resetCoord?.profileId?.name}...`);
+    try {
+      const response = await api.patch(`/users/${resetCoord._id}/reset-password`, {
+        password: resetPasswordVal
+      });
+      if (response.data.success) {
+        toast.success('Password reset successfully!', { id: loadingToast });
+        setShowResetPasswordModal(false);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || 'Failed to reset password.', { id: loadingToast });
+    } finally {
+      setIsResettingPassword(false);
+    }
+  };
+
   // ──────────────────────────────────────────
   // Coordinator CRUD
   // ──────────────────────────────────────────
@@ -357,6 +439,7 @@ const BranchFacultyDashboard = () => {
       instagram: ''
     });
     setCoordFile(null);
+    setShowAssignPassword(false);
     setShowCoordModal(true);
     setMessage({ type: '', text: '' });
   };
@@ -1161,6 +1244,159 @@ const BranchFacultyDashboard = () => {
                     </div>
                   </form>
                 </ClayCard>
+
+                <ClayCard variant="raised" className="p-6 md:p-8 mt-8">
+                  <div
+                    onClick={() => setIsChangePasswordExpanded(!isChangePasswordExpanded)}
+                    className="flex justify-between items-center cursor-pointer select-none group"
+                  >
+                    <div>
+                      <h2 className="text-2xl font-display font-black text-slate-800 transition-colors duration-300 group-hover:text-iste-blue">
+                        Change Password
+                      </h2>
+                      <p className="text-xs font-extrabold text-slate-400 mt-1">
+                        Update your account security password. Click to toggle.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="w-10 h-10 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm flex items-center justify-center transition-all duration-300 transform active:scale-95"
+                    >
+                      <span className={`transition-transform duration-300 inline-block font-extrabold text-sm ${isChangePasswordExpanded ? 'rotate-180 text-iste-blue' : ''}`}>
+                        ▼
+                      </span>
+                    </button>
+                  </div>
+
+                  <AnimatePresence initial={false}>
+                    {isChangePasswordExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <form onSubmit={handlePasswordChange} className="space-y-6 pt-6 border-t border-slate-200/50 mt-6 border-slate-200">
+                          <div className="space-y-2 group">
+                            <label htmlFor="currentPassword" className="block text-xs font-extrabold uppercase tracking-wider text-slate-500 group-focus-within:text-iste-blue transition-colors duration-300">
+                              Current Password
+                            </label>
+                            <div className="relative">
+                              <input
+                                type={showCurrentPassword ? 'text' : 'password'}
+                                id="currentPassword"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                className="w-full pl-4 pr-12 h-[50px] bg-[#EEF1F5] rounded-clay-sm text-slate-900 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300 text-sm font-semibold border-2 border-transparent focus:border-iste-blue/20"
+                                required
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 flex items-center justify-center"
+                                aria-label="Toggle password visibility"
+                              >
+                                {showCurrentPassword ? (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                  </svg>
+                                ) : (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                  </svg>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <div className="space-y-2 group">
+                            <label htmlFor="newPassword" className="block text-xs font-extrabold uppercase tracking-wider text-slate-500 group-focus-within:text-iste-blue transition-colors duration-300">
+                              New Password
+                            </label>
+                            <div className="relative">
+                              <input
+                                type={showNewPassword ? 'text' : 'password'}
+                                id="newPassword"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                className="w-full pl-4 pr-12 h-[50px] bg-[#EEF1F5] rounded-clay-sm text-slate-900 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300 text-sm font-semibold border-2 border-transparent focus:border-iste-blue/20"
+                                required
+                                minLength={8}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowNewPassword(!showNewPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 flex items-center justify-center"
+                                aria-label="Toggle password visibility"
+                              >
+                                {showNewPassword ? (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                  </svg>
+                                ) : (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                  </svg>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <div className="space-y-2 group">
+                            <label htmlFor="confirmPassword" className="block text-xs font-extrabold uppercase tracking-wider text-slate-500 group-focus-within:text-iste-blue transition-colors duration-300">
+                              Confirm New Password
+                            </label>
+                            <div className="relative">
+                              <input
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                id="confirmPassword"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className="w-full pl-4 pr-12 h-[50px] bg-[#EEF1F5] rounded-clay-sm text-slate-900 shadow-clay-inset focus:outline-none focus:shadow-clay-pressed transition-all duration-300 text-sm font-semibold border-2 border-transparent focus:border-iste-blue/20"
+                                required
+                                minLength={8}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 flex items-center justify-center"
+                                aria-label="Toggle password visibility"
+                              >
+                                {showConfirmPassword ? (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                  </svg>
+                                ) : (
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                  </svg>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <motion.button
+                            type="submit"
+                            disabled={isChangingPassword}
+                            whileHover={{ scale: 1.015 }}
+                            whileTap={{ scale: 0.985 }}
+                            className="w-full py-3 h-[50px] rounded-clay-sm text-sm font-extrabold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                          >
+                            {isChangingPassword ? (
+                              <>
+                                <div className="w-5 h-5 border-2.5 border-iste-blue/30 border-t-iste-blue rounded-full animate-spin" />
+                                <span>Updating Password...</span>
+                              </>
+                            ) : (
+                              'Update Password'
+                            )}
+                          </motion.button>
+                        </form>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </ClayCard>
               </motion.div>
             )}
 
@@ -1182,9 +1418,7 @@ const BranchFacultyDashboard = () => {
                 </div>
 
                 {loadingCoords ? (
-                  <div className="flex justify-center py-20">
-                    <div className="w-10 h-10 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                  </div>
+                  <DashboardTableSkeleton rows={4} cols={5} />
                 ) : coordinators.length === 0 ? (
                   <ClayCard variant="raised" className="p-10 text-center text-slate-500 font-bold select-none">No student coordinators assigned. Click 'Add Coordinator' to create one.</ClayCard>
                 ) : (
@@ -1231,6 +1465,7 @@ const BranchFacultyDashboard = () => {
                               </button>
                             </td>
                             <td className="px-6 py-4 text-right space-x-3 select-none">
+                              <button onClick={() => openResetPasswordModal(coord)} className="text-amber-600 hover:text-amber-700 font-extrabold text-xs">Reset PW</button>
                               <button onClick={() => openEditCoord(coord)} className="text-iste-blue hover:text-sky-600 font-extrabold text-xs">Edit</button>
                               <button onClick={() => deleteCoord(coord._id)} className="text-red-500 hover:text-red-700 font-extrabold text-xs">Delete</button>
                             </td>
@@ -1261,9 +1496,13 @@ const BranchFacultyDashboard = () => {
                 </div>
 
                 {loadingEvents ? (
-                  <div className="flex justify-center py-20">
-                    <div className="w-10 h-10 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                  </div>
+                  <BentoGrid className="gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="col-span-12 sm:col-span-6 lg:col-span-4">
+                        <EventCardSkeleton delay={i} />
+                      </div>
+                    ))}
+                  </BentoGrid>
                 ) : branchEvents.length === 0 ? (
                   <ClayCard variant="raised" className="p-10 text-center text-slate-500 font-bold select-none animate-fade-in">No events listed. Click 'Add Event' to schedule one.</ClayCard>
                 ) : (
@@ -1300,9 +1539,13 @@ const BranchFacultyDashboard = () => {
                 </div>
 
                 {loadingAlbums ? (
-                  <div className="flex justify-center py-20">
-                    <div className="w-10 h-10 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                  </div>
+                  <BentoGrid className="gap-6">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="col-span-12 sm:col-span-6 lg:col-span-4">
+                        <DashboardAlbumSkeleton delay={i} />
+                      </div>
+                    ))}
+                  </BentoGrid>
                 ) : albums.length === 0 ? (
                   <ClayCard variant="raised" className="p-10 text-center text-slate-500 font-bold select-none animate-fade-in">No gallery albums created yet.</ClayCard>
                 ) : (
@@ -1383,16 +1626,33 @@ const BranchFacultyDashboard = () => {
                   className="input-field font-mono"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label className="form-label">Password</label>
                 <input
-                  type="password"
+                  type={showAssignPassword ? 'text' : 'password'}
                   required
                   value={coordForm.password}
                   onChange={(e) => setCoordForm({ ...coordForm, password: e.target.value })}
                   placeholder="Min 8 characters"
-                  className="input-field"
+                  className="input-field pr-10"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowAssignPassword(!showAssignPassword)}
+                  className="absolute right-3 top-[38px] w-8 h-8 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 flex items-center justify-center"
+                  aria-label="Toggle password visibility"
+                >
+                  {showAssignPassword ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
           )}
@@ -1633,6 +1893,64 @@ const BranchFacultyDashboard = () => {
             multiple={true}
             onChange={(files) => setUploadFiles(files)}
           />
+        </div>
+      </Modal>
+
+      {/* ────────────────────────────────────────── */}
+      {/* MODAL: RESET COORDINATOR PASSWORD         */}
+      {/* ────────────────────────────────────────── */}
+      <Modal
+        isOpen={showResetPasswordModal}
+        onClose={() => setShowResetPasswordModal(false)}
+        title="Reset Coordinator Password"
+        onSubmit={handleResetCoordinatorPassword}
+        submitText="Reset Password"
+        isSubmitting={isResettingPassword}
+      >
+        <div className="space-y-5">
+          <div className="bg-[#EEF1F5] p-4 rounded-clay-sm shadow-clay-inset border border-slate-200/10">
+            <h4 className="text-xs font-black text-slate-700">Account Details</h4>
+            <div className="grid grid-cols-2 gap-4 mt-2 text-xs font-bold text-slate-600">
+              <div>
+                <span className="text-slate-400 block uppercase tracking-wider text-[10px]">Name</span>
+                <span className="text-slate-800 font-extrabold">{resetCoord?.profileId?.name}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block uppercase tracking-wider text-[10px]">JNTU No</span>
+                <span className="text-slate-800 font-mono font-extrabold">{resetCoord?.jntuNo || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative">
+            <label className="form-label">New Password</label>
+            <input
+              type={showResetPassword ? 'text' : 'password'}
+              required
+              value={resetPasswordVal}
+              onChange={(e) => setResetPasswordVal(e.target.value)}
+              placeholder="Enter new password (Min 8 characters)"
+              className="input-field pr-10"
+              minLength={8}
+            />
+            <button
+              type="button"
+              onClick={() => setShowResetPassword(!showResetPassword)}
+              className="absolute right-3 top-[38px] w-8 h-8 rounded-full bg-[#EEF1F5] text-slate-400 hover:text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed transition-all duration-300 flex items-center justify-center"
+              aria-label="Toggle password visibility"
+            >
+              {showResetPassword ? (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </Modal>
 

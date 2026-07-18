@@ -6,6 +6,7 @@ import HomeBlogCard from '../HomeBlogCard';
 import ClayCard from '../ui/ClayCard';
 import Lightbox from '../Lightbox';
 import AlbumGrid from '../AlbumGrid';
+import { HomeEventSkeleton, HomeBlogSkeleton, HomeGallerySkeleton } from '../ui/SkeletonLoaders';
 
 const SectionErrorState = ({ title, message, onRetry }) => (
   <motion.div
@@ -373,12 +374,7 @@ export const UpcomingEventsSection = ({ events, loading, error, onRetry }) => {
 
         {/* ── Content ── */}
         {loading ? (
-          /* Skeleton loader */
-          <div className="events-scroll">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="events-scroll-card h-[420px] rounded-[1.25rem] bg-gray-100/60 animate-pulse" />
-            ))}
-          </div>
+          <HomeEventSkeleton />
         ) : error ? (
           <SectionErrorState
             title="Events could not load"
@@ -653,11 +649,7 @@ export const LatestBlogSection = ({ posts, loading, error, onRetry }) => {
 
         {/* ── Content ── */}
         {loading ? (
-          <div className="blog-scroll">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="blog-scroll-card h-[480px] rounded-[1.25rem] bg-gray-100/60 animate-pulse" />
-            ))}
-          </div>
+          <HomeBlogSkeleton />
         ) : error ? (
           <SectionErrorState
             title="Blog posts could not load"
@@ -911,15 +903,7 @@ export const GalleryHighlightsSection = ({ albums = [], loading, error, onRetry 
 
         {/* ── Content ── */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-3xl bg-[#EEF1F5] shadow-clay-md p-4 space-y-4">
-                <div className="w-full h-48 skeleton-shimmer rounded-2xl" />
-                <div className="w-3/4 h-5 skeleton-shimmer rounded" />
-                <div className="w-1/2 h-4 skeleton-shimmer rounded" />
-              </div>
-            ))}
-          </div>
+          <HomeGallerySkeleton />
         ) : error ? (
           <SectionErrorState
             title="Gallery could not load"

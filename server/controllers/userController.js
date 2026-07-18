@@ -357,10 +357,83 @@ const getActivityLogs = async (req, res) => {
   }
 };
 
+/**
+ * PATCH /api/users/:id/reset-password
+ * Reset the password of a user managed by the faculty.
+ * Branch Faculty: can only reset student coordinators in their own branch.
+ * Central Faculty: can reset anyone except central faculty.
+ */
+const resetUserPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password || password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 8 characters long.',
+      });
+    }
+
+    const user = await User.findById(req.params.id).populate('profileId');
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
+    }
+
+    // Branch isolation for branch faculty
+    if (req.user.role === 'branch_faculty') {
+      if (user.role !== 'student_coordinator') {
+        return res.status(403).json({
+          success: false,
+          message: 'Branch faculty can only reset passwords for student coordinators.',
+        });
+      }
+      if (user.branch !== req.user.branch) {
+        return res.status(403).json({
+          success: false,
+          message: 'Cannot reset password for coordinators of other branches.',
+        });
+      }
+    }
+
+    // Central faculty cannot reset central faculty password via this (they should use self-service auth route)
+    if (user.role === 'central_faculty') {
+      return res.status(403).json({
+        success: false,
+        message: 'Cannot reset password of central faculty accounts.',
+      });
+    }
+
+    user.passwordHash = await User.hashPassword(password);
+    await user.save();
+
+    await logActivity({
+      action: 'UPDATE',
+      performedBy: req.user.userId,
+      targetModel: 'User',
+      targetId: user._id,
+      details: `Reset password for user ${user.jntuNo || user.email} (${user.role}) from ${user.branch}`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password reset successfully.',
+    });
+  } catch (error) {
+    console.error('Reset user password error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+};
+
 module.exports = {
   assignCredentials,
   getUsers,
   toggleUserActive,
   deleteUser,
   getActivityLogs,
+  resetUserPassword,
 };

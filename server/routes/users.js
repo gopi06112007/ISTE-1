@@ -6,6 +6,7 @@ const {
   toggleUserActive,
   deleteUser,
   getActivityLogs,
+  resetUserPassword,
 } = require('../controllers/userController');
 const verifyToken = require('../middleware/verifyToken');
 const requireRole = require('../middleware/requireRole');
@@ -45,6 +46,14 @@ router.patch(
   verifyToken,
   requireRole('branch_faculty', 'central_faculty'),
   toggleUserActive
+);
+
+// PATCH /api/users/:id/reset-password — Branch Faculty | Central
+router.patch(
+  '/:id/reset-password',
+  verifyToken,
+  requireRole('branch_faculty', 'central_faculty'),
+  resetUserPassword
 );
 
 // DELETE /api/users/:id — Branch Faculty | Central

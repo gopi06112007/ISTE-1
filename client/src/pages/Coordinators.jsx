@@ -4,6 +4,7 @@ import api from '../api/axios';
 import CoordinatorCard from '../components/CoordinatorCard';
 import PageTransition from '../components/ui/PageTransition';
 import ClayCard from '../components/ui/ClayCard';
+import { CoordinatorCardSkeleton } from '../components/ui/SkeletonLoaders';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const BRANCHES = ['All', 'CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'CENTRAL'];
@@ -263,11 +264,10 @@ const Coordinators = () => {
 
           {/* Content */}
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                <p className="text-slate-600 font-bold">Loading coordinators...</p>
-              </div>
+            <div className="flex flex-wrap gap-5 justify-center w-full">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <CoordinatorCardSkeleton key={i} delay={i} />
+              ))}
             </div>
           ) : error ? (
             <div className="text-center py-20 flex justify-center px-4">

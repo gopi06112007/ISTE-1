@@ -5,6 +5,7 @@ import api from '../api/axios';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import { sanitizeBlogContent } from '../utils/html';
+import { BlogDetailSkeleton } from '../components/ui/SkeletonLoaders';
 
 const BlogDetail = ({ blogId }) => {
   const [blog, setBlog] = useState(null);
@@ -175,11 +176,8 @@ const BlogDetail = ({ blogId }) => {
 
   if (loading) {
     return (
-      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-          <p className="text-gray-500 ">Loading post...</p>
-        </div>
+      <PageTransition className="pt-2 lg:pt-20 pb-16">
+        <BlogDetailSkeleton />
       </PageTransition>
     );
   }

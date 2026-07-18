@@ -6,6 +6,7 @@ import api from '../../api/axios';
 import EventCard from '../../components/EventCard';
 import ClayCard from '../../components/ui/ClayCard';
 import BentoGrid from '../../components/ui/BentoGrid';
+import { StudentDashboardEventSkeleton } from '../../components/ui/SkeletonLoaders';
 
 const StudentDashboard = () => {
   const { user, profile, userName, userBranch, setProfile, checkAuth } = useAuth();
@@ -723,9 +724,7 @@ const StudentDashboard = () => {
                 </h2>
 
                 {loadingEvents ? (
-                  <div className="flex justify-center py-20 animate-fade-in">
-                    <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-                  </div>
+                  <StudentDashboardEventSkeleton />
                 ) : events.length === 0 ? (
                   <ClayCard variant="raised" className="p-10 text-center text-slate-500 font-bold select-none animate-fade-in">
                     No events have been posted for your branch yet.

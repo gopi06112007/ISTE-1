@@ -22,15 +22,10 @@ const StudentDashboard = lazy(() => import('./pages/dashboard/StudentDashboard')
 const BranchFacultyDashboard = lazy(() => import('./pages/dashboard/BranchFacultyDashboard'));
 const CentralDashboard = lazy(() => import('./pages/dashboard/CentralDashboard'));
 
+import { PageLoaderSkeleton } from './components/ui/SkeletonLoaders';
+
 function PageLoader() {
-  return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-iste-blue/20 border-t-iste-blue rounded-full animate-spin" />
-        <p className="text-slate-500 font-bold">Loading page...</p>
-      </div>
-    </div>
-  );
+  return <PageLoaderSkeleton />;
 }
 
 function AnimatedRoutes() {

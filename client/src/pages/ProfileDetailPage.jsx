@@ -24,33 +24,33 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-/* ─── Skeleton loader ────────────────────────────────────── */
 const SkeletonHero = () => (
-  <div className="animate-pulse">
+  <div>
     {/* Card container */}
     <div className="bg-white border border-slate-100 rounded-3xl shadow-xl overflow-hidden mb-8">
       {/* Banner skeleton */}
-      <div className="h-36 sm:h-48 w-full bg-slate-100" />
+      <div className="h-36 sm:h-48 w-full skeleton-shimmer" style={{ borderRadius: '3xl 3xl 0 0' }} />
       {/* Profile info skeleton */}
       <div className="px-6 sm:px-10 pb-8 relative flex flex-col items-start">
         {/* Avatar skeleton */}
-        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-slate-200 border-4 border-white -mt-16 sm:-mt-20 z-10" />
+        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white -mt-16 sm:-mt-20 z-10 skeleton-shimmer" />
         
         {/* Details skeleton */}
         <div className="w-full mt-4 space-y-3">
-          <div className="h-8 bg-slate-200 rounded w-1/3" />
-          <div className="h-4 bg-slate-200 rounded w-1/4" />
-          <div className="h-5 bg-slate-200 rounded w-1/2 mt-2" />
+          <div className="h-8 w-1/3 skeleton-shimmer" />
+          <div className="h-4 w-1/4 skeleton-shimmer" />
+          <div className="h-5 w-1/2 mt-2 skeleton-shimmer" />
         </div>
-        
-
       </div>
     </div>
     
     {/* Details grid skeleton */}
     <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {[1, 2, 3, 4].map(i => (
-        <div key={i} className="h-24 bg-white border border-slate-100 rounded-2xl shadow-sm" />
+        <div key={i} className="h-24 p-5 bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col gap-2 justify-center">
+          <div className="h-3 w-16 skeleton-shimmer" />
+          <div className="h-4 w-28 skeleton-shimmer" />
+        </div>
       ))}
     </div>
   </div>
