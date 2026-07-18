@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import useAuth from './hooks/useAuth';
 
@@ -94,6 +94,26 @@ function ScrollProgress() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
+/**
+ * GlobalFooter — renders the Footer statically at the bottom of all subpages.
+ * On the Home page this returns null because the Home page manages its own snap-scroll footer section.
+ */
+function GlobalFooter() {
+  const location = useLocation();
+  if (location.pathname === '/') return null;
+  return <Footer />;
+}
+
 function App() {
   // removed theme initialization
   const { checkAuth } = useAuth();
@@ -105,14 +125,15 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col relative text-slate-800  font-inter transition-colors duration-300">
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col relative text-slate-800 font-inter transition-colors duration-300">
         <ScrollProgress />
         <Toaster position="top-right" toastOptions={{ className: 'font-sans' }} />
         <Navbar />
         <main className="flex-1">
           <AnimatedRoutes />
         </main>
-        <Footer />
+        <GlobalFooter />
       </div>
     </Router>
   );
