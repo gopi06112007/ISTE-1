@@ -275,8 +275,8 @@ const Login = () => {
       </div>
 
       {/* RIGHT PANEL: Sleek Claymorphic Form Space */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative z-10">
-        <ClayCard variant="raised" size="lg" className="w-full max-w-md p-8 sm:p-10 animate-scale-in mt-10 lg:mt-16">
+      <div className="w-full lg:w-1/2 flex-1 flex items-center justify-center p-6 sm:p-12 relative z-10 min-h-screen lg:min-h-0">
+        <ClayCard variant="raised" size="lg" className="w-full max-w-md p-8 sm:p-10 animate-scale-in">
           {/* Mobile Header (Shown on mobile, hidden on lg) */}
           <div className="text-center mb-8 lg:hidden">
             <div className="w-20 h-20 bg-white/70 rounded-clay-md flex items-center justify-center mx-auto mb-4 shadow-clay-sm">
