@@ -27,6 +27,7 @@ export default {
         display: ['Sora', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
         accent: ['"Space Grotesk"', 'sans-serif'],
+        condensed: ['"Barlow Condensed"', 'sans-serif'],
       },
       backdropBlur: {
         sm: '8px',

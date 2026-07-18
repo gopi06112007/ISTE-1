@@ -1,12 +1,7 @@
-import { useLocation } from 'react-router-dom';
 
-const Footer = ({ forceRender = false }) => {
-  const location = useLocation();
+
+const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  if (location.pathname === '/' && !forceRender) {
-    return null;
-  }
 
 
   return (

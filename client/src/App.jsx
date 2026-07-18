@@ -113,7 +113,8 @@ function GlobalFooter() {
   if (
     location.pathname === '/' ||
     location.pathname === '/login' ||
-    location.pathname.startsWith('/dashboard')
+    location.pathname.startsWith('/dashboard') ||
+    location.pathname.startsWith('/blog/')
   ) {
     return null;
   }

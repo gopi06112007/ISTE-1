@@ -224,10 +224,130 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+/**
+ * POST /api/blogs/:id/like
+ * Public
+ */
+const toggleLikeBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { action } = req.body; // 'like' or 'unlike'
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog post not found.',
+      });
+    }
+
+    if (action === 'like') {
+      blog.likes = (blog.likes || 0) + 1;
+    } else if (action === 'unlike') {
+      blog.likes = Math.max(0, (blog.likes || 0) - 1);
+    }
+
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      likes: blog.likes,
+    });
+  } catch (error) {
+    console.error('Toggle like error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+};
+
+/**
+ * POST /api/blogs/:id/react
+ * Public
+ */
+const reactBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { emoji } = req.body;
+
+    if (!emoji) {
+      return res.status(400).json({
+        success: false,
+        message: 'emoji is required.',
+      });
+    }
+
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog post not found.',
+      });
+    }
+
+    if (!blog.reactions) {
+      blog.reactions = new Map();
+    }
+
+    const currentCount = blog.reactions.get(emoji) || 0;
+    blog.reactions.set(emoji, currentCount + 1);
+
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      reactions: Object.fromEntries(blog.reactions),
+    });
+  } catch (error) {
+    console.error('React blog error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+};
+
+/**
+ * POST /api/blogs/:id/share
+ * Public
+ */
+const shareBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Blog post not found.',
+      });
+    }
+
+    blog.shares = (blog.shares || 0) + 1;
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      shares: blog.shares,
+    });
+  } catch (error) {
+    console.error('Share blog error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+};
+
 module.exports = {
   getBlogs,
   getBlogById,
   createBlog,
   updateBlog,
   deleteBlog,
+  toggleLikeBlog,
+  reactBlog,
+  shareBlog,
 };

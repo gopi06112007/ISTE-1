@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import api from '../api/axios';
 import ClayCard from '../components/ui/ClayCard';
 import BentoGrid from '../components/ui/BentoGrid';
-import Footer from '../components/Footer';
 import PageTransition from '../components/ui/PageTransition';
+import Footer from '../components/Footer';
 import HeroBackdrop from '../components/home/HeroBackdrop';
 import {
   BranchCard,
@@ -460,10 +460,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Snap Footer */}
-      <div className="snap-start snap-always">
-        <Footer forceRender={true} />
-      </div>
+      {/* Footer — snaps in as the last section */}
+      <section className="snap-start snap-always">
+        <Footer />
+      </section>
+
     </PageTransition>
   );
 };

@@ -6,6 +6,9 @@ const {
   createBlog,
   updateBlog,
   deleteBlog,
+  toggleLikeBlog,
+  reactBlog,
+  shareBlog,
 } = require('../controllers/blogController');
 const verifyToken = require('../middleware/verifyToken');
 const requireRole = require('../middleware/requireRole');
@@ -16,6 +19,15 @@ router.get('/', getBlogs);
 
 // GET /api/blogs/:id — Public
 router.get('/:id', getBlogById);
+
+// POST /api/blogs/:id/like — Public
+router.post('/:id/like', toggleLikeBlog);
+
+// POST /api/blogs/:id/react — Public
+router.post('/:id/react', reactBlog);
+
+// POST /api/blogs/:id/share — Public
+router.post('/:id/share', shareBlog);
 
 // POST /api/blogs — Central only
 router.post(

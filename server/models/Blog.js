@@ -34,6 +34,22 @@ const blogSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    reactions: {
+      type: Map,
+      of: Number,
+      default: {
+        '👍': 0, '❤️': 0, '😂': 0, '😮': 0, '😢': 0,
+        '😡': 0, '👏': 0, '🔥': 0, '🎉': 0, '💡': 0
+      }
+    },
+    shares: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

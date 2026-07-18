@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SafeImage from './SafeImage';
-import ClayCard from './ui/ClayCard';
+import api from '../api/axios';
 
 const getMockLikes = (id) => {
   if (!id) return 0;
@@ -9,7 +9,7 @@ const getMockLikes = (id) => {
   for (let i = 0; i < id.length; i++) {
     hash = id.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return Math.abs(hash % 140) + 12; // stable count between 12 and 151
+  return Math.abs(hash % 140) + 12;
 };
 
 const BlogCard = ({ blog, featured = false }) => {
@@ -17,181 +17,159 @@ const BlogCard = ({ blog, featured = false }) => {
   const [isLiked, setIsLiked] = useState(() => {
     return localStorage.getItem(`iste_blog_liked_${blog._id}`) === 'true';
   });
-  const [likesCount, setLikesCount] = useState(() => {
-    const saved = localStorage.getItem(`iste_blog_liked_${blog._id}`) === 'true';
-    return saved ? mockLikesBase + 1 : mockLikesBase;
-  });
+  const [likesCount, setLikesCount] = useState(blog.likes || 0);
 
-  const handleLikeClick = (e) => {
+  const handleLikeClick = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     const nextLiked = !isLiked;
     setIsLiked(nextLiked);
     localStorage.setItem(`iste_blog_liked_${blog._id}`, nextLiked ? 'true' : 'false');
-    setLikesCount((prev) => (nextLiked ? prev + 1 : prev - 1));
-  };
-  // Soft clay badges
-  const categoryChipColors = {
-    Announcement: 'text-red-600 bg-[#EEF1F5] shadow-clay-inset',
-    Achievement: 'text-amber-600 bg-[#EEF1F5] shadow-clay-inset',
-    Technical: 'text-cyan-600 bg-[#EEF1F5] shadow-clay-inset',
-    'ISTE News': 'text-blue-600 bg-[#EEF1F5] shadow-clay-inset',
+    setLikesCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
+    
+    try {
+      await api.post(`/blogs/${blog._id}/like`, { action: nextLiked ? 'like' : 'unlike' });
+    } catch (error) {
+      console.error('Failed to sync like with backend:', error);
+    }
   };
 
-  const categoryIcons = {
-    Announcement: '📢',
-    Achievement: '🏅',
-    Technical: '💡',
-    'ISTE News': '📰',
+  const fallbackCopyText = (text) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+    }
+    document.body.removeChild(textArea);
+  };
+
+  const handleShareClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}/blog/${blog._id}`;
+    
+    try {
+      await api.post(`/blogs/${blog._id}/share`);
+    } catch (error) {
+      console.error('Failed to sync share with backend:', error);
+    }
+
+    if (navigator.share) {
+      navigator.share({
+        title: blog.title,
+        text: getExcerpt(blog.content, 120),
+        url: shareUrl,
+      }).catch(console.error);
+    } else {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl);
+      } else {
+        fallbackCopyText(shareUrl);
+      }
+      alert('Link copied to clipboard!');
+    }
   };
 
   const formatDate = (dateStr) => {
+    if (!dateStr) return '';
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  // Strip HTML tags for excerpt
   const getExcerpt = (html, maxLen = 120) => {
     const text = html?.replace(/<[^>]*>/g, '') || '';
     return text.length > maxLen ? text.slice(0, maxLen) + '...' : text;
   };
 
-  const authorName =
-    blog.author?.profileId?.name ||
-    blog.author?.email ||
-    'ISTE GMRIT';
-
-  const chipClass = categoryChipColors[blog.category] || 'text-slate-600 bg-[#EEF1F5] shadow-clay-inset';
-
-  if (featured) {
-    return (
-      <ClayCard
-        as={Link}
-        to={`/blog/${blog._id}`}
-        interactive={true}
-        className="overflow-hidden lg:flex p-4 gap-4"
-      >
-        {/* Featured Image sits in a clay-inset frame with padding */}
-        <div className="relative lg:w-[45%] aspect-video lg:aspect-auto bg-[#EEF1F5] rounded-clay-sm shadow-clay-inset p-2 flex-shrink-0">
-          <div className="w-full h-full rounded-clay-sm overflow-hidden shadow-clay-inset">
-            <SafeImage
-              src={blog.featuredImageUrl}
-              alt={`${blog.title} featured image`}
-              className="w-full h-full object-cover"
-              fallbackType="blog"
-              objectPosition="center center"
-            />
-          </div>
-
-          {/* Category chip — overlaps image corner */}
-          <div className="absolute top-4 left-4">
-            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${chipClass}`}>
-              {categoryIcons[blog.category]} {blog.category}
-            </span>
-          </div>
-        </div>
-
-        {/* Content — ~55% */}
-        <div className="lg:w-[55%] p-4 flex flex-col justify-center">
-          {/* Category chip (mobile — hidden on desktop since it's on image) */}
-          <span className={`lg:hidden inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full w-fit mb-3 ${chipClass}`}>
-            {categoryIcons[blog.category]} {blog.category}
-          </span>
-
-          <h2 className="text-xl lg:text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-            {blog.title}
-          </h2>
-
-          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 font-medium">
-            {getExcerpt(blog.content, 200)}
-          </p>
-
-          <div className="flex items-center gap-3 text-xs text-gray-500 pt-4 border-t border-slate-200/40 font-bold">
-            <div className="w-7 h-7 rounded-full bg-[#EEF1F5] flex items-center justify-center text-iste-blue text-[10px] font-extrabold shadow-clay-sm flex-shrink-0">
-              {authorName.charAt(0).toUpperCase()}
-            </div>
-            <span className="text-gray-700">{authorName}</span>
-            <span className="text-gray-300">•</span>
-            <span>{formatDate(blog.publishedAt)}</span>
-          </div>
-        </div>
-      </ClayCard>
-    );
-  }
-
+  /* ─────────── Redesigned Frameless Card Layout ─────────── */
   return (
-    <ClayCard
-      as={Link}
-      to={`/blog/${blog._id}`}
-      interactive={true}
-      className="group overflow-hidden flex flex-col h-full"
-    >
-      {/* Image sits flush at the top */}
-      <div className="relative w-full aspect-[16/10] overflow-hidden flex-shrink-0">
-        <div className="w-full h-full">
-          <SafeImage
-            src={blog.featuredImageUrl}
-            alt={`${blog.title} featured image`}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            fallbackType="blog"
-            objectPosition="center center"
-          />
-        </div>
+    <div className="flex flex-col h-full bg-transparent group">
+      {/* Image at the top with rounded corners */}
+      <Link to={`/blog/${blog._id}`} className="relative block aspect-[16/10] overflow-hidden rounded-[1.25rem] mb-4 overflow-hidden select-none">
+        <SafeImage
+          src={blog.featuredImageUrl}
+          alt={`${blog.title} featured image`}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          fallbackType="blog"
+          objectPosition="center center"
+        />
+      </Link>
 
-        {/* Category chip — top-left overlapping image */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded shadow-sm backdrop-blur-sm ${chipClass}`}>
-            {categoryIcons[blog.category]} {blog.category}
-          </span>
-        </div>
+      {/* Title */}
+      <Link to={`/blog/${blog._id}`} className="block mb-2 group-hover:opacity-90 transition-opacity">
+        <h3 className="font-condensed text-xl sm:text-[22px] font-bold leading-tight text-slate-900 tracking-tight">
+          {blog.title}
+        </h3>
+      </Link>
 
-        {/* Like button & count badge — top-right overlapping image */}
-        <div className="absolute top-3 right-3 z-10 flex flex-col items-center">
-          <span className="text-[9px] font-bold text-white bg-black/60 px-1.5 py-0.5 rounded mb-1 select-none backdrop-blur-sm">
-            {likesCount}
-          </span>
-          <button
-            onClick={handleLikeClick}
-            className={`w-7 h-7 rounded-full flex items-center justify-center bg-[#EEF1F5] shadow-clay-sm hover:shadow-clay-md active:scale-90 transition-all ${
-              isLiked ? 'text-red-500' : 'text-slate-400'
-            }`}
-            aria-label={isLiked ? 'Unlike post' : 'Like post'}
+      {/* Description */}
+      <p className="text-[13px] sm:text-[14px] text-slate-500 leading-relaxed line-clamp-3 mb-3">
+        {getExcerpt(blog.content, 180)}
+      </p>
+
+      {/* Date */}
+      <span className="text-[12px] sm:text-[13px] text-slate-400 mb-4 block select-none">
+        {formatDate(blog.publishedAt)}
+      </span>
+
+      {/* Footer actions */}
+      <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-100/50">
+        <Link 
+          to={`/blog/${blog._id}`} 
+          className="inline-flex items-center gap-1 text-[14px] font-semibold text-[#E25B3C] hover:text-[#c4492e] transition-colors duration-200"
+        >
+          <span>Read More</span>
+          <svg className="w-3.5 h-3.5 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </Link>
+
+        {/* Action icons */}
+        <div className="flex items-center gap-4 text-slate-700">
+          {/* Like */}
+          <button 
+            onClick={handleLikeClick} 
+            className={`hover:text-[#E25B3C] transition-colors duration-200 flex items-center gap-1 ${isLiked ? 'text-[#E25B3C]' : ''}`}
+            title="Like"
           >
-            <svg className="w-3.5 h-3.5" fill={isLiked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            <svg className="w-5 h-5" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+            </svg>
+            <span className="text-[11px] font-semibold">{likesCount}</span>
+          </button>
+
+          {/* Comment */}
+          <Link 
+            to={`/blog/${blog._id}#comments`} 
+            className="hover:text-[#E25B3C] transition-colors duration-200"
+            title="Comment"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .806-.332 48.242 48.242 0 0 0 3.413-.387c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+            </svg>
+          </Link>
+
+          {/* Share */}
+          <button 
+            onClick={handleShareClick} 
+            className="hover:text-[#E25B3C] transition-colors duration-200"
+            title="Share"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186l5.57 3.285m-5.57-3.285a2.25 2.25 0 1 1 0-2.186m0 2.186l5.57-3.285m0 0a2.25 2.25 0 1 1 3.58 1.838M12 16.5a2.25 2.25 0 1 0 3.58-1.838" />
             </svg>
           </button>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="p-4 flex flex-col flex-grow justify-between bg-white">
-        <div>
-          <h3 className="text-base font-extrabold text-slate-800 mb-2 line-clamp-2 group-hover:text-iste-blue transition-colors duration-300">
-            {blog.title}
-          </h3>
-
-          <p className="text-xs text-slate-500 line-clamp-3 mb-4 leading-relaxed font-medium">
-            {getExcerpt(blog.content, 110)}
-          </p>
-        </div>
-
-        {/* Author / date footer */}
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 mt-auto font-bold">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#EEF1F5] flex items-center justify-center text-iste-blue text-[9px] font-extrabold shadow-clay-sm flex-shrink-0">
-              {authorName.charAt(0).toUpperCase()}
-            </div>
-            <span className="text-gray-700">{authorName}</span>
-          </div>
-          <span>{formatDate(blog.publishedAt)}</span>
-        </div>
-      </div>
-    </ClayCard>
+    </div>
   );
 };
 
