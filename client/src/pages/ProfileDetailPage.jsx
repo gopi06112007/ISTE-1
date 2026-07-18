@@ -6,6 +6,7 @@ import api from '../api/axios';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import { buildCloudinaryUrl } from '../utils/cloudinary';
+import { getProfileGradient } from '../utils/gradients';
 
 /* ─── Role helpers ───────────────────────────────────────── */
 const roleLabels = {
@@ -78,6 +79,7 @@ const DetailCard = ({ icon, label, value }) => (
 const MiniCard = ({ profile }) => {
   const user = profile.userId || {};
   const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
+  const grad = getProfileGradient(profile);
 
   return (
     <Link
@@ -85,7 +87,7 @@ const MiniCard = ({ profile }) => {
       className="w-[180px] min-w-[180px] max-w-[180px] flex-shrink-0 bg-white border border-slate-100/90 rounded-2xl p-3 shadow-md shadow-slate-100/20 hover:shadow-lg hover:border-slate-200/50 hover:-translate-y-1 transition-all duration-300 group"
     >
       <div className="w-full aspect-square overflow-hidden bg-slate-50 rounded-xl p-1 flex-shrink-0 relative">
-        <div className="absolute inset-0 p-0.5 rounded-xl bg-gradient-to-r from-[#FFDEB4] to-[#FFCAD4] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className={`absolute inset-0 p-0.5 rounded-xl bg-gradient-to-tr ${grad.border} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
           <div className="w-full h-full rounded-[10px] bg-white"></div>
         </div>
         <div className="w-full h-full rounded-xl overflow-hidden bg-white relative z-10">
@@ -177,6 +179,7 @@ const ProfileDetailPage = () => {
   const isStudent = user.role === 'student_coordinator';
   const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
   const isActive = user.isActive !== false;
+  const grad = getProfileGradient(profile);
 
   const handleCopyEmail = () => {
     if (user?.email) {
@@ -276,7 +279,7 @@ const ProfileDetailPage = () => {
         <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/40 overflow-hidden mb-8 relative">
           
           {/* Cover Banner (Vibrant Premium Sunset-Sky Multi-Gradient) */}
-          <div className="h-36 sm:h-48 w-full bg-gradient-to-tr from-[#FFD3A5] via-[#FD8A9B] to-[#A8C5F0] relative">
+          <div className={`h-36 sm:h-48 w-full bg-gradient-to-tr ${grad.banner} relative`}>
             <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px] opacity-30"></div>
           </div>
 
@@ -285,7 +288,7 @@ const ProfileDetailPage = () => {
             {/* Avatar Frame with custom gradient border */}
             <div className="relative -mt-16 sm:-mt-20 flex-shrink-0 z-10">
               <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1.5 bg-white shadow-lg">
-                <div className="w-full h-full rounded-full p-0.5 bg-gradient-to-tr from-[#FFD3A5] via-[#FD8A9B] to-[#A8C5F0]">
+                <div className={`w-full h-full rounded-full p-0.5 bg-gradient-to-tr ${grad.border}`}>
                   <div className="w-full h-full rounded-full overflow-hidden bg-white border-2 border-white">
                     <SafeImage
                       src={buildCloudinaryUrl(profile.photoUrl, 'profile')}

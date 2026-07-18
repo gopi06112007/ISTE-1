@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SafeImage from './SafeImage';
+import { getProfileGradient } from '../utils/gradients';
 
 const getInitials = (name = '?') =>
   name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
@@ -36,16 +37,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
 
   const badgeStyle = roleBadgeColors[user.role] || roleBadgeColors.branch_faculty;
 
-  const fallbackGradients = {
-    CSE: 'linear-gradient(135deg, #1A56DB, #60A5FA)',
-    ECE: 'linear-gradient(135deg, #7C3AED, #A78BFA)',
-    EEE: 'linear-gradient(135deg, #D97706, #FBBF24)',
-    MECH: 'linear-gradient(135deg, #475569, #94A3B8)',
-    CIVIL: 'linear-gradient(135deg, #0D9488, #5EEAD4)',
-    IT: 'linear-gradient(135deg, #DB2777, #F472B6)',
-    CENTRAL: 'linear-gradient(135deg, #1A56DB, #7C3AED)',
-  };
-  const gradient = fallbackGradients[profile.branch?.toUpperCase()] || fallbackGradients.CENTRAL;
+  const grad = getProfileGradient(profile);
 
   const MotionLink = motion(Link);
 
@@ -113,7 +105,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
           ) : (
             <div
               className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-lg font-bold text-white"
-              style={{ background: gradient }}
+              style={{ background: grad.fallback }}
             >
               {getInitials(profile.name)}
             </div>
@@ -266,7 +258,7 @@ const CoordinatorCard = ({ profile, index = 0 }) => {
             objectPosition="center top"
           />
         ) : (
-          <div className="coord-photo coord-fallback flex items-center justify-center" style={{ background: gradient }}>
+          <div className="coord-photo coord-fallback flex items-center justify-center" style={{ background: grad.fallback }}>
             <span className="text-5xl font-black text-white/90 select-none drop-shadow">
               {getInitials(profile.name)}
             </span>
