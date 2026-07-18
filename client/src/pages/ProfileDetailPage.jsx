@@ -347,22 +347,19 @@ const ProfileDetailPage = () => {
 
           {/* Profile Name & Primary Details */}
           <div className="px-6 sm:px-10 pb-8">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display tracking-tight flex items-center gap-2.5">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display tracking-tight flex flex-wrap items-center gap-x-3 gap-y-1">
               <span>{profile.name}</span>
+              <span className="text-xs sm:text-sm font-semibold bg-blue-50 text-iste-blue border border-blue-100/50 px-2.5 py-0.5 rounded-full select-none">
+                {user.role === 'student_coordinator' ? '@student' : '@faculty'}
+              </span>
               {isFaculty && (
                 <span className="inline-flex text-[#22C55E]" title="Verified Faculty">
-                  <svg className="w-6.5 h-6.5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                   </svg>
                 </span>
               )}
             </h1>
-
-            {/* Institution / Location */}
-            <div className="flex items-center gap-2 text-slate-400 font-medium text-xs sm:text-sm mt-2">
-              <span className="text-base select-none">🇮🇳</span>
-              <span>GMRIT, Rajam, Andhra Pradesh, India</span>
-            </div>
 
             {/* Tags and Handle */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-x-4 gap-y-2.5 mt-4 text-xs sm:text-sm text-slate-400 font-medium">
