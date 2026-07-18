@@ -73,29 +73,66 @@ export const BlogCardSkeleton = ({ delay = 0 }) => (
   </div>
 );
 
-/* ══════════════════════════════════════════════════════════
-   CoordinatorCardSkeleton — matches coordinator card layout
-   ══════════════════════════════════════════════════════════ */
 export const CoordinatorCardSkeleton = ({ delay = 0 }) => (
-  <div
-    className={`w-[280px] sm:w-[300px] bg-white rounded-[1.5rem] border border-slate-100 shadow-md overflow-hidden skeleton-delay-${delay}`}
-    style={{ opacity: 0.7 }}
-  >
-    {/* Photo area */}
-    <div className="w-full aspect-[3/4] skeleton-shimmer" style={{ borderRadius: '1.5rem 1.5rem 0 0' }} />
-    {/* Info area */}
-    <div className="p-5 space-y-3">
-      {/* Name */}
-      <Shimmer className="h-6 w-3/4 !rounded-lg" />
-      {/* Role badge */}
-      <Shimmer className="h-5 w-24 !rounded-full" />
-      {/* Branch + details */}
-      <div className="flex gap-2">
-        <Shimmer className="h-4 w-16 !rounded" />
-        <Shimmer className="h-4 w-20 !rounded" />
+  <div className={`w-full sm:w-[300px] skeleton-delay-${delay}`}>
+    {/* Mobile layout */}
+    <div
+      className="block sm:hidden w-full rounded-[20px] bg-white p-4 flex flex-col gap-3 text-left"
+      style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.04), 0 10px 24px rgba(0,0,0,0.08)', opacity: 0.7 }}
+    >
+      {/* ROW 1 — CATEGORY PILL */}
+      <Shimmer className="h-6 w-28 !rounded-full self-end" />
+
+      {/* ROW 2 — AVATAR + NAME/META */}
+      <div className="flex items-center gap-3">
+        <ShimmerCircle className="w-14 h-14" />
+        <div className="flex flex-col gap-[6px] flex-1">
+          <Shimmer className="h-5 w-32 !rounded-lg" />
+          <Shimmer className="h-4 w-48 !rounded" />
+        </div>
       </div>
-      {/* Designation */}
-      <Shimmer className="h-4 w-2/3 !rounded" />
+
+      {/* ROW 3 — TAG PILLS & SOCIAL MEDIA BUTTONS */}
+      <div className="flex items-center justify-between gap-[6px] w-full">
+        <div className="flex gap-[6px]">
+          <Shimmer className="h-6 w-12 !rounded-full" />
+          <Shimmer className="h-6 w-14 !rounded-full" />
+          <Shimmer className="h-6 w-10 !rounded-full" />
+        </div>
+        <div className="flex gap-1.5">
+          <ShimmerCircle className="w-8 h-8" />
+          <ShimmerCircle className="w-8 h-8" />
+        </div>
+      </div>
+
+      {/* ROW 4 — ACTION BUTTONS */}
+      <div className="flex items-center gap-2 mt-1">
+        <Shimmer className="h-[40px] flex-1 !rounded-full" />
+        <Shimmer className="h-[40px] w-20 !rounded-full" />
+      </div>
+    </div>
+
+    {/* Desktop layout */}
+    <div
+      className="hidden sm:flex flex-col w-full bg-white rounded-[1.5rem] border border-slate-100 shadow-md overflow-hidden"
+      style={{ opacity: 0.7 }}
+    >
+      {/* Photo area */}
+      <div className="w-full aspect-[3/4] skeleton-shimmer" style={{ borderRadius: '1.5rem 1.5rem 0 0' }} />
+      {/* Info area */}
+      <div className="p-5 space-y-3">
+        {/* Name */}
+        <Shimmer className="h-6 w-3/4 !rounded-lg" />
+        {/* Role badge */}
+        <Shimmer className="h-5 w-24 !rounded-full" />
+        {/* Branch + details */}
+        <div className="flex gap-2">
+          <Shimmer className="h-4 w-16 !rounded" />
+          <Shimmer className="h-4 w-20 !rounded" />
+        </div>
+        {/* Designation */}
+        <Shimmer className="h-4 w-2/3 !rounded" />
+      </div>
     </div>
   </div>
 );
