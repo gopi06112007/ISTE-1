@@ -152,8 +152,8 @@ const Navbar = () => {
               <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-md" />
             </div>
             <div className="flex flex-col">
-              <span className="text-base font-extrabold text-gray-900 tracking-tight leading-none">ISTE</span>
-              <span className="text-[9px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold mt-0.5">GMRIT</span>
+              <span className="text-base font-extrabold text-[#0B0E37] tracking-tight leading-none">ISTE</span>
+              <span className="text-[9px] uppercase tracking-wider font-jetbrains text-[#0B0E37] font-bold mt-0.5">Student Chapter GMRIT</span>
             </div>
           </Link>
         </>
@@ -176,11 +176,11 @@ const Navbar = () => {
                 <img src="/istelogo.webp" alt="ISTE Logo" className="w-full h-full object-contain drop-shadow-sm" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-extrabold text-gray-900 tracking-tight leading-none">
+                <span className="text-lg font-extrabold text-[#0B0E37] tracking-tight leading-none">
                   ISTE
                 </span>
-                <span className="text-[10px] uppercase tracking-wider font-jetbrains text-iste-blue font-bold mt-0.5">
-                  GMRIT Student Chapter
+                <span className="text-[10px] uppercase tracking-wider font-jetbrains text-[#0B0E37] font-bold mt-0.5">
+                  Student Chapter GMRIT
                 </span>
               </div>
             </Link>
