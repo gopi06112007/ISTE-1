@@ -106,11 +106,17 @@ function ScrollToTop() {
 
 /**
  * GlobalFooter — renders the Footer statically at the bottom of all subpages.
- * On the Home page this returns null because the Home page manages its own snap-scroll footer section.
+ * Hides the footer on Home, Login, and Dashboard routes.
  */
 function GlobalFooter() {
   const location = useLocation();
-  if (location.pathname === '/') return null;
+  if (
+    location.pathname === '/' ||
+    location.pathname === '/login' ||
+    location.pathname.startsWith('/dashboard')
+  ) {
+    return null;
+  }
   return <Footer />;
 }
 
