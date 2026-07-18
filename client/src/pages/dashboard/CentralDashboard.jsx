@@ -715,7 +715,7 @@ const CentralDashboard = () => {
   };
 
   return (
-    <div className="pt-2 lg:pt-20 min-h-screen bg-[#EEF1F5] text-slate-800 transition-colors duration-300">
+    <div className="pt-2 lg:pt-20 pb-28 lg:pb-0 min-h-screen bg-[#EEF1F5] text-slate-800 transition-colors duration-300">
       <section className="py-10 lg:py-16">
         <div className="section-container max-w-5xl px-4 mx-auto">
           
