@@ -26,7 +26,7 @@ const Navbar = () => {
 
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/coordinators', label: 'Coordinators' },
+    { to: isAuthenticated ? '/coordinator' : '/coordinators', label: 'Coordinators' },
     { to: '/events', label: 'Events' },
     { to: '/gallery', label: 'Gallery' },
     { to: '/blog', label: 'Blog' },
@@ -44,7 +44,7 @@ const Navbar = () => {
       ),
     },
     {
-      to: '/coordinators',
+      to: isAuthenticated ? '/coordinator' : '/coordinators',
       label: 'Team',
       icon: (
         <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>

@@ -21,6 +21,7 @@ const ProfileDetailPage = lazy(() => import('./pages/ProfileDetailPage'));
 const StudentDashboard = lazy(() => import('./pages/dashboard/StudentDashboard'));
 const BranchFacultyDashboard = lazy(() => import('./pages/dashboard/BranchFacultyDashboard'));
 const CentralDashboard = lazy(() => import('./pages/dashboard/CentralDashboard'));
+const CoordinatorPortal = lazy(() => import('./pages/CoordinatorPortal'));
 
 import { PageLoaderSkeleton } from './components/ui/SkeletonLoaders';
 
@@ -43,6 +44,14 @@ function AnimatedRoutes() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/login" element={<Login />} />
+          <Route
+            path="/coordinator"
+            element={
+              <ProtectedRoute>
+                <CoordinatorPortal />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Protected Dashboard Routes */}
           <Route
@@ -109,6 +118,7 @@ function GlobalFooter() {
     location.pathname === '/' ||
     location.pathname === '/login' ||
     location.pathname.startsWith('/dashboard') ||
+    location.pathname.startsWith('/coordinator') ||
     location.pathname.startsWith('/blog/')
   ) {
     return null;
