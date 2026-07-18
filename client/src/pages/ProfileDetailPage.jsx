@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import api from '../api/axios';
 import PageTransition from '../components/ui/PageTransition';
 import SafeImage from '../components/SafeImage';
 import { buildCloudinaryUrl } from '../utils/cloudinary';
-import ClayCard from '../components/ui/ClayCard';
 
 /* ─── Role helpers ───────────────────────────────────────── */
 const roleLabels = {
@@ -17,7 +17,7 @@ const roleLabels = {
 /* ─── Stagger animation variants ────────────────────────── */
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+  show: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } },
 };
 const item = {
   hidden: { opacity: 0, y: 16 },
@@ -27,36 +27,54 @@ const item = {
 /* ─── Skeleton loader ────────────────────────────────────── */
 const SkeletonHero = () => (
   <div className="animate-pulse">
-    <div className="rounded-clay-lg bg-[#EEF1F5] shadow-clay-sm p-8 lg:p-12 flex flex-col lg:flex-row gap-8 items-center lg:items-start">
-      <div className="w-36 h-36 lg:w-44 lg:h-44 rounded-full bg-gray-200 flex-shrink-0 shadow-clay-inset" />
-      <div className="flex-1 space-y-4 w-full">
-        <div className="h-8 bg-gray-200 rounded-clay-sm w-2/3" />
-        <div className="h-5 bg-gray-200 rounded-clay-sm w-1/3" />
-        <div className="h-4 bg-gray-200 rounded-clay-sm w-1/4" />
-        <div className="flex gap-3 mt-4">
-          {[1, 2, 3].map(i => <div key={i} className="h-9 w-9 bg-gray-200 rounded-full" />)}
+    {/* Card container */}
+    <div className="bg-white border border-slate-100 rounded-3xl shadow-xl overflow-hidden mb-8">
+      {/* Banner skeleton */}
+      <div className="h-36 sm:h-48 w-full bg-slate-100" />
+      {/* Profile info skeleton */}
+      <div className="px-6 sm:px-10 pb-8 relative flex flex-col items-start">
+        {/* Avatar skeleton */}
+        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-slate-200 border-4 border-white -mt-16 sm:-mt-20 z-10" />
+        
+        {/* Details skeleton */}
+        <div className="w-full mt-4 space-y-3">
+          <div className="h-8 bg-slate-200 rounded w-1/3" />
+          <div className="h-4 bg-slate-200 rounded w-1/4" />
+          <div className="h-5 bg-slate-200 rounded w-1/2 mt-2" />
+        </div>
+        
+        {/* Buttons skeleton */}
+        <div className="flex gap-3 mt-6">
+          <div className="h-10 w-28 bg-slate-200 rounded-xl" />
+          <div className="h-10 w-32 bg-slate-200 rounded-xl" />
         </div>
       </div>
     </div>
+    
+    {/* Details grid skeleton */}
     <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {[1, 2, 3, 4].map(i => <div key={i} className="h-28 bg-[#EEF1F5] rounded-clay-sm shadow-clay-sm" />)}
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="h-24 bg-white border border-slate-100 rounded-2xl shadow-sm" />
+      ))}
     </div>
   </div>
 );
 
 /* ─── Detail card ───────────────────────────────────────── */
 const DetailCard = ({ icon, label, value }) => (
-  <motion.div variants={item} className="h-full">
-    <ClayCard
-      variant="raised"
-      className="p-5 flex flex-col h-full"
-    >
-      <div className="flex items-center gap-3 mb-2 select-none">
-        <span className="text-2xl">{icon}</span>
-        <span className="text-xs font-black text-slate-400 uppercase tracking-wider">{label}</span>
-      </div>
-      <p className="text-slate-800 font-extrabold text-sm">{value || '—'}</p>
-    </ClayCard>
+  <motion.div 
+    variants={item} 
+    whileHover={{ y: -4, scale: 1.02 }}
+    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    className="bg-white border border-slate-100/90 rounded-2xl p-5 shadow-md shadow-slate-100/20 flex items-center gap-4 hover:shadow-lg hover:border-slate-200/50"
+  >
+    <div className="p-3 bg-slate-50 rounded-xl flex-shrink-0 flex items-center justify-center">
+      {icon}
+    </div>
+    <div>
+      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-sans">{label}</span>
+      <p className="text-slate-800 font-bold text-sm mt-0.5 font-display">{value || '—'}</p>
+    </div>
   </motion.div>
 );
 
@@ -64,31 +82,21 @@ const DetailCard = ({ icon, label, value }) => (
 const MiniCard = ({ profile }) => {
   const user = profile.userId || {};
   const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
-  const branchAccents = {
-    CSE: 'blue',
-    ECE: 'violet',
-    EEE: 'amber',
-    MECH: 'slate',
-    CIVIL: 'teal',
-    IT: 'rose',
-    CENTRAL: 'blue',
-  };
-  const accentColor = branchAccents[profile.branch?.toUpperCase()] || 'blue';
 
   return (
-    <ClayCard
-      as={Link}
+    <Link
       to={`/coordinators/${profile._id}`}
-      interactive={true}
-      accent={accentColor}
-      className="w-[180px] min-w-[180px] max-w-[180px] flex-shrink-0 overflow-hidden flex flex-col p-3"
+      className="w-[180px] min-w-[180px] max-w-[180px] flex-shrink-0 bg-white border border-slate-100/90 rounded-2xl p-3 shadow-md shadow-slate-100/20 hover:shadow-lg hover:border-slate-200/50 hover:-translate-y-1 transition-all duration-300 group"
     >
-      <div className="w-full aspect-square overflow-hidden bg-[#EEF1F5] rounded-clay-sm shadow-clay-inset p-1.5 flex-shrink-0">
-        <div className="w-full h-full rounded-clay-sm overflow-hidden shadow-clay-inset bg-white">
+      <div className="w-full aspect-square overflow-hidden bg-slate-50 rounded-xl p-1 flex-shrink-0 relative">
+        <div className="absolute inset-0 p-0.5 rounded-xl bg-gradient-to-r from-[#FFDEB4] to-[#FFCAD4] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="w-full h-full rounded-[10px] bg-white"></div>
+        </div>
+        <div className="w-full h-full rounded-xl overflow-hidden bg-white relative z-10">
           <SafeImage
-            src={profile.photoUrl}
+            src={buildCloudinaryUrl(profile.photoUrl, 'profile')}
             alt={`${profile.name} - ISTE GMRIT`}
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
             fallbackType="profile"
             name={profile.name}
             objectPosition="center top"
@@ -96,7 +104,7 @@ const MiniCard = ({ profile }) => {
         </div>
       </div>
       <div className="pt-3">
-        <p className="text-sm font-extrabold text-slate-800 line-clamp-1 flex items-center gap-1">
+        <p className="text-sm font-bold text-slate-800 line-clamp-1 flex items-center gap-1 font-display group-hover:text-iste-blue transition-colors">
           <span className="truncate">{profile.name}</span>
           {isFaculty && (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#22C55E" className="flex-shrink-0" title="Official Faculty">
@@ -104,9 +112,9 @@ const MiniCard = ({ profile }) => {
             </svg>
           )}
         </p>
-        <p className="text-xs text-slate-500 mt-1 font-bold line-clamp-1">{profile.role || roleLabels[user.role] || ''}</p>
+        <p className="text-[10px] text-slate-400 mt-1 font-bold line-clamp-1 tracking-wider uppercase font-sans">{profile.role || roleLabels[user.role] || ''}</p>
       </div>
-    </ClayCard>
+    </Link>
   );
 };
 
@@ -119,6 +127,7 @@ const ProfileDetailPage = () => {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -130,6 +139,13 @@ const ProfileDetailPage = () => {
     }
     return () => { document.title = 'ISTE GMRIT — Student Chapter'; };
   }, [profile]);
+
+  useEffect(() => {
+    if (!showMenu) return;
+    const closeMenu = () => setShowMenu(false);
+    document.addEventListener('click', closeMenu);
+    return () => document.removeEventListener('click', closeMenu);
+  }, [showMenu]);
 
   const fetchProfile = async () => {
     try {
@@ -161,6 +177,35 @@ const ProfileDetailPage = () => {
   const formatDate = (d) =>
     new Date(d).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
+  const user = profile?.userId || {};
+  const isStudent = user.role === 'student_coordinator';
+  const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
+
+  const handleCopyEmail = () => {
+    if (user?.email) {
+      navigator.clipboard.writeText(user.email);
+      toast.success('Email copied to clipboard!');
+    } else {
+      toast.error('No email configured for this profile.');
+    }
+    setShowMenu(false);
+  };
+
+  const handleCopyJNTU = () => {
+    if (user?.jntuNo) {
+      navigator.clipboard.writeText(user.jntuNo);
+      toast.success('JNTU Number copied to clipboard!');
+    }
+    setShowMenu(false);
+  };
+
+  const handleShareProfile = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    toast.success('Profile link copied to clipboard!');
+    setShowMenu(false);
+  };
+
   /* ── Back URL preserving filters ─── */
   const backUrl = location.state?.fromSearch
     ? `/coordinators${location.state.fromSearch}`
@@ -169,8 +214,8 @@ const ProfileDetailPage = () => {
   /* ── Loading skeleton ─────────────── */
   if (loading) {
     return (
-      <PageTransition className="pt-2 lg:pt-20 pb-16">
-        <div className="section-container max-w-5xl">
+      <PageTransition className="pt-4 lg:pt-20 pb-16">
+        <div className="section-container max-w-4xl px-4">
           <div className="mb-8 h-4 w-36 bg-gray-200 rounded animate-pulse" />
           <SkeletonHero />
         </div>
@@ -181,194 +226,253 @@ const ProfileDetailPage = () => {
   /* ── Error / 404 states ──────────── */
   if (error === 'not_found' || !profile) {
     return (
-      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
-        <ClayCard variant="raised" className="max-w-md w-full p-8 text-center flex flex-col items-center">
+      <PageTransition className="pt-4 lg:pt-20 min-h-[60vh] flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white border border-slate-100 rounded-3xl p-8 text-center flex flex-col items-center shadow-xl">
           <p className="text-6xl mb-4 select-none">🔍</p>
-          <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none">Profile Not Found</h2>
-          <p className="text-slate-500 font-bold text-sm mb-6 select-none">This coordinator's profile doesn't exist or was removed.</p>
+          <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none font-display">Profile Not Found</h2>
+          <p className="text-slate-500 font-medium text-sm mb-6 select-none">This coordinator's profile doesn't exist or was removed.</p>
           <Link
             to="/coordinators"
-            className="px-5 py-2.5 rounded-clay-sm text-sm font-bold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300"
+            className="px-6 py-3 rounded-xl text-sm font-bold bg-[#1A56DB] text-white shadow-md hover:bg-[#1A56DB]/90 transition-all duration-300"
           >
             ← Back to Coordinators
           </Link>
-        </ClayCard>
+        </div>
       </PageTransition>
     );
   }
 
   if (error === 'network') {
     return (
-      <PageTransition className="pt-2 lg:pt-20 min-h-[60vh] flex items-center justify-center">
-        <ClayCard variant="raised" className="max-w-md w-full p-8 text-center flex flex-col items-center">
+      <PageTransition className="pt-4 lg:pt-20 min-h-[60vh] flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white border border-slate-100 rounded-3xl p-8 text-center flex flex-col items-center shadow-xl">
           <p className="text-6xl mb-4 select-none">⚠️</p>
-          <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none">Connection Error</h2>
-          <p className="text-slate-500 font-bold text-sm mb-6 select-none">Unable to load this profile. Please check your connection.</p>
+          <h2 className="text-2xl font-extrabold text-slate-800 mb-2 select-none font-display">Connection Error</h2>
+          <p className="text-slate-500 font-medium text-sm mb-6 select-none">Unable to load this profile. Please check your connection.</p>
           <button
             onClick={fetchProfile}
-            className="px-5 py-2.5 rounded-clay-sm text-sm font-bold bg-[#EEF1F5] text-iste-blue shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all duration-300"
+            className="px-6 py-3 rounded-xl text-sm font-bold bg-[#1A56DB] text-white shadow-md hover:bg-[#1A56DB]/90 transition-all duration-300"
           >
             Try Again
           </button>
-        </ClayCard>
+        </div>
       </PageTransition>
     );
   }
 
-  const user = profile.userId || {};
-  const isStudent = user.role === 'student_coordinator';
-  const isFaculty = user.role === 'central_faculty' || user.role === 'branch_faculty';
-
   return (
-    <PageTransition className="pt-2 lg:pt-20 pb-16">
-      <div className="section-container max-w-5xl">
+    <PageTransition className="pt-4 lg:pt-20 pb-16 bg-[#F8FAFC]">
+      <div className="section-container max-w-4xl px-4">
 
-        {/* Back link - clay button style */}
+        {/* Back link */}
         <Link
           to={backUrl}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-clay-sm text-sm font-bold bg-[#EEF1F5] text-slate-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all mb-8 group"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 shadow-sm hover:shadow transition-all mb-8 group"
         >
-          <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
           Back to Coordinators
         </Link>
 
-        {/* ── Hero card wrapped in branch-tinted raised ClayCard ── */}
-        <ClayCard
-          variant="raised"
-          tint={profile.branch}
-          className="p-8 lg:p-12 mb-8"
-        >
-          <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+        {/* ── Main Profile Card ── */}
+        <div className="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/40 overflow-hidden mb-8 relative">
+          
+          {/* Cover Banner (linear gradient Yellow-Peach to Rose-Pink) */}
+          <div className="h-36 sm:h-48 w-full bg-gradient-to-r from-[#FFDEB4] to-[#FFCAD4] relative">
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px] opacity-30"></div>
+          </div>
 
-            {/* Profile photo inside padded clay-inset circle frame */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
-              className="flex-shrink-0"
-            >
-              <div className="w-36 h-36 lg:w-44 lg:h-44 bg-[#EEF1F5] rounded-full overflow-hidden p-2 shadow-clay-inset">
-                <div className="w-full h-full rounded-full overflow-hidden shadow-clay-inset bg-white">
-                  <SafeImage
-                    src={buildCloudinaryUrl(profile.photoUrl, 'profile')}
-                    alt={`${profile.name} - ISTE GMRIT`}
-                    className="w-full h-full object-cover object-top"
-                    fallbackType="profile"
-                    name={profile.name}
-                    objectPosition="center top"
-                    eager
-                  />
+          {/* Overlapping Avatar Area & Menu Button */}
+          <div className="relative flex flex-row justify-between items-start px-6 sm:px-10 pb-4">
+            {/* Avatar Frame with custom gradient border */}
+            <div className="relative -mt-16 sm:-mt-20 flex-shrink-0 z-10">
+              <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full p-1.5 bg-white shadow-lg">
+                <div className="w-full h-full rounded-full p-0.5 bg-gradient-to-r from-[#FFDEB4] to-[#FFCAD4]">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-white border-2 border-white">
+                    <SafeImage
+                      src={buildCloudinaryUrl(profile.photoUrl, 'profile')}
+                      alt={`${profile.name} - ISTE GMRIT`}
+                      className="w-full h-full object-cover object-top"
+                      fallbackType="profile"
+                      name={profile.name}
+                      objectPosition="center top"
+                      eager
+                    />
+                  </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Info */}
-            <div className="flex-1 text-center lg:text-left select-none">
-              {/* Role badge */}
-              <span className={`inline-flex items-center text-xs font-bold px-3 py-1 rounded-full mb-3 shadow-clay-inset bg-[#EEF1F5] ${
-                user.role === 'student_coordinator' ? 'text-emerald-600' :
-                user.role === 'branch_faculty' ? 'text-blue-600' : 'text-orange-600'
-              }`}>
-                {roleLabels[user.role] || user.role}
-              </span>
-
-              {/* Name */}
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-800 mb-1 leading-tight flex items-center justify-center lg:justify-start gap-2">
-                <span>{profile.name}</span>
-                {isFaculty && (
-                  <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="#22C55E" title="Official Faculty">
-                    <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            {/* Options Menu Dropdown */}
+            <div className="mt-4">
+              <div className="relative">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMenu(!showMenu);
+                  }}
+                  className="p-2 rounded-full hover:bg-slate-50 border border-transparent hover:border-slate-100 text-slate-400 hover:text-slate-600 transition-all focus:outline-none"
+                  aria-label="Options"
+                >
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                   </svg>
-                )}
-              </h1>
-
-              {/* ISTE role / designation */}
-              {(profile.role || profile.designation) && (
-                <p className="text-iste-blue font-extrabold text-lg mb-3">
-                  {profile.role || profile.designation}
-                </p>
-              )}
-
-              {/* Branch + Year / JNTU / Email */}
-              <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-sm text-slate-500 mb-5 font-bold">
-                {profile.branch && (
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-iste-blue" />
-                    {profile.branch}
-                  </span>
-                )}
-                {isStudent && profile.year && (
-                  <span className="flex items-center gap-1.5">🎓 {profile.year}</span>
-                )}
-                {isStudent && user.jntuNo && (
-                  <span className="flex items-center gap-1.5 font-mono text-xs">🪪 {user.jntuNo}</span>
-                )}
-                {!isStudent && user.email && (
-                  <span className="flex items-center gap-1.5">✉️ {user.email}</span>
+                </button>
+                
+                {showMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-lg py-2 z-20 font-sans" onClick={(e) => e.stopPropagation()}>
+                    <button 
+                      onClick={handleCopyEmail}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2"
+                    >
+                      ✉️ Copy Email
+                    </button>
+                    {user.jntuNo && (
+                      <button 
+                        onClick={handleCopyJNTU}
+                        className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2"
+                      >
+                        🪪 Copy JNTU ID
+                      </button>
+                    )}
+                    <button 
+                      onClick={handleShareProfile}
+                      className="w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-2"
+                    >
+                      🔗 Copy Profile Link
+                    </button>
+                  </div>
                 )}
               </div>
-
-              {/* Social links - Clay buttons */}
-              {profile.socialLinks && (
-                <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                  {profile.socialLinks.linkedin && (
-                    <a
-                      href={profile.socialLinks.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-clay-sm bg-[#EEF1F5] text-blue-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all text-sm font-bold"
-                      aria-label="LinkedIn"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                      LinkedIn
-                    </a>
-                  )}
-                  {profile.socialLinks.github && (
-                    <a
-                      href={profile.socialLinks.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-clay-sm bg-[#EEF1F5] text-[#24292F] shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all text-sm font-bold"
-                      aria-label="GitHub"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
-                      GitHub
-                    </a>
-                  )}
-                  {profile.socialLinks.instagram && (
-                    <a
-                      href={profile.socialLinks.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 rounded-clay-sm bg-[#EEF1F5] text-pink-600 shadow-clay-sm hover:shadow-clay-md active:shadow-clay-pressed active:scale-95 transition-all text-sm font-bold"
-                      aria-label="Instagram"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
-                      Instagram
-                    </a>
-                  )}
-                </div>
-              )}
             </div>
           </div>
-        </ClayCard>
 
-        {/* ── About / Bio ── */}
-        <ClayCard
-          variant="raised"
-          className="p-6 lg:p-8 mb-6"
-        >
-          <h2 className="text-lg font-extrabold text-slate-800 mb-3 flex items-center gap-2 select-none">
-            <span>👤</span> About
-          </h2>
-          <p className="text-slate-600 leading-relaxed font-semibold">
-            {profile.bio || "This coordinator hasn't added a bio yet."}
-          </p>
-        </ClayCard>
+          {/* Profile Name & Primary Details */}
+          <div className="px-6 sm:px-10 pb-8">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display tracking-tight flex items-center gap-2.5">
+              <span>{profile.name}</span>
+              {isFaculty && (
+                <span className="inline-flex text-[#22C55E]" title="Verified Faculty">
+                  <svg className="w-6.5 h-6.5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23 12l-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.7 3.1 5.52l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82 1.89 3.2 3.4-1.46 3.4 1.46 1.89-3.2 3.61-.82-.34-3.7L23 12zm-13 5l-4-4 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                  </svg>
+                </span>
+              )}
+            </h1>
 
-        {/* ── Details grid ── */}
+            {/* Institution / Location */}
+            <div className="flex items-center gap-2 text-slate-400 font-medium text-xs sm:text-sm mt-2">
+              <span className="text-base select-none">🇮🇳</span>
+              <span>GMRIT, Rajam, Andhra Pradesh, India</span>
+            </div>
+
+            {/* Tags and Handle */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-4 text-xs sm:text-sm text-slate-400 font-medium">
+              <span className="text-slate-800 font-semibold bg-slate-100 px-2 py-0.5 rounded-md font-mono text-[11px] sm:text-xs">
+                @{profile.name.toLowerCase().replace(/[^a-z0-9]/g, '')}
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+              
+              <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
+                <div className="w-5 h-5 rounded-md bg-[#1A56DB] flex items-center justify-center text-white p-1 shadow-sm select-none">
+                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 2L2 22h20L12 2zm0 4l6.5 13H5.5L12 6z"/>
+                  </svg>
+                </div>
+                <span>{profile.role || roleLabels[user.role] || 'Member'}</span>
+              </div>
+
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+              <span className="text-emerald-600 bg-emerald-50 border border-emerald-100/50 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+                {user.role === 'student_coordinator' ? 'Active Coordinator' : 'Official Faculty'}
+              </span>
+            </div>
+
+            {/* Primary Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3 mt-6">
+              <a
+                href={user.email ? `mailto:${user.email}` : '#'}
+                onClick={(e) => {
+                  if (!user.email) {
+                    e.preventDefault();
+                    toast.error("No email address configured for this profile.");
+                  }
+                }}
+                className="px-6 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 active:scale-[0.98] transition-all flex items-center gap-2 shadow-sm"
+              >
+                Message
+              </a>
+
+              <button
+                onClick={handleShareProfile}
+                className="px-6 py-2.5 rounded-xl bg-[#1A56DB] hover:bg-[#1A56DB]/95 text-sm font-bold text-white active:scale-[0.98] transition-all flex items-center gap-2 shadow-md shadow-blue-500/10"
+              >
+                <svg className="w-4 h-4 text-white/90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 10.742l5.084-2.542m0 0a3 3 0 10-3.3-3.3m3.3 3.3L8.684 13.258m0 0a3 3 0 11-3.3-3.3m3.3 3.3l5.084 2.542m0 0a3 3 0 105.3-2.2H18" />
+                </svg>
+                Share profile
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── About / Biography Section ── */}
+        <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-lg shadow-slate-100/20 mb-6 relative overflow-hidden flex gap-4">
+          {/* Gradient accent stripe matching profile gradients */}
+          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#FFDEB4] to-[#FFCAD4]"></div>
+          
+          <div className="w-full">
+            <h2 className="text-lg font-bold text-slate-800 font-display mb-3 flex items-center gap-2">
+              <span className="text-xl">👤</span> About
+            </h2>
+            <p className="text-slate-600 leading-relaxed font-medium">
+              {profile.bio || "This coordinator hasn't added a bio yet."}
+            </p>
+
+            {/* Social Links inside Bio Container */}
+            {profile.socialLinks && (Object.values(profile.socialLinks).some(Boolean)) && (
+              <div className="mt-5 pt-5 border-t border-slate-100 flex items-center gap-3">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Connect:</span>
+                {profile.socialLinks.linkedin && (
+                  <a
+                    href={profile.socialLinks.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-slate-50 border border-slate-100 text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white transition-all duration-300"
+                    aria-label="LinkedIn"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                  </a>
+                )}
+                {profile.socialLinks.github && (
+                  <a
+                    href={profile.socialLinks.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-slate-50 border border-slate-100 text-[#24292F] hover:bg-[#24292F] hover:text-white transition-all duration-300"
+                    aria-label="GitHub"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+                  </a>
+                )}
+                {profile.socialLinks.instagram && (
+                  <a
+                    href={profile.socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-slate-50 border border-slate-100 text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all duration-300"
+                    aria-label="Instagram"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── Details Grid ── */}
         <motion.div
           variants={container}
           initial="hidden"
@@ -376,47 +480,61 @@ const ProfileDetailPage = () => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           <DetailCard
-            icon="🏷️"
+            icon={
+              <svg className="w-6 h-6 text-[#1A56DB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            }
             label="ISTE Role"
             value={profile.role || roleLabels[user.role] || '—'}
           />
           <DetailCard
-            icon="🏫"
+            icon={
+              <svg className="w-6 h-6 text-[#7C3AED]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            }
             label="Branch"
             value={profile.branch}
           />
-          {isStudent && (
-            <DetailCard
-              icon="🎓"
-              label="Academic Year"
-              value={profile.year}
-            />
-          )}
-          {!isStudent && profile.designation && (
-            <DetailCard
-              icon="💼"
-              label="Designation"
-              value={profile.designation}
-            />
-          )}
           <DetailCard
-            icon="📅"
+            icon={
+              isStudent ? (
+                <svg className="w-6 h-6 text-[#F59E0B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6 text-[#F59E0B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4.667 14H18a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9a2 2 0 002 2h2.333" />
+                </svg>
+              )
+            }
+            label={isStudent ? "Academic Year" : "Designation"}
+            value={isStudent ? profile.year : profile.designation}
+          />
+          <DetailCard
+            icon={
+              <svg className="w-6 h-6 text-[#0D9488]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z" />
+              </svg>
+            }
             label="Member Since"
             value={profile.createdAt ? formatDate(profile.createdAt) : '—'}
           />
         </motion.div>
 
-        {/* ── More from same branch ── */}
+        {/* ── More from Same Branch Section ── */}
         {related.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.5 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="mt-10"
           >
-            <h2 className="text-lg font-extrabold text-slate-800 mb-4 select-none">
-              More from <span className="text-iste-blue">{profile.branch}</span>
+            <h2 className="text-lg font-bold text-slate-800 mb-5 select-none font-display">
+              More from <span className="text-iste-blue font-extrabold">{profile.branch}</span>
             </h2>
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex gap-5 overflow-x-auto pb-4 pt-1 scrollbar-hide">
               {related.map((rel) => (
                 <MiniCard key={rel._id} profile={rel} />
               ))}
